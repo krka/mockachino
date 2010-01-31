@@ -5,6 +5,7 @@ import org.junit.Before;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertSame;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -119,7 +120,21 @@ public class MockachinoTest {
 
 		Mockachino.stubReturn(mockA, mockB).get(Matchers.anyInt());
 
-		assertTrue(mockB == mockA.get(0));
+		assertSame(mockB, mockA.get(0));
+	}
+
+	@Test
+	public void testInlineMock2() {
+		List mock = Mockachino.mock(List.class);
+
+		Mockachino.stubReturn(mock, Mockachino.mock(List.class)).get(Matchers.anyInt());
+
+		List inlinedMock = (List) mock.get(0);
+
+		// Do some stubbing on the inlined mock to verify that it works.
+		Mockachino.stubReturn(inlinedMock, "Foo").get(123);
+		assertEquals("Foo", inlinedMock.get(123));
+		assertEquals(null, inlinedMock.get(124));
 	}
 
 	@Test
