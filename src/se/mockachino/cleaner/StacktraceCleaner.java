@@ -27,8 +27,7 @@ public class StacktraceCleaner {
 	}
 
 	private static final Collection<String> bannedNames = new ArrayList<String>(){{
-		add("se.mockachino.Mockachino$Mock");
-		add("se.mockachino.MockData$");
+		add("se.mockachino.");
 		add("$Proxy");
 		add("sun.reflect.");
 		add("java.lang.reflect.");

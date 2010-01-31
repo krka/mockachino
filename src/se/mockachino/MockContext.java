@@ -45,12 +45,27 @@ public class MockContext {
 	}
 
 	public <T> T verify(T mock) {
-		MatcherThreadHandler.assertEmpty();
-		MockData<T> data = getData(mock);
-		return data.getVerifier();
+		return verifyAtLeast(mock, 1);
 	}
 
-	public <T> T verify(T mock, int min, int max) {
+
+	public <T> T verifyExactly(T mock, int count) {
+		return verifyRange(mock, count, count);
+	}
+
+	public <T> T verifyAtMost(T mock, int max) {
+		return verifyRange(mock, 0, max);
+	}
+
+	public <T> T verifyAtLeast(T mock, int min) {
+		return verifyRange(mock, min, Integer.MAX_VALUE);
+	}
+
+	public <T> T verifyNever(T mock) {
+		return verifyAtMost(mock, 0);
+	}
+
+	public <T> T verifyRange(T mock, int min, int max) {
 		MatcherThreadHandler.assertEmpty();
 		MockData<T> data = getData(mock);
 		return data.getVerifier(min, max);

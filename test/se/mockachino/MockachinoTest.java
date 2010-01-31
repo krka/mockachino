@@ -1,7 +1,10 @@
 package se.mockachino;
 
 import org.junit.Test;
+import org.junit.Before;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -32,6 +35,7 @@ public class MockachinoTest {
 		foo(mock);
 
 		Mockachino.verify(mock).add(1, Matchers.regexp("Hell.*"));
+		Mockachino.verifyNever(mock).add(1, Matchers.regexp("Helll.*"));
 	}
 
 	private void foo(List mock) {
@@ -61,7 +65,7 @@ public class MockachinoTest {
 		mock.remove("Hello");
 		mock.add("World");
 
-		Mockachino.verify(mock, 1, 1).add("Hello");
+		Mockachino.verifyExactly(mock, 1).add("Hello");
 
 		InOrder order = Mockachino.verifyOrder();
 		order.verify(mock).add("Hello");
@@ -75,16 +79,19 @@ public class MockachinoTest {
 
 	@Test
 	public void testInOrderFail() {
-		System.out.println("Start");
 		List mock = Mockachino.mock(List.class);
 		mock.add("Hello");
 		mock.remove("Hello");
 		mock.add("World");
 
-		InOrder order = Mockachino.verifyOrder();
-		order.verify(mock).add("World");
-		order.verify(mock).add("Hello");
-		System.out.println("End");
+		try {
+			InOrder order = Mockachino.verifyOrder();
+			order.verify(mock).add("World");
+			order.verify(mock).add("Hello");
+			fail("Expected out of order calls to fail");
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Test
@@ -100,23 +107,19 @@ public class MockachinoTest {
 		List list = new LinkedList();
 		List spy = Mockachino.spy(List.class, list);
 
-		//Impossible: real method is called so spy.get(0) throws IndexOutOfBoundsException (the list is yet empty)
-		// when(spy.get(0)).thenReturn("foo");
-
-		// Not in Mockachino!
 		Mockachino.stubReturn(spy, "foo").get(0);
 
-		System.out.println("spy.get(0): " + spy.get(0));
+		assertEquals("foo", spy.get(0));
 	}
 
 	@Test
 	public void testInlineMock() {
 		List mockA = Mockachino.mock(List.class);
 		List mockB = Mockachino.mock(List.class);
-		System.out.println("a: " + mockA);
-		System.out.println("b: " + mockB);
+
 		Mockachino.stubReturn(mockA, mockB).get(Matchers.anyInt());
-		System.out.println(mockA.get(0));
+
+		assertTrue(mockB == mockA.get(0));
 	}
 
 	@Test
@@ -126,13 +129,11 @@ public class MockachinoTest {
 
 		Mockachino.stubReturn(mock, "Jello").subSequence(0, 5);
 
-		System.out.println(mock.subSequence(0, 4));
 		assertEquals("Hell", mock.subSequence(0, 4));
-		System.out.println(mock.subSequence(0, 5));
 		assertEquals("Jello", mock.subSequence(0, 5));
 
-		Mockachino.verify(mock, 2, 2).subSequence(0, 4);
-		Mockachino.verify(mock, 2, 2).subSequence(0, Matchers.eq(4));
+		Mockachino.verifyExactly(mock, 1).subSequence(0, 4);
+		Mockachino.verifyExactly(mock, 1).subSequence(0, Matchers.eq(4));
 	}
 
 	@Test
@@ -144,27 +145,32 @@ public class MockachinoTest {
 		Mockachino.stubReturn(spy, "World").get(123);
 		Mockachino.stubReturn(mock, "Foo").get(456);
 
-		Mockachino.verify(mock, 0, 0).get(Matchers.anyInt());
-		Mockachino.verify(spy, 0, 0).get(Matchers.anyInt());
+		Mockachino.verifyNever(mock).get(Matchers.anyInt());
+		Mockachino.verifyNever(spy).get(Matchers.anyInt());
 
 		assertEquals("Hello", mock.get(123));
-		Mockachino.verify(mock, 1, 1).get(123);
-		Mockachino.verify(spy, 0, 0).get(Matchers.anyInt());
+		Mockachino.verifyExactly(mock, 1).get(123);
+		Mockachino.verifyNever(spy).get(Matchers.anyInt());
 
 		assertEquals("Foo", spy.get(456));
-		Mockachino.verify(mock, 1, 1).get(456);
-		Mockachino.verify(spy, 1, 1).get(456);
+		Mockachino.verifyExactly(mock, 1).get(456);
+		Mockachino.verifyExactly(spy, 1).get(456);
 
 		assertEquals("World", spy.get(123));
-		Mockachino.verify(spy, 1, 1).get(123);
+		Mockachino.verifyExactly(spy, 1).get(123);
 	}
 
 	@Test
 	public void testBadMatcher() {
-		List mock = Mockachino.mock(List.class);
-		Matchers.anyInt();
-		Mockachino.stubReturn(mock, "Hello").get(0);
+		try {
+			List mock = Mockachino.mock(List.class);
+			Matchers.anyInt();
+			Mockachino.stubReturn(mock, "Hello").get(0);
 
+			fail("Not supposed to accept bad matcher usage");
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Test

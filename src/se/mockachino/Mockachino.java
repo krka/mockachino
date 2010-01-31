@@ -2,6 +2,7 @@ package se.mockachino;
 
 import se.mockachino.order.InOrder;
 import se.mockachino.MockContext;
+import se.mockachino.matchers.MatcherThreadHandler;
 
 public class Mockachino {
 	private static final MockContext DEFAULT_CONTEXT = new MockContext();
@@ -22,8 +23,24 @@ public class Mockachino {
 		return DEFAULT_CONTEXT.verify(mock);
 	}
 
-	public static <T> T verify(T mock, int min, int max) {
-		return DEFAULT_CONTEXT.verify(mock, min, max);
+	public static <T> T verifyNever(T mock) {
+		return DEFAULT_CONTEXT.verifyNever(mock);
+	}
+
+	public static <T> T verifyAtLeast(T mock, int min) {
+		return DEFAULT_CONTEXT.verifyAtLeast(mock, min);
+	}
+
+	public static <T> T verifyAtMost(T mock, int max) {
+		return DEFAULT_CONTEXT.verifyAtMost(mock, max);
+	}
+
+	public static <T> T verifyExactly(T mock, int count) {
+		return DEFAULT_CONTEXT.verifyExactly(mock, count);
+	}
+
+	public static <T> T verifyRange(T mock, int min, int max) {
+		return DEFAULT_CONTEXT.verifyRange(mock, min, max);
 	}
 
 	public static <T> T stubThrow(T mock, Throwable e) {

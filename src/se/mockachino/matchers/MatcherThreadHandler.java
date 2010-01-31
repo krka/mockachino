@@ -11,7 +11,7 @@ public class MatcherThreadHandler {
 		}
 	};
 
-	static void pushMatcher(Matcher m) {
+	public static void pushMatcher(Matcher m) {
 		matchers.get().add(m);
 	}
 
@@ -21,6 +21,7 @@ public class MatcherThreadHandler {
 
 	public static void assertEmpty() {
 		if (matchers.get().size() > 0) {
+			matchers.get().clear();
 			throw new RuntimeException("matchers called in wrong context");
 		}
 
