@@ -1,16 +1,21 @@
 package se.mockachino.matchers;
 
-public class ClassMatcher implements Matcher {
-	private final Class[] clazz;
+public class ClassMatcher<T> implements Matcher<T> {
+	private final Class clazz;
+	private final Class[] classes;
 
-	public ClassMatcher(Class... clazz) {
+	public ClassMatcher(Class clazz, Class... classes) {
 		this.clazz = clazz;
+		this.classes = classes;
 	}
 
 	@Override
 	public boolean matches(Object value) {
-		for (Class aClass : clazz) {
-			if (aClass.isInstance(value)) {
+		if (clazz.isInstance(value)) {
+			return true;
+		}
+		for (Class clazz : classes) {
+			if (clazz.isInstance(value)) {
 				return true;
 			}
 		}
@@ -18,18 +23,21 @@ public class ClassMatcher implements Matcher {
 	}
 
 	public String toString() {
-		return "Any:<" + list() + ">";
+		return "<type:" + list() + ">";
 	}
 
 	private String list() {
 		StringBuilder builder = new StringBuilder();
-		for (Class arg : clazz) {
-			if (builder.length() > 0) {
-				builder.append(",");
-			}
+		builder.append(clazz.getSimpleName());
+		for (Class arg : classes) {
+			builder.append(",");
 			builder.append(arg.getSimpleName());
 		}
 		return builder.toString();
 	}
 
+	@Override
+	public Class<T> getType() {
+		return clazz;
+	}
 }

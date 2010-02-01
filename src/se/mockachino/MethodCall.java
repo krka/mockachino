@@ -21,7 +21,7 @@ public class MethodCall {
 
 	@Override
 	public String toString() {
-		return method.getName() + "(" + Formatting.list(args) + ");";
+		return method.getName() + "(" + Formatting.list(args) + ")";
 	}
 
 	public Object[] getArguments() {

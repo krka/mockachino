@@ -2,8 +2,8 @@ package se.mockachino.expectations;
 
 import se.mockachino.MethodCall;
 
-public interface MethodExpectation {
+public interface MethodExpectation<T> {
 	boolean matches(MethodCall call);
 
-	Object getValue() throws Throwable;
+	T getValue() throws Throwable;
 }

@@ -1,12 +1,19 @@
 package se.mockachino.matchers;
 
-public class AnyMatcher implements Matcher {
+public class AnyMatcher<T> implements Matcher<T> {
+	private final Class<T> clazz;
+
+	public AnyMatcher(Class<T> clazz) {
+		this.clazz = clazz;
+	}
+
 	@Override
-	public boolean matches(Object value) {
+	public boolean matches(T value) {
 		return true;
 	}
 
-	public String toString() {
-		return "<any>";
+	@Override
+	public Class<T> getType() {
+		return clazz;
 	}
 }

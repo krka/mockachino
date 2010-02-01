@@ -31,6 +31,7 @@ public class Mock extends AbstractInvocationHandler {
 		if (expectation != null) {
 			return expectation.getValue();
 		}
+		method.setAccessible(true);
 		return method.invoke(impl, objects);
 	}
 }

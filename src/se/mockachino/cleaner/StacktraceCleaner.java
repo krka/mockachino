@@ -31,9 +31,15 @@ public class StacktraceCleaner {
 		add("$Proxy");
 		add("sun.reflect.");
 		add("java.lang.reflect.");
+		add("org.junit.");
+		add("com.intellij.rt.execution.");
+		add("com.intellij.junit4.");
 	}};
 	private static boolean isClean(StackTraceElement stackTraceElement) {
 		String s = stackTraceElement.getClassName();
+		if (s.endsWith("Test")) {
+			return true;
+		}
 		for (String bannedName : bannedNames) {
 			if (s.startsWith(bannedName)) {
 				return false;

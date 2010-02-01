@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Mockachino" basedir="." default="all">
+
+	<dirname property="baseDir" file="${ant.file}"/>
+	<property name="reports.dir" value="${basedir}/build/testreport"/>
+
+	<target name="all" depends="compile, test, package" />
+	
+	<target name="clean" description="Removes old build files">
+		<delete dir="${baseDir}/build" failonerror="false"/>
+	</target>
+	
+	<target name="compile">
+		<mkdir dir="${baseDir}/build/classes" />
+		<javac
+			destdir="${baseDir}/build/classes"
+			>
+			<src path="src"></src>
+		</javac>
+	</target>
+
+	<target name="compile-test" depends="compile">
+		<mkdir dir="${baseDir}/build/testclasses" />
+		<javac
+			destdir="${baseDir}/build/testclasses"
+			>
+			<classpath path="${baseDir}/build/classes" />
+			<src path="test"></src>
+		</javac>
+	</target>
+
+	<target name="test" depends="compile-test">
+		<mkdir dir="${reports.dir}" />
+		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="true" forkmode="perBatch" includeantruntime="true">
+			<classpath>
+				<pathelement location="${baseDir}/build/classes"/>
+				<pathelement location="${baseDir}/build/testclasses"/>
+			</classpath>
+
+			<formatter type="xml"/>
+			<batchtest fork="yes" todir="${reports.dir}">
+				<fileset dir="${basedir}/test">
+					<include name="**/*Test*.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+		<junitreport todir="${reports.dir}">
+			<fileset dir="${reports.dir}">
+				<include name="TEST-*.xml"/>
+			</fileset>
+			<report format="frames" todir="${reports.dir}/html"/>
+		</junitreport>
+	</target>
+
+	<target name="package" depends="compile">
+		<jar destfile="${baseDir}/build/mockachino.jar">
+			<fileset dir="${baseDir}/build/classes"/>
+		</jar>
+	</target>
+</project>
+
+

@@ -3,8 +3,7 @@ package se.mockachino.matchers;
 import java.util.Random;
 
 public class MagicNumbers {
-	private static final Random random = new Random();
-	static final int INT_MATCHER = Integer.MIN_VALUE + random.nextInt(Integer.MAX_VALUE / 4);
+	private static final Character ZERO_CHARACTER = Character.valueOf('\0');
 
 	public static Matcher getMatcher(Object value) {
 		if (value == null) {
@@ -13,7 +12,16 @@ public class MagicNumbers {
 		if (value instanceof Matcher) {
 			return (Matcher) value;
 		}
-		if (value instanceof Integer && value.equals(INT_MATCHER)) {
+		if (value instanceof Number) {
+			if (((Number) value).longValue() == 0) {
+				return MatcherThreadHandler.getMatcher();
+			}
+			return new EqualityMatcher(value);
+		}
+		if (Boolean.FALSE.equals(value)) {
+			return MatcherThreadHandler.getMatcher();
+		}
+		if (ZERO_CHARACTER.equals(value)) {
 			return MatcherThreadHandler.getMatcher();
 		}
 		return new EqualityMatcher(value);

@@ -1,19 +1,14 @@
 package se.mockachino;
 
 import org.junit.Test;
-import org.junit.Before;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertSame;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 import se.mockachino.matchers.Matchers;
 import se.mockachino.order.InOrder;
-import se.mockachino.Mockachino;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class MockachinoTest {
 
@@ -74,7 +69,7 @@ public class MockachinoTest {
 
 		InOrder order2 = Mockachino.verifyOrder();
 		order2.verify(mock).add("Hello");
-		order2.verify(mock).remove(Matchers.any());
+		order2.verify(mock).remove(Matchers.type(Object.class));
 
 	}
 
@@ -98,9 +93,7 @@ public class MockachinoTest {
 	@Test
 	public void testException() {
 		List mock = Mockachino.mock(List.class);
-		Mockachino.stubThrow(mock, new ArrayIndexOutOfBoundsException("Hello")).add(Matchers.any());
-
-		//mock.add(null);
+		Mockachino.stubThrow(mock, new ArrayIndexOutOfBoundsException("Hello")).add(Matchers.type(Object.class));
 	}
 
 	@Test
@@ -148,7 +141,7 @@ public class MockachinoTest {
 		assertEquals("Jello", mock.subSequence(0, 5));
 
 		Mockachino.verifyExactly(mock, 1).subSequence(0, 4);
-		Mockachino.verifyExactly(mock, 1).subSequence(0, Matchers.eq(4));
+		Mockachino.verifyExactly(mock, 1).subSequence(Matchers.eq(0), Matchers.eq(4));
 	}
 
 	@Test
@@ -160,8 +153,8 @@ public class MockachinoTest {
 		Mockachino.stubReturn(spy, "World").get(123);
 		Mockachino.stubReturn(mock, "Foo").get(456);
 
-		Mockachino.verifyNever(mock).get(Matchers.anyInt());
-		Mockachino.verifyNever(spy).get(Matchers.anyInt());
+		Mockachino.verifyNever(mock).get(Matchers.type(int.class));
+		Mockachino.verifyNever(spy).get(Matchers.type(int.class));
 
 		assertEquals("Hello", mock.get(123));
 		Mockachino.verifyExactly(mock, 1).get(123);
@@ -195,6 +188,37 @@ public class MockachinoTest {
 		Mockachino.stubReturn(mock, "B").get(0);
 		assertEquals("B", mock.get(0));
 
+	}
+
+	private static interface Foo {
+		String bar(String s);
+		int bar(int i);
+	}
+
+	@Test
+	public void testMatcherType() {
+		Foo mock = Mockachino.mock(Foo.class);
+		Mockachino.stubReturn(mock, "World").bar("Hello");
+		Mockachino.stubReturn(mock, 123).bar(Matchers.anyInt());
+
+		assertEquals("World", mock.bar("Hello"));
+		assertEquals(123, mock.bar(789));
+
+		Mockachino.verifyExactly(mock, 1).bar("Hello");
+		Mockachino.verifyExactly(mock, 1).bar(Matchers.type(String.class));
+		Mockachino.verifyExactly(mock, 1).bar(Matchers.eq("Hello"));
+		Mockachino.verifyExactly(mock, 1).bar(Matchers.same("Hello"));
+		Mockachino.verifyExactly(mock, 1).bar((String) Matchers.notSame(null));
+		Mockachino.verifyExactly(mock, 1).bar(Matchers.<String>notNull());
+
+		Mockachino.verifyExactly(mock, 1).bar(789);
+		Mockachino.verifyExactly(mock, 1).bar(Matchers.type(Integer.class));
+		Mockachino.verifyExactly(mock, 1).bar(Matchers.eq("Hello"));
+		Mockachino.verifyExactly(mock, 1).bar(Matchers.same("Hello"));
+		Mockachino.verifyExactly(mock, 1).bar((String) Matchers.notSame(null));
+		Mockachino.verifyExactly(mock, 1).bar(Matchers.<String>notNull());
+
+		assertEquals(null, mock.bar("A"));
 	}
 
 

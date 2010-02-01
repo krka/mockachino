@@ -2,24 +2,23 @@ package se.mockachino.matchers;
 
 import se.mockachino.util.Formatting;
 
-public class EqualityMatcher<T> implements Matcher<T> {
+public class InequalityMatcher<T> implements Matcher<T> {
 	private final Object value;
 
-	public EqualityMatcher(Object value) {
+	public InequalityMatcher(Object value) {
 		this.value = value;
 	}
 
-	@Override
 	public boolean matches(T other) {
 		if (value == null) {
-			return other == null;
+			return other != null;
 		}
-		return value.equals(other);
+		return !value.equals(other);
 	}
 
 	@Override
 	public String toString() {
-		return Formatting.argument(value);
+		return "!" + Formatting.argument(value);
 	}
 
 	@Override

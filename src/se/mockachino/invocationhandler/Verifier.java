@@ -26,26 +26,56 @@ public class Verifier<T> extends VerificationHandler {
 				counter++;
 			}
 		}
+		boolean exact = minCalls == maxCalls;
 		if (counter < minCalls) {
-			error(String.format("Expected %d call(s) to %s but only got %d call(s)", minCalls, matcher.toString(), counter), matcher);
+			String expected;
+			if (exact) {
+				expected = "Expected exactly " + calls(minCalls);
+			} else {
+				expected = "Expected at least " + calls(minCalls);
+			}
+			error(expected + ", but got " + calls(counter), matcher);
 		}
 		if (counter > maxCalls) {
-			error(String.format("Expected %d call(s) to %s but got %d call(s)", maxCalls, matcher.toString(), counter), matcher);
+			String expected;
+			if (exact) {
+				expected = "Expected exactly " + calls(maxCalls);
+			} else {
+				expected = "Expected at most" + calls(maxCalls);
+			}
+			error(expected + ", but got " + calls(counter), matcher);
 		}
+	}
+
+	private String calls(int num) {
+		if (num == 1) {
+			return "1 call";
+		}
+		if (num == 0) {
+			return "no calls";
+		}
+		return num + " calls";
 	}
 
 	private void error(String msg, MethodMatcher matcher) {
 		String matchingMethods = getBestMatches(matcher);
-		throw new VerificationError(msg + matchingMethods);
+		String expected = "EXPECTED:     mock." + matcher.toString();
+		throw new VerificationError(msg + "\n" + matchingMethods + expected);
 	}
 
 	private String getBestMatches(MethodMatcher matcher) {
 		String matchingMethods = "";
 		for (MethodCall call : mockData.getCalls()) {
 			if (call.getMethod().equals(matcher.getMethod())) {
-				matchingMethods += "\nActual method called: " + call;
+				String prefix = (matcher.matches(call)) ? "ACTUAL: (HIT) " : "ACTUAL:       ";
+				matchingMethods += prefix + "mock." + call + "\n" + getStacktrace(call);
 			}
 		}
 		return matchingMethods;
+	}
+
+	private String getStacktrace(MethodCall call) {
+		return "";
+		//return call.getStackTrace();
 	}
 }
