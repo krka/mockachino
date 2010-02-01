@@ -24,7 +24,7 @@ public class Mock extends AbstractInvocationHandler {
 		int callNumber = context.incrementSequence();
 		MockData data = context.getData(o);
 		List<MethodCall> list = data.getCalls();
-		MethodCall methodCall = new MethodCall(method, objects, callNumber, StacktraceCleaner.getCleanStacktrace(new Throwable()));
+		MethodCall methodCall = new MethodCall(method, objects, callNumber, StacktraceCleaner.cleanError(new Throwable()).getStackTrace());
 		list.add(methodCall);
 		MethodExpectations methodExpectations = data.getExpectations(method);
 		MethodExpectation expectation = methodExpectations.findMatch(methodCall);

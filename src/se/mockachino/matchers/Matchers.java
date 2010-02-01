@@ -13,6 +13,14 @@ public class Matchers {
 		}
 	}
 
+	public static <T> T m(Matcher<T> matcher) {
+		return matcher(matcher);
+	}
+
+	public static <T> T not(Matcher<T> matcher) {
+		return matcher(new NotMatcher<T>(matcher));
+	}
+
 	public static String regexp(String s) {
 		return matcher(new RegexpMatcher(s));
 	}
@@ -42,31 +50,31 @@ public class Matchers {
 	}
 
 	public static int anyInt() {
-		return type(Integer.class);
+		return m(ClassMatcher.anyInt());
 	}
 
 	public static long anyLong() {
-		return type(Long.class, Integer.class);
+		return m(ClassMatcher.anyLong());
 	}
 
 	public static double anyDouble() {
-		return type(Double.class);
+		return m(ClassMatcher.anyDouble());
 	}
 
 	public static float anyFloat() {
-		return type(Float.class, Double.class);
+		return m(ClassMatcher.anyFloat());
 	}
 
 	public static short anyShort() {
-		return type(Short.class, Integer.class);
+		return m(ClassMatcher.anyShort());
 	}
 
 	public static byte anyByte() {
-		return type(Byte.class, Integer.class);
+		return m(ClassMatcher.anyByte());
 	}
 
 	public static boolean anyBoolean() {
-		return type(Boolean.class);
+		return m(ClassMatcher.anyBoolean());
 	}
 
 	public static <T> T isNull() {
@@ -77,3 +85,4 @@ public class Matchers {
 		return notSame((T) null);
 	}
 }
+

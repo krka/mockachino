@@ -23,14 +23,16 @@ public class InOrderVerifier extends VerificationHandler {
 		List<MethodCall> calls = data.getCalls();
 		for (MethodCall call : calls) {
 			if (matcher.matches(call)) {
-				int number = call.getCallNumber();
-				if (number < inOrder.getCurrentCallNumber()) {
-					String errorMessage = "Calls were out of order:\n";
-					errorMessage += "Call to " + call + " occured before " + inOrder.getCurrentCall();
-					throw new VerificationError(errorMessage);
-				} else {
-					inOrder.setCurrent(number, call);
-					return;
+				if (inOrder.consume(call)) {
+					int number = call.getCallNumber();
+					if (number < inOrder.getCurrentCallNumber()) {
+						String errorMessage = "Calls were out of order:\n";
+						errorMessage += "Call to " + call + " occured before " + inOrder.getCurrentCall();
+						throw new VerificationError(errorMessage);
+					} else {
+						inOrder.setCurrent(number, call);
+						return;
+					}
 				}
 			}
 		}

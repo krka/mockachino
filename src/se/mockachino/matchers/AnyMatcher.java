@@ -16,4 +16,8 @@ public class AnyMatcher<T> implements Matcher<T> {
 	public Class<T> getType() {
 		return clazz;
 	}
+
+	public static <T> AnyMatcher<T> create(Class<T> clazz) {
+		return new AnyMatcher<T>(clazz);
+	}
 }

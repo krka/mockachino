@@ -3,6 +3,7 @@ package se.mockachino;
 import org.junit.Test;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.Matchers;
+import se.mockachino.order.InOrder;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class ErrorMessageTest {
 			Mockachino.verifyAtLeast(mock, 2).get(3);
 			fail("Should not succeed");
 		} catch (VerificationError e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -34,6 +36,41 @@ public class ErrorMessageTest {
 			Mockachino.verifyAtLeast(mock, 2).add(Matchers.anyInt());
 			fail("Should not succeed");
 		} catch (VerificationError e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testVerifyInOrder() {
+		try {
+			List mock = Mockachino.mock(List.class);
+			mock.add("Hello");
+			mock.add(2);
+			mock.add("World");
+
+			InOrder order = Mockachino.verifyOrder();
+			order.verify(mock).add("World");
+			order.verify(mock).add("Hello");
+			fail("Should not succeed");
+		} catch (VerificationError e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testVerifyInOrder2() {
+		try {
+			List mock = Mockachino.mock(List.class);
+			mock.add("Hello");
+			mock.add(2);
+			mock.add("World");
+
+			InOrder order = Mockachino.verifyOrder();
+			order.verify(mock).add("World");
+			order.verify(mock).add("Hello2");
+			fail("Should not succeed");
+		} catch (VerificationError e) {
+			e.printStackTrace();
 		}
 	}
 

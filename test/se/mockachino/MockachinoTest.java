@@ -221,5 +221,17 @@ public class MockachinoTest {
 		assertEquals(null, mock.bar("A"));
 	}
 
+	@Test
+	public void testVerifyInOrderDuplicate() {
+		List mock = Mockachino.mock(List.class);
+		mock.add("Hello");
+		mock.add("World");
+		mock.add("Hello");
+
+		InOrder order = Mockachino.verifyOrder();
+		order.verify(mock).add("Hello");
+		order.verify(mock).add("World");
+		order.verify(mock).add("Hello");
+	}
 
 }

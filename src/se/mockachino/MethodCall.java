@@ -10,9 +10,9 @@ public class MethodCall {
 	private final Method method;
 	private final int callNumber;
 	private final Object[] args;
-	private final List<StackTraceElement> stacktrace;
+	private final StackTraceElement[] stacktrace;
 
-	public MethodCall(Method method, Object[] args, int callNumber, List<StackTraceElement> stacktrace) {
+	public MethodCall(Method method, Object[] args, int callNumber, StackTraceElement[] stacktrace) {
 		this.method = method;
 		this.callNumber = callNumber;
 		this.args = args;
@@ -37,6 +37,6 @@ public class MethodCall {
 	}
 
 	public String getStackTrace() {
-		return Formatting.toString(StacktraceCleaner.convert(stacktrace));
+		return Formatting.toString(stacktrace);
 	}
 }

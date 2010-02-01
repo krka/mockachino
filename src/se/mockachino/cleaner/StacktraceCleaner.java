@@ -5,7 +5,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class StacktraceCleaner {
-	public static List<StackTraceElement> getCleanStacktrace(Throwable e) {
+
+	public static <T extends Throwable> T cleanError(T e) {
+		e.setStackTrace(convert(getCleanStacktrace(e)));
+		return e;
+	}
+
+	private static List<StackTraceElement> getCleanStacktrace(Throwable e) {
 		StackTraceElement[] stackTraceElements = e.getStackTrace();
 		List<StackTraceElement> list = new ArrayList<StackTraceElement>();
 		for (StackTraceElement stackTraceElement : stackTraceElements) {
@@ -17,7 +23,7 @@ public class StacktraceCleaner {
 
 	}
 
-	public static StackTraceElement[] convert(List<StackTraceElement> list) {
+	private static StackTraceElement[] convert(List<StackTraceElement> list) {
 		StackTraceElement[] ret = new StackTraceElement[list.size()];
 		int i = 0;
 		for (StackTraceElement stackTraceElement : list) {
@@ -47,5 +53,4 @@ public class StacktraceCleaner {
 		}
 		return true;
 	}
-
 }
