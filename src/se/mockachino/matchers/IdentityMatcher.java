@@ -1,6 +1,8 @@
 package se.mockachino.matchers;
 
-public class IdentityMatcher<T> implements Matcher<T> {
+import se.mockachino.util.Formatting;
+
+public class IdentityMatcher<T> extends Matcher<T> {
 	private final T value;
 	private final boolean same;
 
@@ -21,5 +23,10 @@ public class IdentityMatcher<T> implements Matcher<T> {
 			return (Class<T>) value.getClass();
 		}
 		return (Class<T>) Object.class;
+	}
+
+	@Override
+	protected String asString() {
+		return Formatting.argument(value);
 	}
 }

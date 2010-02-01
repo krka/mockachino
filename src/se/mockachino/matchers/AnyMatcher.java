@@ -1,6 +1,6 @@
 package se.mockachino.matchers;
 
-public class AnyMatcher<T> implements Matcher<T> {
+public class AnyMatcher<T> extends Matcher<T> {
 	private final Class<T> clazz;
 
 	public AnyMatcher(Class<T> clazz) {
@@ -15,6 +15,11 @@ public class AnyMatcher<T> implements Matcher<T> {
 	@Override
 	public Class<T> getType() {
 		return clazz;
+	}
+
+	@Override
+	protected String asString() {
+		return "<any>";
 	}
 
 	public static <T> AnyMatcher<T> create(Class<T> clazz) {

@@ -2,7 +2,7 @@ package se.mockachino.matchers;
 
 import se.mockachino.util.Formatting;
 
-public class InequalityMatcher<T> implements Matcher<T> {
+public class InequalityMatcher<T> extends Matcher<T> {
 	private final Object value;
 
 	public InequalityMatcher(Object value) {
@@ -17,7 +17,7 @@ public class InequalityMatcher<T> implements Matcher<T> {
 	}
 
 	@Override
-	public String toString() {
+	public String asString() {
 		return "!" + Formatting.argument(value);
 	}
 

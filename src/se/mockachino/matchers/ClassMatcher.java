@@ -1,6 +1,6 @@
 package se.mockachino.matchers;
 
-public class ClassMatcher<T> implements Matcher<T> {
+public class ClassMatcher<T> extends Matcher<T> {
 	private final Class<T> clazz;
 	private final Class[] classes;
 
@@ -60,8 +60,9 @@ public class ClassMatcher<T> implements Matcher<T> {
 
 	}
 
-	public String toString() {
-		return "<create:" + list() + ">";
+	@Override
+	protected String asString() {
+		return "<type:" + list() + ">";
 	}
 
 	private String list() {

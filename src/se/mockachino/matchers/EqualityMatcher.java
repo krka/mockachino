@@ -2,7 +2,7 @@ package se.mockachino.matchers;
 
 import se.mockachino.util.Formatting;
 
-public class EqualityMatcher<T> implements Matcher<T> {
+public class EqualityMatcher<T> extends Matcher<T> {
 	private final Object value;
 
 	public EqualityMatcher(Object value) {
@@ -18,7 +18,7 @@ public class EqualityMatcher<T> implements Matcher<T> {
 	}
 
 	@Override
-	public String toString() {
+	public String asString() {
 		return Formatting.argument(value);
 	}
 

@@ -6,6 +6,7 @@ import se.mockachino.Mockachino;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.List;
 
 public class MatchersTest {
 	@Test
@@ -85,4 +86,13 @@ public class MatchersTest {
 		
 	}
 
+	@Test
+	public void testNotMatcher() {
+		Comparator mock = Mockachino.mock(Comparator.class);
+		mock.compare("Hello", "World");
+		mock.compare("Foo", "Bar");
+		mock.compare("Foo", null);
+
+		Mockachino.verifyExactly(mock, 1).compare(Matchers.not(ClassMatcher.create(List.class)), "World");
+	}
 }

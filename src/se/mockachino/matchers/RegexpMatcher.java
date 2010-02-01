@@ -1,6 +1,6 @@
 package se.mockachino.matchers;
 
-class RegexpMatcher implements Matcher<String> {
+class RegexpMatcher extends Matcher<String> {
 	private final String s;
 
 	public RegexpMatcher(String s) {
@@ -20,7 +20,7 @@ class RegexpMatcher implements Matcher<String> {
 		return String.class;
 	}
 
-	public String toString() {
+	public String asString() {
 		return "regexp(\"" + s + "\")";
 	}
 

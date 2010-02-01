@@ -1,6 +1,6 @@
 package se.mockachino.matchers;
 
-public class ArgumentCatcher<T> implements Matcher<T> {
+public class ArgumentCatcher<T> extends Matcher<T> {
 	private final Matcher<T> delegate;
 	private T value;
 
@@ -21,6 +21,11 @@ public class ArgumentCatcher<T> implements Matcher<T> {
 	@Override
 	public Class<T> getType() {
 		return delegate.getType();
+	}
+
+	@Override
+	protected String asString() {
+		return delegate.asString();
 	}
 
 	public T getValue() {
