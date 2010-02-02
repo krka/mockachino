@@ -1,7 +1,8 @@
-package se.mockachino.invocationhandler;
+package se.mockachino.stub;
 
 import se.mockachino.MockData;
-import se.mockachino.expectations.MethodStub;
+import se.mockachino.stub.MethodStub;
+import se.mockachino.verifier.VerificationHandler;
 import se.mockachino.matchers.MethodMatcher;
 
 public class Stubber<T> extends VerificationHandler {

@@ -1,5 +1,6 @@
-package se.mockachino.invocationhandler;
+package se.mockachino.verifier;
 
+import se.mockachino.invocationhandler.AbstractInvocationHandler;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.expectations.DefaultMethodExpectations;
 

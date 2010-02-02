@@ -1,14 +1,20 @@
 package se.mockachino;
 
+import se.mockachino.listener.MethodCallListener;
 import se.mockachino.order.InOrder;
 import se.mockachino.MockContext;
-import se.mockachino.matchers.MatcherThreadHandler;
+
+import java.lang.reflect.InvocationHandler;
 
 public class Mockachino {
 	private static final MockContext DEFAULT_CONTEXT = new MockContext();
 
 	public static <T> T mock(Class<T> clazz) {
 		return DEFAULT_CONTEXT.mock(clazz);
+	}
+
+	public <T> T mock(Class<T> clazz, InvocationHandler handler) {
+		return DEFAULT_CONTEXT.mock(clazz, handler);
 	}
 
 	public static <T> T spy(Class<T> clazz, T impl) {
@@ -50,4 +56,9 @@ public class Mockachino {
 	public static <T> T stubReturn(T mock, Object returnValue) {
 		return DEFAULT_CONTEXT.stubReturn(mock, returnValue);
 	}
+
+	public static <T> T addListener(T mock, MethodCallListener listener) {
+		return DEFAULT_CONTEXT.addListener(mock, listener);
+	}
+
 }

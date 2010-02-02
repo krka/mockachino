@@ -1,5 +1,6 @@
-package se.mockachino.expectations;
+package se.mockachino.stub;
 
+import se.mockachino.expectations.MethodExpectation;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.MethodCall;
 

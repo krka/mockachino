@@ -1,6 +1,6 @@
-package se.mockachino.invocationhandler;
+package se.mockachino.verifier;
 
-import se.mockachino.invocationhandler.VerificationHandler;
+import se.mockachino.verifier.VerificationHandler;
 import se.mockachino.MockData;
 import se.mockachino.MethodCall;
 import se.mockachino.exceptions.VerificationError;

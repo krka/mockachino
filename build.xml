@@ -56,6 +56,14 @@
 		<jar destfile="${baseDir}/build/mockachino.jar">
 			<fileset dir="${baseDir}/build/classes"/>
 		</jar>
+		<zip destfile="${baseDir}/build/mockachino-src.zip">
+			<fileset dir="${baseDir}">
+				<exclude name=".idea/**" />
+				<exclude name="build/**" />
+				<exclude name="out/**" />
+				<exclude name="**/.svn" />
+			</fileset>
+		</zip>
 	</target>
 </project>
 

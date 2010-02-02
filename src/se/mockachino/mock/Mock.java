@@ -1,4 +1,4 @@
-package se.mockachino.invocationhandler;
+package se.mockachino.mock;
 
 import se.mockachino.MockData;
 import se.mockachino.MethodCall;
@@ -6,6 +6,7 @@ import se.mockachino.MockContext;
 import se.mockachino.expectations.MethodExpectations;
 import se.mockachino.expectations.MethodExpectation;
 import se.mockachino.cleaner.StacktraceCleaner;
+import se.mockachino.invocationhandler.AbstractInvocationHandler;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -26,6 +27,8 @@ public class Mock extends AbstractInvocationHandler {
 		List<MethodCall> list = data.getCalls();
 		MethodCall methodCall = new MethodCall(method, objects, callNumber, StacktraceCleaner.cleanError(new Throwable()).getStackTrace());
 		list.add(methodCall);
+
+		data.getListeners(method).notifyListeners(methodCall);
 		MethodExpectations methodExpectations = data.getExpectations(method);
 		MethodExpectation expectation = methodExpectations.findMatch(methodCall);
 		if (expectation != null) {

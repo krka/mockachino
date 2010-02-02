@@ -1,7 +1,8 @@
-package se.mockachino.invocationhandler;
+package se.mockachino.stub;
 
 import se.mockachino.MockData;
-import se.mockachino.expectations.MethodThrow;
+import se.mockachino.stub.MethodThrow;
+import se.mockachino.verifier.VerificationHandler;
 import se.mockachino.matchers.MethodMatcher;
 
 public class Thrower<T> extends VerificationHandler {

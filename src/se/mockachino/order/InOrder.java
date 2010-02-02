@@ -4,9 +4,8 @@ import se.mockachino.MockData;
 import se.mockachino.MethodCall;
 import se.mockachino.MockContext;
 import se.mockachino.proxy.ProxyUtil;
-import se.mockachino.invocationhandler.InOrderVerifier;
+import se.mockachino.order.InOrderVerifier;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 

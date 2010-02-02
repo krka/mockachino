@@ -1,6 +1,7 @@
 package se.mockachino.matchers;
 
 import se.mockachino.expectations.DefaultMethodExpectations;
+import se.mockachino.matchers.matcher.*;
 
 public class Matchers {
 

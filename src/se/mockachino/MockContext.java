@@ -1,14 +1,16 @@
 package se.mockachino;
 
+import se.mockachino.invocationhandler.*;
+import se.mockachino.listener.AddListener;
+import se.mockachino.listener.MethodCallListener;
+import se.mockachino.mock.Mock;
 import se.mockachino.order.InOrder;
-import se.mockachino.invocationhandler.DefaultInvocationHandler;
-import se.mockachino.invocationhandler.Stubber;
-import se.mockachino.invocationhandler.Mock;
-import se.mockachino.invocationhandler.Thrower;
 import se.mockachino.proxy.ProxyUtil;
 import se.mockachino.matchers.MatcherThreadHandler;
 import se.mockachino.MockData;
 import se.mockachino.MethodCall;
+import se.mockachino.stub.Stubber;
+import se.mockachino.stub.Thrower;
 
 import java.lang.reflect.InvocationHandler;
 import java.util.List;
@@ -24,7 +26,11 @@ public class MockContext {
 	private final AtomicInteger nextSequenceNumber = new AtomicInteger();
 
 	public <T> T mock(Class<T> clazz) {
-		return spy(clazz, ProxyUtil.newProxy(clazz, DEFAULT_INVOCATION_HANDLER), "Mock");
+		return mock(clazz, DEFAULT_INVOCATION_HANDLER);
+	}
+
+	public <T> T mock(Class<T> clazz, InvocationHandler handler) {
+		return spy(clazz, ProxyUtil.newProxy(clazz, handler), "Mock");
 	}
 
 	public <T> T spy(Class<T> clazz, T impl) {
@@ -71,18 +77,26 @@ public class MockContext {
 		return data.getVerifier(min, max);
 	}
 
-	public <T> T stubThrow(T mock, Throwable e) {
+	private <T> T createProxy(T mock, InvocationHandler handler) {
 		MatcherThreadHandler.assertEmpty();
 		MockData data = getData(mock);
 		Class<T> iface = data.getInterface();
-		return ProxyUtil.newProxy(iface, new Thrower(e, data));
+		return ProxyUtil.newProxy(iface, handler);
+	}
+
+	public <T> T stubThrow(T mock, Throwable e) {
+		MockData data = getData(mock);
+		return createProxy(mock, new Thrower(e, data));
 	}
 
 	public <T> T stubReturn(T mock, Object returnValue) {
-		MatcherThreadHandler.assertEmpty();
 		MockData data = getData(mock);
-		Class<T> iface = data.getInterface();
-		return ProxyUtil.newProxy(iface, new Stubber(returnValue, data));
+		return createProxy(mock, new Stubber(returnValue, data));
+	}
+
+	public <T> T addListener(T mock, MethodCallListener listener) {
+		MockData data = getData(mock);
+		return createProxy(mock, new AddListener(data, mock, listener));
 	}
 
 	private <T> void assertInterface(Class<T> clazz) {

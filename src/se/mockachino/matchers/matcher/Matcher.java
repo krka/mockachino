@@ -1,8 +1,8 @@
-package se.mockachino.matchers;
+package se.mockachino.matchers.matcher;
 
 public abstract class Matcher<T> {
-	abstract boolean matches(T value);
-	abstract Class<T> getType();
+	public abstract boolean matches(T value);
+	public abstract Class<T> getType();
 	public final String toString() {
 		return asString();
 	}

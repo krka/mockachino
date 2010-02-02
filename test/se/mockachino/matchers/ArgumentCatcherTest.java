@@ -1,6 +1,8 @@
 package se.mockachino.matchers;
 
 import org.junit.Test;
+import se.mockachino.matchers.matcher.ArgumentCatcher;
+import se.mockachino.matchers.matcher.ClassMatcher;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package se.mockachino.matchers;
+package se.mockachino.matchers.matcher;
 
 import se.mockachino.util.Formatting;
 

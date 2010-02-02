@@ -1,6 +1,8 @@
 package se.mockachino.matchers;
 
 import se.mockachino.MethodCall;
+import se.mockachino.matchers.matcher.EqualityMatcher;
+import se.mockachino.matchers.matcher.Matcher;
 import se.mockachino.util.Formatting;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class MethodMatcher {
 				}
 			} else {
 				for (Object argument : arguments) {
-					argumentMatchers.add(MagicNumbers.getMatcher(argument));
+					argumentMatchers.add(MatcherThreadHandler.getMatcher(argument));
 				}
 			}
 		}

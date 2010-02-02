@@ -1,6 +1,6 @@
 package se.mockachino.util;
 
-import se.mockachino.matchers.Matcher;
+import se.mockachino.matchers.matcher.Matcher;
 
 public class Formatting {
 	public static String list(Object[] args) {

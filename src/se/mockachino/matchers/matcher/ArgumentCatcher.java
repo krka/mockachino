@@ -1,4 +1,4 @@
-package se.mockachino.matchers;
+package se.mockachino.matchers.matcher;
 
 public class ArgumentCatcher<T> extends Matcher<T> {
 	private final Matcher<T> delegate;

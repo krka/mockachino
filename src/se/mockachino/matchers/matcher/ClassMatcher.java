@@ -1,4 +1,4 @@
-package se.mockachino.matchers;
+package se.mockachino.matchers.matcher;
 
 public class ClassMatcher<T> extends Matcher<T> {
 	private final Class<T> clazz;

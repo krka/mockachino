@@ -1,27 +1,27 @@
 package se.mockachino;
 
 import se.mockachino.expectations.MethodExpectations;
+import se.mockachino.listener.MethodListeners;
 import se.mockachino.proxy.ProxyUtil;
-import se.mockachino.invocationhandler.Verifier;
+import se.mockachino.verifier.Verifier;
 
-import java.util.List;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 import java.lang.reflect.Method;
 
 public class MockData<T> {
 	private final Class<T> iface;
 	private final List<MethodCall> calls;
+	private final Map<Method, MethodListeners> listeners;
 	private final Map<Method, MethodExpectations> expectations;
 
 	public MockData(Class<T> iface) {
 		this.iface = iface;
 		calls = Collections.synchronizedList(new ArrayList<MethodCall>());
-		expectations = new ConcurrentHashMap<Method,MethodExpectations>();
+		expectations = new HashMap<Method,MethodExpectations>();
+		listeners = new HashMap<Method,MethodListeners>();
 		for (Method method : iface.getMethods()) {
 			expectations.put(method, new MethodExpectations(method.getReturnType()));
+			listeners.put(method, new MethodListeners(method.getReturnType()));
 		}
 	}
 
@@ -31,6 +31,10 @@ public class MockData<T> {
 
 	public MethodExpectations getExpectations(Method method) {
 		return expectations.get(method);
+	}
+
+	public MethodListeners getListeners(Method method) {
+		return listeners.get(method);
 	}
 
 	public Class<T> getInterface() {
@@ -44,5 +48,4 @@ public class MockData<T> {
 	public T getVerifier() {
 		return ProxyUtil.newProxy(iface, new Verifier(this, 1, Integer.MAX_VALUE));
 	}
-
 }

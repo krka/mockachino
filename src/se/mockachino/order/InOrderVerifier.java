@@ -1,8 +1,9 @@
-package se.mockachino.invocationhandler;
+package se.mockachino.order;
 
 import se.mockachino.MockData;
 import se.mockachino.MethodCall;
 import se.mockachino.exceptions.VerificationError;
+import se.mockachino.verifier.VerificationHandler;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.order.InOrder;
 

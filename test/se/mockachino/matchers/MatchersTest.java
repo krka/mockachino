@@ -2,6 +2,8 @@ package se.mockachino.matchers;
 
 import org.junit.Test;
 import se.mockachino.Mockachino;
+import se.mockachino.matchers.matcher.ClassMatcher;
+import se.mockachino.matchers.matcher.Matcher;
 
 import java.io.DataOutput;
 import java.io.IOException;
@@ -94,5 +96,31 @@ public class MatchersTest {
 		mock.compare("Foo", null);
 
 		Mockachino.verifyExactly(mock, 1).compare(Matchers.not(ClassMatcher.create(List.class)), "World");
+	}
+
+	@Test
+	public void testCustomMatcher() {
+		Comparator mock = Mockachino.mock(Comparator.class);
+		mock.compare("Hello", "World");
+		mock.compare("Foo", "Bar");
+		mock.compare("Foo", null);
+
+		Matcher<Object> myFooBarMatcher = new Matcher<Object>() {
+			@Override
+			public boolean matches(Object value) {
+				return "Foo".equals(value) || "Bar".equals(value);
+			}
+
+			@Override
+			public Class<Object> getType() {
+				return Object.class;
+			}
+
+			@Override
+			protected String asString() {
+				return "(Foo or Bar)";
+			}
+		};
+		Mockachino.verifyExactly(mock, 1).compare(Matchers.matcher(myFooBarMatcher), Matchers.matcher(myFooBarMatcher));
 	}
 }

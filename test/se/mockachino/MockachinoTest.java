@@ -118,11 +118,11 @@ public class MockachinoTest {
 
 	@Test
 	public void testInlineMock2() {
-		List mock = Mockachino.mock(List.class);
+		List<List> mock = Mockachino.mock(List.class);
 
 		Mockachino.stubReturn(mock, Mockachino.mock(List.class)).get(Matchers.anyInt());
 
-		List inlinedMock = (List) mock.get(0);
+		List inlinedMock = mock.get(0);
 
 		// Do some stubbing on the inlined mock to verify that it works.
 		Mockachino.stubReturn(inlinedMock, "Foo").get(123);

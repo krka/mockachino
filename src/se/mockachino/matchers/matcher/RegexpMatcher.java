@@ -1,6 +1,6 @@
-package se.mockachino.matchers;
+package se.mockachino.matchers.matcher;
 
-class RegexpMatcher extends Matcher<String> {
+public class RegexpMatcher extends Matcher<String> {
 	private final String s;
 
 	public RegexpMatcher(String s) {
