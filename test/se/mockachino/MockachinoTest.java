@@ -234,4 +234,28 @@ public class MockachinoTest {
 		order.verify(mock).add("Hello");
 	}
 
+	@Test
+	public void testAnswer() {
+		List mock = Mockachino.mock(List.class);
+		Mockachino.stubAnswer(mock, new Answer() {
+			@Override
+			public Object getValue(MethodCall call) {
+				Object obj = call.getArguments()[0];
+				return obj.toString() + obj;
+			}
+		}).get(Matchers.anyInt());
+
+		for (int i = 0; i < 100; i++) {
+			String s = "" + i;
+			String s2 = s + s;
+			assertEquals(s2, mock.get(i));
+		}
+		InOrder order = Mockachino.verifyOrder();
+		for (int i = 0; i < 100; i++) {
+			order.verify(mock).get(i);
+		}
+
+		Mockachino.verifyExactly(mock, 100).get(Matchers.anyInt());
+
+	}
 }

@@ -8,7 +8,7 @@ public class Matchers {
 	public static <T> T matcher(Matcher<T> matcher) {
 		MatcherThreadHandler.pushMatcher(matcher);
 		try {
-			return DefaultMethodExpectations.forType(matcher.getType()).getValue();
+			return DefaultMethodExpectations.forType(matcher.getType()).getValue(null);
 		} catch (Throwable throwable) {
 			return null;
 		}

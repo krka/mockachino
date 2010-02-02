@@ -9,6 +9,7 @@ import se.mockachino.proxy.ProxyUtil;
 import se.mockachino.matchers.MatcherThreadHandler;
 import se.mockachino.MockData;
 import se.mockachino.MethodCall;
+import se.mockachino.stub.AnswerStubber;
 import se.mockachino.stub.Stubber;
 import se.mockachino.stub.Thrower;
 
@@ -92,6 +93,11 @@ public class MockContext {
 	public <T> T stubReturn(T mock, Object returnValue) {
 		MockData data = getData(mock);
 		return createProxy(mock, new Stubber(returnValue, data));
+	}
+
+	public <T> T stubAnswer(T mock, Answer answer) {
+		MockData data = getData(mock);
+		return createProxy(mock, new AnswerStubber(answer, data));
 	}
 
 	public <T> T addListener(T mock, MethodCallListener listener) {

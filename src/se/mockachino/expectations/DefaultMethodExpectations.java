@@ -46,7 +46,7 @@ public class DefaultMethodExpectations implements MethodExpectation {
 	}
 
 	@Override
-	public Object getValue() {
+	public Object getValue(MethodCall call) {
 		return value;
 	}
 }

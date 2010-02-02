@@ -17,7 +17,7 @@ public class MethodStub implements MethodExpectation {
 		return matcher.matches(call);
 	}
 
-	public Object getValue() {
+	public Object getValue(MethodCall call) {
 		return returnValue;
 	}
 }

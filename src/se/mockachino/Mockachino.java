@@ -57,6 +57,10 @@ public class Mockachino {
 		return DEFAULT_CONTEXT.stubReturn(mock, returnValue);
 	}
 
+	public static <T> T stubAnswer(T mock, Answer answer) {
+		return DEFAULT_CONTEXT.stubAnswer(mock, answer);
+	}
+
 	public static <T> T addListener(T mock, MethodCallListener listener) {
 		return DEFAULT_CONTEXT.addListener(mock, listener);
 	}

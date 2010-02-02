@@ -32,7 +32,7 @@ public class Mock extends AbstractInvocationHandler {
 		MethodExpectations methodExpectations = data.getExpectations(method);
 		MethodExpectation expectation = methodExpectations.findMatch(methodCall);
 		if (expectation != null) {
-			return expectation.getValue();
+			return expectation.getValue(methodCall);
 		}
 		method.setAccessible(true);
 		return method.invoke(impl, objects);

@@ -1,24 +1,27 @@
 package se.mockachino.stub;
 
+import se.mockachino.Answer;
+import se.mockachino.MethodCall;
 import se.mockachino.expectations.MethodExpectation;
 import se.mockachino.matchers.MethodMatcher;
-import se.mockachino.MethodCall;
 
-public class MethodThrow implements MethodExpectation {
-	private final Throwable e;
+public class AnswerStub implements MethodExpectation {
+	private final Answer answer;
 	private final MethodMatcher matcher;
 
-	public MethodThrow(Throwable e, MethodMatcher matcher) {
-		this.e = e;
+	public AnswerStub(Answer answer, MethodMatcher matcher) {
+		this.answer = answer;
 		this.matcher = matcher;
 	}
 
+	@Override
 	public boolean matches(MethodCall call) {
 		return matcher.matches(call);
 	}
 
 	@Override
 	public Object getValue(MethodCall call) throws Throwable {
-		throw e;
+		return answer.getValue(call);
+
 	}
 }

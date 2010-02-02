@@ -12,6 +12,6 @@ public class DefaultInvocationHandler extends AbstractInvocationHandler {
 
 	public Object doInvoke(Object o, Method method, Object[] objects) throws Throwable {
 		MethodExpectation methodExpectation = DefaultMethodExpectations.forType(method.getReturnType());
-		return methodExpectation.getValue();
+		return methodExpectation.getValue(null);
 	}
 }

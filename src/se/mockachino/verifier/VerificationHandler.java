@@ -14,7 +14,7 @@ public abstract class VerificationHandler extends AbstractInvocationHandler {
 	public final Object doInvoke(Object o, Method method, Object[] objects) throws Throwable {
 		MethodMatcher matcher = new MethodMatcher(method, objects);
 		verify(o, matcher);
-		return DefaultMethodExpectations.forType(method.getReturnType()).getValue();
+		return DefaultMethodExpectations.forType(method.getReturnType()).getValue(null);
 	}
 
 	public abstract void verify(Object o, MethodMatcher matcher);
