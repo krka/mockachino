@@ -3,18 +3,20 @@
 
 	<dirname property="baseDir" file="${ant.file}"/>
 	<property name="reports.dir" value="${basedir}/build/testreport"/>
+	<property file="${baseDir}/version.properties" />
+	<property name="suffix" value="${version.major}.${version.minor}.${version.fix}" />
 
-	<target name="all" depends="compile, test, package" />
-	
+	<target name="all" depends="compile, test, package" description="Test and package"/>
+
 	<target name="clean" description="Removes old build files">
 		<delete dir="${baseDir}/build" failonerror="false"/>
 	</target>
-	
+
 	<target name="compile">
 		<mkdir dir="${baseDir}/build/classes" />
 		<javac
-			destdir="${baseDir}/build/classes"
-			>
+				destdir="${baseDir}/build/classes"
+				>
 			<src path="src"></src>
 		</javac>
 	</target>
@@ -22,14 +24,14 @@
 	<target name="compile-test" depends="compile">
 		<mkdir dir="${baseDir}/build/testclasses" />
 		<javac
-			destdir="${baseDir}/build/testclasses"
-			>
+				destdir="${baseDir}/build/testclasses"
+				>
 			<classpath path="${baseDir}/build/classes" />
 			<src path="test"></src>
 		</javac>
 	</target>
 
-	<target name="test" depends="compile-test">
+	<target name="test" depends="compile-test" description="Run unit tests">
 		<mkdir dir="${reports.dir}" />
 		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="true" forkmode="perBatch" includeantruntime="true">
 			<classpath>
@@ -52,11 +54,19 @@
 		</junitreport>
 	</target>
 
-	<target name="package" depends="compile">
-		<jar destfile="${baseDir}/build/mockachino.jar">
+	<target name="javadoc" description="Generate javadoc">
+		<mkdir dir="${baseDir}/build/javadoc" />
+		<javadoc destdir="${baseDir}/build/javadoc">
+			<sourcepath location="${baseDir}/src" >
+			</sourcepath>
+		</javadoc>
+	</target>
+	
+	<target name="package" depends="compile" description="Package jars">
+		<jar destfile="${baseDir}/build/mockachino-${suffix}.jar">
 			<fileset dir="${baseDir}/build/classes"/>
 		</jar>
-		<zip destfile="${baseDir}/build/mockachino-src.zip">
+		<zip destfile="${baseDir}/build/mockachino-src-${suffix}.zip">
 			<fileset dir="${baseDir}">
 				<exclude name=".idea/**" />
 				<exclude name="build/**" />
@@ -66,5 +76,4 @@
 		</zip>
 	</target>
 </project>
-
-
+		
