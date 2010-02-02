@@ -39,7 +39,6 @@ public class MockContext {
 	}
 
 	private <T> T spy(Class<T> clazz, T impl, String kind) {
-		assertInterface(clazz);
 		MatcherThreadHandler.assertEmpty();
 		T mock = ProxyUtil.newProxy(clazz, new Mock(this, impl, kind));
 		mockData.put(mock, new MockData(clazz));
@@ -103,12 +102,6 @@ public class MockContext {
 	public <T> T addListener(T mock, MethodCallListener listener) {
 		MockData data = getData(mock);
 		return createProxy(mock, new AddListener(data, mock, listener));
-	}
-
-	private <T> void assertInterface(Class<T> clazz) {
-		if (!clazz.isInterface()) {
-			throw new IllegalArgumentException("Only interfaces can be mocked");
-		}
 	}
 
 	public <T> MockData<T> getData(T mock) {

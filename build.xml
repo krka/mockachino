@@ -17,6 +17,11 @@
 		<javac
 				destdir="${baseDir}/build/classes"
 				>
+			<classpath>
+				<fileset dir="${baseDir}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
 			<src path="src"></src>
 		</javac>
 	</target>
@@ -37,6 +42,11 @@
 			<classpath>
 				<pathelement location="${baseDir}/build/classes"/>
 				<pathelement location="${baseDir}/build/testclasses"/>
+			</classpath>
+			<classpath>
+				<fileset dir="${baseDir}/lib">
+					<include name="**/*.jar" />
+				</fileset>
 			</classpath>
 
 			<formatter type="xml"/>
