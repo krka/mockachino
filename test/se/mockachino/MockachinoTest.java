@@ -92,8 +92,14 @@ public class MockachinoTest {
 
 	@Test
 	public void testException() {
-		List mock = Mockachino.mock(List.class);
-		Mockachino.stubThrow(mock, new ArrayIndexOutOfBoundsException("Hello")).add(Matchers.type(Object.class));
+		try {
+			List mock = Mockachino.mock(List.class);
+			Mockachino.stubThrow(mock, new ArrayIndexOutOfBoundsException("Hello")).add(Matchers.type(Object.class));
+			mock.add("");
+			fail("Should have thrown an exception");
+		} catch (Exception e) {
+			assertEquals("Hello", e.getMessage());
+		}
 	}
 
 	@Test
