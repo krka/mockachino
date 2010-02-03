@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class MockachinoTest {
-
+	
 	@Test
 	public void testSimpleTest() {
 		List mock = Mockachino.mock(List.class);
