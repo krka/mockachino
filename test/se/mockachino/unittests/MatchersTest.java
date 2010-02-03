@@ -101,7 +101,7 @@ public class MatchersTest {
 		Mockachino.verifyExactly(2).on(mock).compare(
 				Matchers.and(
 						new EqualityMatcher("Foo"),
-						new EqualityMatcher("Foo2"),
+						//new EqualityMatcher("Foo2"),
 						ClassMatcher.create(Object.class)),
 				Matchers.or(
 						new EqualityMatcher("Bar"),

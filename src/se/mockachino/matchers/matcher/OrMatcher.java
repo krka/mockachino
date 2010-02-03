@@ -29,6 +29,6 @@ public class OrMatcher<T> extends Matcher<T> {
 
 	@Override
 	protected String asString() {
-		return "(" + Formatting.join(" | ", delegates) + ")";
+		return "(" + Formatting.join(" | ", (Object[]) delegates) + ")";
 	}
 }
