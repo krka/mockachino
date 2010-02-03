@@ -4,6 +4,8 @@ import org.junit.Test;
 import se.mockachino.Mockachino;
 import se.mockachino.matchers.Matchers;
 import se.mockachino.matchers.matcher.ClassMatcher;
+import se.mockachino.matchers.matcher.EqualityMatcher;
+import se.mockachino.matchers.matcher.IdentityMatcher;
 import se.mockachino.matchers.matcher.Matcher;
 
 import java.io.DataOutput;
@@ -87,6 +89,23 @@ public class MatchersTest {
 		Mockachino.verifyOnce().on(mock).compare(Matchers.type(String.class), Matchers.isNull());
 		Mockachino.verifyOnce().on(mock).compare(Matchers.notNull(), Matchers.isNull());
 		
+	}
+
+	@Test
+	public void testAnd() {
+		Comparator mock = Mockachino.mock(Comparator.class);
+		mock.compare("Hello", "World");
+		mock.compare("Foo", "Bar");
+		mock.compare("Foo", null);
+
+		Mockachino.verifyExactly(2).on(mock).compare(
+				Matchers.and(
+						new EqualityMatcher("Foo"),
+						new EqualityMatcher("Foo2"),
+						ClassMatcher.create(Object.class)),
+				Matchers.or(
+						new EqualityMatcher("Bar"),
+						new IdentityMatcher(null, true)));
 	}
 
 }

@@ -85,5 +85,14 @@ public class Matchers {
 	public static <T> T notNull() {
 		return notSame((T) null);
 	}
+
+	public static <T> T and(Matcher<T>... matchers) {
+		return m(new AndMatcher<T>(matchers));
+	}
+
+	public static <T> T or(Matcher<T>... matchers) {
+		return m(new OrMatcher<T>(matchers));
+	}
+
 }
 

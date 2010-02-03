@@ -4,27 +4,11 @@ import se.mockachino.matchers.matcher.Matcher;
 
 public class Formatting {
 	public static String list(Object[] args) {
-		StringBuilder builder = new StringBuilder();
-		if (args != null) {
-			for (Object arg : args) {
-				if (builder.length() > 0) {
-					builder.append(", ");
-				}
-				builder.append(argument(arg));
-			}
-		}
-		return builder.toString();
+		return join(", ", args);
 	}
 
 	public static String list(Iterable<Matcher> iterable) {
-		StringBuilder builder = new StringBuilder();
-			for (Object arg : iterable) {
-				if (builder.length() > 0) {
-					builder.append(", ");
-				}
-				builder.append(argument(arg));
-			}
-		return builder.toString();
+		return join(", ", iterable);
 	}
 
 	public static String argument(Object arg) {
@@ -37,6 +21,39 @@ public class Formatting {
 		return arg.toString();
 	}
 
+	public static String join(String sep, Iterable iterable) {
+		if (iterable == null) {
+			return "";
+		}
+		StringBuilder builder = new StringBuilder();
+		boolean first = true;
+		for (Object object : iterable) {
+			if (first) {
+				first = false;
+			} else {
+				builder.append(sep);
+			}
+			builder.append(argument(object));
+		}
+		return builder.toString();
+	}
+
+	public static String join(String sep, Object... objects) {
+		if (objects == null) {
+			return "";
+		}
+		StringBuilder builder = new StringBuilder();
+		boolean first = true;
+		for (Object object : objects) {
+			if (first) {
+				first = false;
+			} else {
+				builder.append(sep);
+			}
+			builder.append(argument(object));
+		}
+		return builder.toString();
+	}
 	public static String toString(StackTraceElement[] stacktrace) {
 		StringBuilder builder = new StringBuilder();
 		for (StackTraceElement element : stacktrace) {
