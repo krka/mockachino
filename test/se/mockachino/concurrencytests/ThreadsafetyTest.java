@@ -1,9 +1,12 @@
 package se.mockachino.concurrencytests;
 
 import org.junit.Test;
+import se.mockachino.MethodCall;
 import se.mockachino.Mockachino;
 import se.mockachino.matchers.Matchers;
 import se.mockachino.order.InOrder;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 

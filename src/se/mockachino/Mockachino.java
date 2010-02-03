@@ -10,6 +10,7 @@ import se.mockachino.stub.StubThrow;
 import se.mockachino.verifier.VerifyRangeStart;
 
 import java.lang.reflect.InvocationHandler;
+import java.util.List;
 
 public class Mockachino {
 	private static final MockContext DEFAULT_CONTEXT = new MockContext();
@@ -68,6 +69,10 @@ public class Mockachino {
 
 	public static ListenerAdder listenWith(MethodCallListener listener) {
 		return DEFAULT_CONTEXT.listenWith(listener);
+	}
+
+	public static List<MethodCall> getCalls(Object mock) {
+		return DEFAULT_CONTEXT.getCalls(mock);
 	}
 
 }

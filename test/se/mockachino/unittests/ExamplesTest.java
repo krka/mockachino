@@ -2,8 +2,14 @@ package se.mockachino.unittests;
 
 import org.junit.Test;
 import se.mockachino.Mockachino;
+import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.Matchers;
+import se.mockachino.matchers.matcher.ClassMatcher;
+import se.mockachino.matchers.matcher.Matcher;
+import se.mockachino.order.InOrder;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -93,4 +99,101 @@ public class ExamplesTest {
 			e.printStackTrace();
 		}
 	}
+
+	@Test
+	public void testSimpleVerify() {
+		try {
+			List mock = Mockachino.mock(List.class);
+			mock.get(1);
+			mock.get(2);
+			mock.get(3);
+
+			Mockachino.verifyAtLeast(2).on(mock).get(3);
+			fail("This should never pass");
+		} catch (VerificationError e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testInOrder() {
+		List mock = Mockachino.mock(List.class);
+		mock.add("Hello");
+		mock.remove("Hello");
+		mock.add("World");
+		mock.contains("Hello");
+		mock.add("Bar");
+
+		InOrder order = Mockachino.verifyOrder();
+		order.verify(mock).add("Hello");
+		order.verify(mock).add("World");
+		order.verify(mock).contains("Hello");
+		order.verify(mock).add("Bar");
+	}
+
+	@Test
+	public void testSpy() {
+		// Setup spied object
+		ArrayList myList = new ArrayList();
+		myList.add("Real object");
+
+		// Create spy on object
+		List spy = Mockachino.spy(List.class, myList);
+
+		// Show that calls to the spy go to the real object
+		assertEquals(1, spy.size());
+		assertEquals("Real object", spy.get(0));
+
+		// Overwrite spy.get(0)
+		Mockachino.stubReturn("Fake object").on(spy).get(0);
+		spy.add("Real object 2");
+
+		// Show that the overwrite worked,
+		// but other calls still go through the real object
+		assertEquals(2, spy.size());
+		assertEquals("Fake object", spy.get(0));
+		assertEquals("Real object 2", spy.get(1));
+
+		// Verifying the calls still work of course
+		Mockachino.verifyExactly(2).on(spy).size();
+		Mockachino.verifyExactly(3).on(spy).get(Matchers.anyInt());
+		Mockachino.verifyExactly(1).on(spy).add(Matchers.any(Object.class));
+	}
+
+	@Test
+	public void testNotMatcher() {
+		Comparator mock = Mockachino.mock(Comparator.class);
+		mock.compare("Hello", "World");
+		mock.compare("Foo", "Bar");
+		mock.compare("Foo", null);
+
+		Mockachino.verifyOnce().on(mock).compare(Matchers.not(ClassMatcher.create(List.class)), "World");
+	}
+
+	@Test
+	public void testCustomMatcher() {
+		Comparator mock = Mockachino.mock(Comparator.class);
+		mock.compare("Hello", "World");
+		mock.compare("Foo", "Bar");
+		mock.compare("Foo", null);
+
+		Matcher<Object> myFooBarMatcher = new Matcher<Object>() {
+			@Override
+			public boolean matches(Object value) {
+				return "Foo".equals(value) || "Bar".equals(value);
+			}
+
+			@Override
+			public Class<Object> getType() {
+				return Object.class;
+			}
+
+			@Override
+			protected String asString() {
+				return "(Foo or Bar)";
+			}
+		};
+		Mockachino.verifyOnce().on(mock).compare(Matchers.matcher(myFooBarMatcher), Matchers.matcher(myFooBarMatcher));
+	}
+
 }

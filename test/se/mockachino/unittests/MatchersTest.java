@@ -89,39 +89,4 @@ public class MatchersTest {
 		
 	}
 
-	@Test
-	public void testNotMatcher() {
-		Comparator mock = Mockachino.mock(Comparator.class);
-		mock.compare("Hello", "World");
-		mock.compare("Foo", "Bar");
-		mock.compare("Foo", null);
-
-		Mockachino.verifyOnce().on(mock).compare(Matchers.not(ClassMatcher.create(List.class)), "World");
-	}
-
-	@Test
-	public void testCustomMatcher() {
-		Comparator mock = Mockachino.mock(Comparator.class);
-		mock.compare("Hello", "World");
-		mock.compare("Foo", "Bar");
-		mock.compare("Foo", null);
-
-		Matcher<Object> myFooBarMatcher = new Matcher<Object>() {
-			@Override
-			public boolean matches(Object value) {
-				return "Foo".equals(value) || "Bar".equals(value);
-			}
-
-			@Override
-			public Class<Object> getType() {
-				return Object.class;
-			}
-
-			@Override
-			protected String asString() {
-				return "(Foo or Bar)";
-			}
-		};
-		Mockachino.verifyOnce().on(mock).compare(Matchers.matcher(myFooBarMatcher), Matchers.matcher(myFooBarMatcher));
-	}
 }

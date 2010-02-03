@@ -12,21 +12,6 @@ import static org.junit.Assert.fail;
 
 public class ErrorMessageTest {
 	@Test
-	public void testSimpleVerify() {
-		try {
-			List mock = Mockachino.mock(List.class);
-			mock.get(1);
-			mock.get(2);
-			mock.get(3);
-
-			Mockachino.verifyAtLeast(2).on(mock).get(3);
-			fail("Should not succeed");
-		} catch (VerificationError e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Test
 	public void testSimpleVerify2() {
 		try {
 			List mock = Mockachino.mock(List.class);
