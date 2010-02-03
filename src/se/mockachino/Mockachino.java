@@ -1,8 +1,13 @@
 package se.mockachino;
 
+import se.mockachino.listener.ListenerAdder;
 import se.mockachino.listener.MethodCallListener;
 import se.mockachino.order.InOrder;
 import se.mockachino.MockContext;
+import se.mockachino.stub.StubAnswer;
+import se.mockachino.stub.StubReturn;
+import se.mockachino.stub.StubThrow;
+import se.mockachino.verifier.VerifyRangeStart;
 
 import java.lang.reflect.InvocationHandler;
 
@@ -25,44 +30,44 @@ public class Mockachino {
 		return DEFAULT_CONTEXT.verifyOrder();
 	}
 
-	public static <T> T verify(T mock) {
-		return DEFAULT_CONTEXT.verify(mock);
+	public static VerifyRangeStart verifyNever() {
+		return DEFAULT_CONTEXT.verifyNever();
 	}
 
-	public static <T> T verifyNever(T mock) {
-		return DEFAULT_CONTEXT.verifyNever(mock);
+	public static VerifyRangeStart verifyOnce() {
+		return DEFAULT_CONTEXT.verifyOnce();
 	}
 
-	public static <T> T verifyAtLeast(T mock, int min) {
-		return DEFAULT_CONTEXT.verifyAtLeast(mock, min);
+	public static VerifyRangeStart verifyAtLeast(int min) {
+		return DEFAULT_CONTEXT.verifyAtLeast(min);
 	}
 
-	public static <T> T verifyAtMost(T mock, int max) {
-		return DEFAULT_CONTEXT.verifyAtMost(mock, max);
+	public static VerifyRangeStart verifyAtMost(int max) {
+		return DEFAULT_CONTEXT.verifyAtMost(max);
 	}
 
-	public static <T> T verifyExactly(T mock, int count) {
-		return DEFAULT_CONTEXT.verifyExactly(mock, count);
+	public static VerifyRangeStart verifyRange(int min, int max) {
+		return DEFAULT_CONTEXT.verifyRange(min, max);
 	}
 
-	public static <T> T verifyRange(T mock, int min, int max) {
-		return DEFAULT_CONTEXT.verifyRange(mock, min, max);
+	public static VerifyRangeStart verifyExactly(int count) {
+		return DEFAULT_CONTEXT.verifyExactly(count);
 	}
 
-	public static <T> T stubThrow(T mock, Throwable e) {
-		return DEFAULT_CONTEXT.stubThrow(mock, e);
+	public static StubThrow stubThrow(Throwable e) {
+		return DEFAULT_CONTEXT.stubThrow(e);
 	}
 
-	public static <T> T stubReturn(T mock, Object returnValue) {
-		return DEFAULT_CONTEXT.stubReturn(mock, returnValue);
+	public static StubReturn stubReturn(Object returnValue) {
+		return DEFAULT_CONTEXT.stubReturn(returnValue);
 	}
 
-	public static <T> T stubAnswer(T mock, Answer answer) {
-		return DEFAULT_CONTEXT.stubAnswer(mock, answer);
+	public static StubAnswer stubAnswer(Answer answer) {
+		return DEFAULT_CONTEXT.stubAnswer(answer);
 	}
 
-	public static <T> T addListener(T mock, MethodCallListener listener) {
-		return DEFAULT_CONTEXT.addListener(mock, listener);
+	public static ListenerAdder listenWith(MethodCallListener listener) {
+		return DEFAULT_CONTEXT.listenWith(listener);
 	}
 
 }

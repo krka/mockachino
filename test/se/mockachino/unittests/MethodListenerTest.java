@@ -1,6 +1,8 @@
-package se.mockachino;
+package se.mockachino.unittests;
 
 import org.junit.Test;
+import se.mockachino.MethodCall;
+import se.mockachino.Mockachino;
 import se.mockachino.listener.MethodCallListener;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class MethodListenerTest {
 				list.add(call.toString());
 			}
 		};
-		Mockachino.addListener(mock, listener).get(123);
+		Mockachino.listenWith(listener).on(mock).get(123);
 		
 		mock.get(123);
 		mock.get(124);

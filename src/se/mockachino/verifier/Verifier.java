@@ -6,6 +6,8 @@ import se.mockachino.MethodCall;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.MethodMatcher;
 
+import java.util.List;
+
 public class Verifier<T> extends VerificationHandler {
 	private MockData<T> mockData;
 	private final int minCalls;
@@ -21,7 +23,8 @@ public class Verifier<T> extends VerificationHandler {
 	@Override
 	public void verify(Object o, MethodMatcher matcher) {
 		int counter = 0;
-		for (MethodCall call : mockData.getCalls()) {
+		List<MethodCall> calls = mockData.getCalls();
+		for (MethodCall call : calls) {
 			if (matcher.matches(call)) {
 				counter++;
 			}
@@ -65,7 +68,8 @@ public class Verifier<T> extends VerificationHandler {
 
 	private String getBestMatches(MethodMatcher matcher) {
 		String matchingMethods = "";
-		for (MethodCall call : mockData.getCalls()) {
+		List<MethodCall> calls = mockData.getCalls();
+		for (MethodCall call : calls) {
 			if (call.getMethod().equals(matcher.getMethod())) {
 				String prefix = (matcher.matches(call)) ? "ACTUAL: (HIT) " : "ACTUAL:       ";
 				matchingMethods += prefix + "mock." + call + "\n" + getStacktrace(call);

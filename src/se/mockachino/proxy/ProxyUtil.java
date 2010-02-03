@@ -6,6 +6,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
 public class ProxyUtil {
+	private static final boolean CGLIB_FOR_INTERFACES = false;
+
 	private static final boolean USE_CGLIB = canUseCgLib();
 	private static boolean canUseCgLib() {
 		try {
@@ -16,8 +18,12 @@ public class ProxyUtil {
 		}
 	}
 
+	private static boolean useJavaReflect() {
+		return !(USE_CGLIB && CGLIB_FOR_INTERFACES);
+	}
+
 	public static <T> T newProxy(Class<T> clazz, final InvocationHandler handler) {
-		if (clazz.isInterface()) {
+		if (useJavaReflect() && clazz.isInterface()) {
 			return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[]{clazz}, handler);
 		}
 		if (!USE_CGLIB) {

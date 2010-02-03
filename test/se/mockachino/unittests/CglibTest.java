@@ -1,6 +1,7 @@
-package se.mockachino;
+package se.mockachino.unittests;
 
 import org.junit.Test;
+import se.mockachino.Mockachino;
 
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ public class CglibTest {
 		ArrayList mock = Mockachino.mock(ArrayList.class);
 		mock.add("Hello");
 
-		Mockachino.verify(mock).add("Hello");
+		Mockachino.verifyOnce().on(mock).add("Hello");
 	}
 
 	@Test
@@ -21,7 +22,7 @@ public class CglibTest {
 			String mock = Mockachino.mock(String.class);
 			mock.concat("Hello");
 
-			Mockachino.verify(mock).concat("Hello");
+			Mockachino.verifyOnce().on(mock).concat("Hello");
 			fail("Should not work");
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,6 +1,7 @@
-package se.mockachino;
+package se.mockachino.unittests;
 
 import org.junit.Test;
+import se.mockachino.Mockachino;
 
 import java.io.DataInput;
 import java.io.IOException;

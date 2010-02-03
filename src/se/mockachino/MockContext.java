@@ -1,17 +1,14 @@
 package se.mockachino;
 
 import se.mockachino.invocationhandler.*;
-import se.mockachino.listener.AddListener;
+import se.mockachino.listener.ListenerAdder;
 import se.mockachino.listener.MethodCallListener;
 import se.mockachino.mock.Mock;
 import se.mockachino.order.InOrder;
 import se.mockachino.proxy.ProxyUtil;
 import se.mockachino.matchers.MatcherThreadHandler;
-import se.mockachino.MockData;
-import se.mockachino.MethodCall;
-import se.mockachino.stub.AnswerStubber;
-import se.mockachino.stub.Stubber;
-import se.mockachino.stub.Thrower;
+import se.mockachino.stub.*;
+import se.mockachino.verifier.VerifyRangeStart;
 
 import java.lang.reflect.InvocationHandler;
 import java.util.List;
@@ -50,58 +47,51 @@ public class MockContext {
 		return new InOrder(this);
 	}
 
-	public <T> T verify(T mock) {
-		return verifyAtLeast(mock, 1);
+	public VerifyRangeStart verifyRange(int min, int max) {
+		return new VerifyRangeStart(this, min, max);
 	}
 
-
-	public <T> T verifyExactly(T mock, int count) {
-		return verifyRange(mock, count, count);
+	public VerifyRangeStart verifyExactly(int count) {
+		return verifyRange(count, count);
 	}
 
-	public <T> T verifyAtMost(T mock, int max) {
-		return verifyRange(mock, 0, max);
+	public VerifyRangeStart verifyNever() {
+		return verifyExactly(0);
 	}
 
-	public <T> T verifyAtLeast(T mock, int min) {
-		return verifyRange(mock, min, Integer.MAX_VALUE);
+	public VerifyRangeStart verifyOnce() {
+		return verifyExactly(1);
 	}
 
-	public <T> T verifyNever(T mock) {
-		return verifyAtMost(mock, 0);
+	public VerifyRangeStart verifyAtLeast(int min) {
+		return verifyRange(min, Integer.MAX_VALUE);
 	}
 
-	public <T> T verifyRange(T mock, int min, int max) {
-		MatcherThreadHandler.assertEmpty();
-		MockData<T> data = getData(mock);
-		return data.getVerifier(min, max);
+	public VerifyRangeStart verifyAtMost(int max) {
+		return verifyRange(0, max);
 	}
-
-	private <T> T createProxy(T mock, InvocationHandler handler) {
+	
+	public <T> T createProxy(T mock, InvocationHandler handler) {
 		MatcherThreadHandler.assertEmpty();
 		MockData data = getData(mock);
 		Class<T> iface = data.getInterface();
 		return ProxyUtil.newProxy(iface, handler);
 	}
 
-	public <T> T stubThrow(T mock, Throwable e) {
-		MockData data = getData(mock);
-		return createProxy(mock, new Thrower(e, data));
+	public StubThrow stubThrow(Throwable e) {
+		return new StubThrow(this, e);
 	}
 
-	public <T> T stubReturn(T mock, Object returnValue) {
-		MockData data = getData(mock);
-		return createProxy(mock, new Stubber(returnValue, data));
+	public StubReturn stubReturn(Object returnValue) {
+		return new StubReturn(this, returnValue);
 	}
 
-	public <T> T stubAnswer(T mock, Answer answer) {
-		MockData data = getData(mock);
-		return createProxy(mock, new AnswerStubber(answer, data));
+	public StubAnswer stubAnswer(Answer answer) {
+		return new StubAnswer(this, answer);
 	}
 
-	public <T> T addListener(T mock, MethodCallListener listener) {
-		MockData data = getData(mock);
-		return createProxy(mock, new AddListener(data, mock, listener));
+	public ListenerAdder listenWith(MethodCallListener listener) {
+		return new ListenerAdder(this, listener);
 	}
 
 	public <T> MockData<T> getData(T mock) {

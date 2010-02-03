@@ -1,6 +1,7 @@
-package se.mockachino;
+package se.mockachino.unittests;
 
 import org.junit.Test;
+import se.mockachino.Mockachino;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.Matchers;
 import se.mockachino.order.InOrder;
@@ -18,7 +19,7 @@ public class ErrorMessageTest {
 			mock.get(2);
 			mock.get(3);
 
-			Mockachino.verifyAtLeast(mock, 2).get(3);
+			Mockachino.verifyAtLeast(2).on(mock).get(3);
 			fail("Should not succeed");
 		} catch (VerificationError e) {
 			e.printStackTrace();
@@ -33,7 +34,7 @@ public class ErrorMessageTest {
 			mock.add(2);
 			mock.add("World");
 
-			Mockachino.verifyAtLeast(mock, 2).add(Matchers.anyInt());
+			Mockachino.verifyAtLeast(2).on(mock).add(Matchers.anyInt());
 			fail("Should not succeed");
 		} catch (VerificationError e) {
 			e.printStackTrace();
