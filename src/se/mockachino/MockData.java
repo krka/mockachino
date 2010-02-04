@@ -2,13 +2,10 @@ package se.mockachino;
 
 import se.mockachino.expectations.MethodExpectations;
 import se.mockachino.listener.MethodListeners;
-import se.mockachino.proxy.ProxyUtil;
-import se.mockachino.util.SafeList;
-import se.mockachino.verifier.Verifier;
+import se.mockachino.util.SafeIteratorList;
 
 import java.util.*;
 import java.lang.reflect.Method;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MockData<T> {
 	private final Class<T> iface;
@@ -19,7 +16,7 @@ public class MockData<T> {
 
 	public MockData(Class<T> iface) {
 		this.iface = iface;
-		calls = Collections.synchronizedList(new SafeList<MethodCall>());
+		calls = new SafeIteratorList<MethodCall>(new ArrayList<MethodCall>());
 		readOnlyCalls = Collections.unmodifiableList(calls);
 		expectations = new HashMap<Method,MethodExpectations>();
 		listeners = new HashMap<Method,MethodListeners>();
@@ -51,4 +48,9 @@ public class MockData<T> {
 		calls.add(call);
 		return call;
 	}
+
+	public synchronized void reset() {
+		calls.clear();
+	}
+
 }

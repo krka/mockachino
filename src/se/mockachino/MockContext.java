@@ -1,6 +1,7 @@
 package se.mockachino;
 
 import se.mockachino.cleaner.StacktraceCleaner;
+import se.mockachino.exceptions.UsageError;
 import se.mockachino.invocationhandler.*;
 import se.mockachino.listener.ListenerAdder;
 import se.mockachino.listener.MethodCallListener;
@@ -38,12 +39,13 @@ public class MockContext {
 
 	public <T> T spy(Class<T> clazz, T impl) {
 		assertClass(clazz);
-		if (impl == null) {
-			throw StacktraceCleaner.cleanError(
-					new IllegalArgumentException(
-							"impl can not be null"));
-		}
+		assertImpl(impl);
 		return spy(clazz, impl, "Spy");
+	}
+
+	public <T> T spy(T impl) {
+		assertImpl(impl);
+		return spy((Class<T>) impl.getClass(), impl);
 	}
 
 	private <T> T spy(Class<T> clazz, T impl, String kind) {
@@ -56,17 +58,19 @@ public class MockContext {
 
 	private <T> void assertClass(Class<T> clazz) {
 		if (clazz == null) {
-			throw StacktraceCleaner.cleanError(
-					new IllegalArgumentException(
-							"class can not be null"));
+			throw new UsageError("class can not be null");
+		}
+	}
+
+	private <T> void assertImpl(T impl) {
+		if (impl == null) {
+			throw new UsageError("impl can not be null");
 		}
 	}
 
 	private <T> void assertHandler(InvocationHandler handler) {
 		if (handler == null) {
-			throw StacktraceCleaner.cleanError(
-					new IllegalArgumentException(
-							"handler can not be null"));
+			throw new UsageError("handler can not be null");
 		}
 	}
 
@@ -103,6 +107,18 @@ public class MockContext {
 		return verifyRange(0, max);
 	}
 	
+	public void reset(Object mock) {
+		MockData<Object> data = getData(mock);
+		data.reset();
+	}
+
+	public void reset(Object mock, Object... mocks) {
+		reset(mock);
+		for (Object mock2 : mocks) {
+			reset(mock2);
+		}
+	}
+
 	public <T> T createProxy(T mock, InvocationHandler handler) {
 		MatcherThreadHandler.assertEmpty();
 		MockData data = getData(mock);
@@ -112,9 +128,7 @@ public class MockContext {
 
 	public StubThrow stubThrow(Throwable e) {
 		if (e == null) {
-			throw StacktraceCleaner.cleanError(
-					new IllegalArgumentException(
-							"exception can not be null"));
+			throw new UsageError("exception can not be null");
 		}
 		return new StubThrow(this, e);
 	}
@@ -125,18 +139,14 @@ public class MockContext {
 
 	public StubAnswer stubAnswer(Answer answer) {
 		if (answer== null) {
-			throw StacktraceCleaner.cleanError(
-					new IllegalArgumentException(
-							"Answer can not be null"));
+			throw new UsageError("answer can not be null");
 		}
 		return new StubAnswer(this, answer);
 	}
 
 	public ListenerAdder listenWith(MethodCallListener listener) {
 		if (listener == null) {
-			throw StacktraceCleaner.cleanError(
-					new IllegalArgumentException(
-							"Listener can not be null"));
+			throw new UsageError("Listener can not be null");
 		}
 		return new ListenerAdder(this, listener);
 	}
@@ -144,9 +154,8 @@ public class MockContext {
 	public <T> MockData<T> getData(T mock) {
 		MockData data = mockData.get(mock);
 		if (data == null) {
-			throw StacktraceCleaner.cleanError(
-					new IllegalArgumentException(
-							"Argument " + mock + " is not a mocked object."));
+			throw new UsageError(
+							"Argument " + mock + " is not a mocked object.");
 		}
 		return data;
 	}

@@ -30,7 +30,7 @@ public class InOrderVerifier extends VerificationHandler {
 					if (number < inOrder.getCurrentCallNumber()) {
 						String errorMessage = "Calls were out of order:\n";
 						errorMessage += "Call to " + call + " occured before " + inOrder.getCurrentCall();
-						throw StacktraceCleaner.cleanError(new VerificationError(errorMessage));
+						throw new VerificationError(errorMessage);
 					} else {
 						inOrder.setCurrent(number, call);
 						return;
@@ -38,6 +38,6 @@ public class InOrderVerifier extends VerificationHandler {
 				}
 			}
 		}
-		throw StacktraceCleaner.cleanError(new VerificationError("No call found for " + matcher));
+		throw new VerificationError("No call found for " + matcher);
 	}
 }

@@ -27,6 +27,10 @@ public class Mockachino {
 		return DEFAULT_CONTEXT.spy(clazz, impl);
 	}
 
+	public static <T> T spy(T impl) {
+		return DEFAULT_CONTEXT.spy(impl);
+	}
+
 	public static InOrder verifyOrder() {
 		return DEFAULT_CONTEXT.verifyOrder();
 	}
@@ -73,6 +77,14 @@ public class Mockachino {
 
 	public static List<MethodCall> getCalls(Object mock) {
 		return DEFAULT_CONTEXT.getCalls(mock);
+	}
+
+	public static void reset(Object mock) {
+		DEFAULT_CONTEXT.reset(mock);
+	}
+
+	public static void reset(Object mock, Object... mocks) {
+		DEFAULT_CONTEXT.reset(mock, mocks);
 	}
 
 }

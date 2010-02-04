@@ -4,6 +4,7 @@ import org.junit.Test;
 import se.mockachino.Answer;
 import se.mockachino.MethodCall;
 import se.mockachino.Mockachino;
+import se.mockachino.exceptions.UsageError;
 import se.mockachino.listener.MethodCallListener;
 import se.mockachino.matchers.Matchers;
 import se.mockachino.order.InOrder;
@@ -299,40 +300,40 @@ public class MockachinoTest {
 		}
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = UsageError.class)
 	public void testBadUsage1() {
 		List mock = Mockachino.mock(List.class);
 		Mockachino.listenWith(null).on(mock);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = UsageError.class)
 	public void testBadUsage2() {
 		List mock = Mockachino.mock(List.class);
 		Mockachino.stubThrow(null).on(mock);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = UsageError.class)
 	public void testBadUsage3() {
 		List mock = Mockachino.mock(List.class);
 		Mockachino.stubAnswer(null).on(mock);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = UsageError.class)
 	public void testBadUsage4() {
 		Mockachino.verifyOrder().verify(null);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = UsageError.class)
 	public void testBadUsage5() {
 		Mockachino.mock(null);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = UsageError.class)
 	public void testBadUsage6() {
 		Mockachino.spy(List.class, null);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = UsageError.class)
 	public void testBadUsage7() {
 		Mockachino.mock(List.class, null);
 	}

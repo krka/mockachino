@@ -1,6 +1,7 @@
 package se.mockachino.matchers;
 
 import se.mockachino.cleaner.StacktraceCleaner;
+import se.mockachino.exceptions.UsageError;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.matcher.EqualityMatcher;
 import se.mockachino.matchers.matcher.Matcher;
@@ -49,19 +50,18 @@ public class MatcherThreadHandler {
 			return matchers.get().remove();
 		} catch (Exception e) {
 			matchers.get().clear();
-			throw StacktraceCleaner.cleanError(new VerificationError(
+			throw new UsageError(
 					"Illegal mix of matchers and default values in the same method verification or stubbing. \n" +
-							"Replace null, 0, '\\0' and false with matchers."));
+							"Replace null, 0, '\\0' and false with matchers.");
 		}
 	}
 
 	public static void assertEmpty() {
 		if (matchers.get().size() > 0) {
 			matchers.get().clear();
-			throw StacktraceCleaner.cleanError(
-					new RuntimeException(
+			throw new UsageError(
 							"Matchers called in wrong context. " +
-									"Only use matchers inside verification or stubbing method calls."));
+									"Only use matchers inside verification or stubbing method calls.");
 		}
 
 	}

@@ -64,7 +64,7 @@ public class Verifier<T> extends VerificationHandler {
 	private void error(String msg, MethodMatcher matcher) {
 		String matchingMethods = getBestMatches(matcher);
 		String expected = "EXPECTED:     mock." + matcher.toString();
-		throw StacktraceCleaner.cleanError(new VerificationError(msg + "\n" + matchingMethods + expected));
+		throw new VerificationError(msg + "\n" + matchingMethods + expected);
 	}
 
 	private String getBestMatches(MethodMatcher matcher) {
