@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 public class DefaultInvocationHandler extends AbstractInvocationHandler {
 	public DefaultInvocationHandler() {
-		super("Default");
+		super("DefaultResult");
 	}
 
 	public Object doInvoke(Object o, Method method, Object[] objects) throws Throwable {

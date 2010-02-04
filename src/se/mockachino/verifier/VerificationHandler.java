@@ -7,8 +7,8 @@ import se.mockachino.expectations.DefaultMethodExpectations;
 import java.lang.reflect.Method;
 
 public abstract class VerificationHandler extends AbstractInvocationHandler {
-	protected VerificationHandler(String kind) {
-		super(kind);
+	protected VerificationHandler(String kind, String id) {
+		super(kind + ":" + id);
 	}
 
 	public final Object doInvoke(Object o, Method method, Object[] objects) throws Throwable {
@@ -17,5 +17,5 @@ public abstract class VerificationHandler extends AbstractInvocationHandler {
 		return DefaultMethodExpectations.forType(method.getReturnType()).getValue(null);
 	}
 
-	public abstract void verify(Object o, MethodMatcher matcher);
+	protected abstract void verify(Object o, MethodMatcher matcher);
 }

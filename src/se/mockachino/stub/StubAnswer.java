@@ -4,7 +4,7 @@ import se.mockachino.Answer;
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
 
-public class StubAnswer implements StubStart {
+public class StubAnswer {
 	private final MockContext mockContext;
 	private final Answer answer;
 
@@ -13,9 +13,8 @@ public class StubAnswer implements StubStart {
 		this.answer = answer;
 	}
 
-	@Override
 	public <T> T on(T mock) {
 		MockData data = mockContext.getData(mock);
-		return mockContext.createProxy(mock, new AnswerStubber(answer, data));
+		return mockContext.createProxy(mock, new AnswerStubber(answer, mock, data));
 	}
 }

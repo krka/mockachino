@@ -3,7 +3,7 @@ package se.mockachino.stub;
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
 
-public class StubReturn implements StubStart {
+public class StubReturn {
 	private final MockContext mockContext;
 	private final Object returnValue;
 
@@ -12,9 +12,8 @@ public class StubReturn implements StubStart {
 		this.returnValue = returnValue;
 	}
 
-	@Override
 	public <T> T on(T mock) {
 		MockData data = mockContext.getData(mock);
-		return mockContext.createProxy(mock, new Stubber(returnValue, data));
+		return mockContext.createProxy(mock, new Stubber(returnValue, mock, data));
 	}
 }

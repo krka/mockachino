@@ -9,8 +9,8 @@ public class Stubber<T> extends VerificationHandler {
 	private final Object returnValue;
 	private final MockData<T> data;
 
-	public Stubber(Object returnValue, MockData<T> data) {
-		super("Stubber");
+	public Stubber(Object returnValue, T mock, MockData<T> data) {
+		super("Stubber", mock.toString());
 		this.returnValue = returnValue;
 		this.data = data;
 	}

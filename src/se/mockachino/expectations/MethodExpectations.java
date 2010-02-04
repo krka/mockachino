@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class MethodExpectations {
 	private final List<MethodExpectation> expectations;
 
-	public MethodExpectations(Class<?> returnType) {
+	public MethodExpectations() {
 		expectations = new ArrayList<MethodExpectation>();
 	}
 

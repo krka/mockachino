@@ -2,9 +2,8 @@ package se.mockachino.listener;
 
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
-import se.mockachino.stub.StubStart;
 
-public class ListenerAdder implements StubStart {
+public class ListenerAdder {
 	private final MockContext mockContext;
 	private final MethodCallListener listener;
 

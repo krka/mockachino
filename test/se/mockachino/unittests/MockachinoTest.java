@@ -4,6 +4,7 @@ import org.junit.Test;
 import se.mockachino.Answer;
 import se.mockachino.MethodCall;
 import se.mockachino.Mockachino;
+import se.mockachino.listener.MethodCallListener;
 import se.mockachino.matchers.Matchers;
 import se.mockachino.order.InOrder;
 
@@ -267,4 +268,74 @@ public class MockachinoTest {
 		Mockachino.verifyExactly(100).on(mock).get(Matchers.anyInt());
 
 	}
+
+	@Test
+	public void testNotAMock() {
+		try {
+			Throwable notAMock = new Throwable();
+			Mockachino.verifyExactly(1).on(notAMock).printStackTrace();
+			fail("Should fail");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testBadListener() {
+		List mock = Mockachino.mock(List.class);
+		Mockachino.listenWith(new MethodCallListener() {
+			@Override
+			public void listen(Object obj, MethodCall call) {
+				Integer i = (Integer) obj;
+				System.out.println("i:" + i);
+			}
+		}).on(mock).add(Matchers.any(Object.class));
+
+		try {
+			mock.add("Hello world");
+			fail("Should fail");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testBadUsage1() {
+		List mock = Mockachino.mock(List.class);
+		Mockachino.listenWith(null).on(mock);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testBadUsage2() {
+		List mock = Mockachino.mock(List.class);
+		Mockachino.stubThrow(null).on(mock);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testBadUsage3() {
+		List mock = Mockachino.mock(List.class);
+		Mockachino.stubAnswer(null).on(mock);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testBadUsage4() {
+		Mockachino.verifyOrder().verify(null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testBadUsage5() {
+		Mockachino.mock(null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testBadUsage6() {
+		Mockachino.spy(List.class, null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testBadUsage7() {
+		Mockachino.mock(List.class, null);
+	}
+
 }
+

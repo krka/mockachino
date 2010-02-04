@@ -10,8 +10,8 @@ public class Thrower<T> extends VerificationHandler {
 	private final MockData<T> data;
 
 
-	public Thrower(Throwable e, MockData<T> data) {
-		super("Thrower");
+	public Thrower(Throwable e, T mock, MockData<T> data) {
+		super("Thrower", mock.toString());
 		this.e = e;
 		this.data = data;
 	}

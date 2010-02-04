@@ -3,7 +3,7 @@ package se.mockachino.stub;
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
 
-public class StubThrow implements StubStart {
+public class StubThrow {
 	private final MockContext mockContext;
 	private final Throwable e;
 
@@ -12,9 +12,8 @@ public class StubThrow implements StubStart {
 		this.e = e;
 	}
 
-	@Override
 	public <T> T on(T mock) {
 		MockData data = mockContext.getData(mock);
-		return mockContext.createProxy(mock, new Thrower(e, data));
+		return mockContext.createProxy(mock, new Thrower(e, mock, data));
 	}
 }

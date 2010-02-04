@@ -1,28 +1,65 @@
 package se.mockachino.invocationhandler;
 
+import se.mockachino.cleaner.StacktraceCleaner;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 public abstract class AbstractInvocationHandler implements InvocationHandler {
-	private final String kind;
+	private static final Method EQUALS = find("equals");
+	private static final Method HASHCODE = find("hashCode");
+	private static final Method TOSTRING = find("toString");
 
-	protected AbstractInvocationHandler(String kind) {
-		this.kind = kind;
+	private final String name;
+
+	protected AbstractInvocationHandler(String name) {
+		this.name = name;
 	}
+
 	public final Object invoke(Object o, Method method, Object[] objects) throws Throwable {
-		//System.out.println("method:" + method + ", " + Formatting.list(objects));
-		if (method.getName().equals("equals") && method.getParameterTypes().length == 1) {
+		if (equals(method, EQUALS)) {
 			return o == objects[0];
 		}
-		if (method.getName().equals("hashCode") && method.getParameterTypes().length == 0) {
+		if (equals(method, HASHCODE)) {
 			return System.identityHashCode(o);
 		}
-		if (method.getName().equals("toString") && method.getParameterTypes().length == 0) {
-			return "Mockachino" + kind + ":" + System.identityHashCode(o);
+		if (equals(method, TOSTRING)) {
+			return name;
 		}
-		return doInvoke(o, method, objects);
+		try {
+			return doInvoke(o, method, objects);
+		} catch (Throwable throwable) {
+			throw StacktraceCleaner.cleanError(throwable);
+		}
 	}
 
-	public abstract Object doInvoke(Object o, Method method, Object[] objects) throws Throwable;
+	protected abstract Object doInvoke(Object o, Method method, Object[] objects) throws Throwable;
+
+	private static Method find(String name) {
+		for (Method method : Object.class.getMethods()) {
+			if (method.getName().equals(name)) {
+				return method;
+			}
+		}
+		return null;
+	}
+
+	private static boolean equals(Method a, Method b) {
+		if (!a.getName().equals(b.getName())) {
+			return false;
+		}
+		Class<?>[] paramsA = a.getParameterTypes();
+		Class<?>[] paramsB = b.getParameterTypes();
+		int n = paramsA.length;
+		if (n != paramsB.length) {
+			return false;
+		}
+		for (int i = n - 1; i >= 0; i--) {
+			if (paramsA[i] != paramsB[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
 

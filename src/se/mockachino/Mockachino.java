@@ -19,7 +19,7 @@ public class Mockachino {
 		return DEFAULT_CONTEXT.mock(clazz);
 	}
 
-	public <T> T mock(Class<T> clazz, InvocationHandler handler) {
+	public static <T> T mock(Class<T> clazz, InvocationHandler handler) {
 		return DEFAULT_CONTEXT.mock(clazz, handler);
 	}
 

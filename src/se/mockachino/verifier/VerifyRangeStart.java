@@ -2,9 +2,8 @@ package se.mockachino.verifier;
 
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
-import se.mockachino.stub.StubStart;
 
-public class VerifyRangeStart implements StubStart {
+public class VerifyRangeStart {
 	private final MockContext mockContext;
 	private final int min;
 	private final int max;
@@ -15,9 +14,8 @@ public class VerifyRangeStart implements StubStart {
 		this.max = max;
 	}
 
-	@Override
 	public <T> T on(T mock) {
 		MockData data = mockContext.getData(mock);
-		return mockContext.createProxy(mock, new Verifier(data, min, max));
+		return mockContext.createProxy(mock, new Verifier(mock, data, min, max));
 	}
 }

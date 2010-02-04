@@ -12,7 +12,7 @@ public class AddListener extends VerificationHandler {
 	private final MethodCallListener listener;
 
 	public AddListener(MockData mockData, Object mock, MethodCallListener listener) {
-		super("Listener");
+		super("Listener", mock.toString());
 		this.mockData = mockData;
 		this.mock = mock;
 		this.listener = listener;

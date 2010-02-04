@@ -1,5 +1,6 @@
 package se.mockachino;
 
+import se.mockachino.cleaner.StacktraceCleaner;
 import se.mockachino.invocationhandler.*;
 import se.mockachino.listener.ListenerAdder;
 import se.mockachino.listener.MethodCallListener;
@@ -22,24 +23,55 @@ public class MockContext {
 
 	private final Map<Object, MockData> mockData = Collections.synchronizedMap(new WeakHashMap<Object, MockData>());
 	private final AtomicInteger nextSequenceNumber = new AtomicInteger();
+	private final AtomicInteger nextMockId = new AtomicInteger();
 
 	public <T> T mock(Class<T> clazz) {
+		assertClass(clazz);
 		return mock(clazz, DEFAULT_INVOCATION_HANDLER);
 	}
 
 	public <T> T mock(Class<T> clazz, InvocationHandler handler) {
+		assertClass(clazz);
+		assertHandler(handler);
 		return spy(clazz, ProxyUtil.newProxy(clazz, handler), "Mock");
 	}
 
 	public <T> T spy(Class<T> clazz, T impl) {
+		assertClass(clazz);
+		if (impl == null) {
+			throw StacktraceCleaner.cleanError(
+					new IllegalArgumentException(
+							"impl can not be null"));
+		}
 		return spy(clazz, impl, "Spy");
 	}
 
 	private <T> T spy(Class<T> clazz, T impl, String kind) {
+		assertClass(clazz);
 		MatcherThreadHandler.assertEmpty();
-		T mock = ProxyUtil.newProxy(clazz, new Mock(this, impl, kind));
+		T mock = ProxyUtil.newProxy(clazz, new Mock(this, impl, kind, clazz.getSimpleName(), nextMockId()));
 		mockData.put(mock, new MockData(clazz));
 		return mock;
+	}
+
+	private <T> void assertClass(Class<T> clazz) {
+		if (clazz == null) {
+			throw StacktraceCleaner.cleanError(
+					new IllegalArgumentException(
+							"class can not be null"));
+		}
+	}
+
+	private <T> void assertHandler(InvocationHandler handler) {
+		if (handler == null) {
+			throw StacktraceCleaner.cleanError(
+					new IllegalArgumentException(
+							"handler can not be null"));
+		}
+	}
+
+	private String nextMockId() {
+		return Integer.toString(nextMockId.incrementAndGet());
 	}
 
 	public InOrder verifyOrder() {
@@ -79,6 +111,11 @@ public class MockContext {
 	}
 
 	public StubThrow stubThrow(Throwable e) {
+		if (e == null) {
+			throw StacktraceCleaner.cleanError(
+					new IllegalArgumentException(
+							"exception can not be null"));
+		}
 		return new StubThrow(this, e);
 	}
 
@@ -87,17 +124,29 @@ public class MockContext {
 	}
 
 	public StubAnswer stubAnswer(Answer answer) {
+		if (answer== null) {
+			throw StacktraceCleaner.cleanError(
+					new IllegalArgumentException(
+							"Answer can not be null"));
+		}
 		return new StubAnswer(this, answer);
 	}
 
 	public ListenerAdder listenWith(MethodCallListener listener) {
+		if (listener == null) {
+			throw StacktraceCleaner.cleanError(
+					new IllegalArgumentException(
+							"Listener can not be null"));
+		}
 		return new ListenerAdder(this, listener);
 	}
 
 	public <T> MockData<T> getData(T mock) {
 		MockData data = mockData.get(mock);
 		if (data == null) {
-			throw new IllegalArgumentException("Argument " + mock + " is not a mocked object.");
+			throw StacktraceCleaner.cleanError(
+					new IllegalArgumentException(
+							"Argument " + mock + " is not a mocked object."));
 		}
 		return data;
 	}

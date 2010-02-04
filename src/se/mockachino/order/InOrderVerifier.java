@@ -2,6 +2,7 @@ package se.mockachino.order;
 
 import se.mockachino.MockData;
 import se.mockachino.MethodCall;
+import se.mockachino.cleaner.StacktraceCleaner;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.verifier.VerificationHandler;
 import se.mockachino.matchers.MethodMatcher;
@@ -11,10 +12,10 @@ import java.util.List;
 
 public class InOrderVerifier extends VerificationHandler {
 	private final MockData data;
-	private InOrder inOrder;
+	private final InOrder inOrder;
 
-	public InOrderVerifier(InOrder inOrder, MockData data) {
-		super("InOrderVerifier");
+	public InOrderVerifier(InOrder inOrder, Object mock, MockData data) {
+		super("InOrderVerifier", mock.toString());
 		this.inOrder = inOrder;
 		this.data = data;
 	}
@@ -29,7 +30,7 @@ public class InOrderVerifier extends VerificationHandler {
 					if (number < inOrder.getCurrentCallNumber()) {
 						String errorMessage = "Calls were out of order:\n";
 						errorMessage += "Call to " + call + " occured before " + inOrder.getCurrentCall();
-						throw new VerificationError(errorMessage);
+						throw StacktraceCleaner.cleanError(new VerificationError(errorMessage));
 					} else {
 						inOrder.setCurrent(number, call);
 						return;
@@ -37,6 +38,6 @@ public class InOrderVerifier extends VerificationHandler {
 				}
 			}
 		}
-		throw new VerificationError("No call found for " + matcher);
+		throw StacktraceCleaner.cleanError(new VerificationError("No call found for " + matcher));
 	}
 }

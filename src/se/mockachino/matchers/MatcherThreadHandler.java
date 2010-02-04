@@ -44,7 +44,7 @@ public class MatcherThreadHandler {
 		matchers.get().add(m);
 	}
 
-	static Matcher getMatcher() {
+	private static Matcher getMatcher() {
 		try {
 			return matchers.get().remove();
 		} catch (Exception e) {

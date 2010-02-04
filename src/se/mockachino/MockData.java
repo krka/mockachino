@@ -13,22 +13,24 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class MockData<T> {
 	private final Class<T> iface;
 	private final List<MethodCall> calls;
+	private final List<MethodCall> readOnlyCalls;
 	private final Map<Method, MethodListeners> listeners;
 	private final Map<Method, MethodExpectations> expectations;
 
 	public MockData(Class<T> iface) {
 		this.iface = iface;
 		calls = Collections.synchronizedList(new SafeList<MethodCall>());
+		readOnlyCalls = Collections.unmodifiableList(calls);
 		expectations = new HashMap<Method,MethodExpectations>();
 		listeners = new HashMap<Method,MethodListeners>();
 		for (Method method : iface.getMethods()) {
-			expectations.put(method, new MethodExpectations(method.getReturnType()));
-			listeners.put(method, new MethodListeners(method.getReturnType()));
+			expectations.put(method, new MethodExpectations());
+			listeners.put(method, new MethodListeners());
 		}
 	}
 
 	public List<MethodCall> getCalls() {
-		return calls;
+		return readOnlyCalls;
 	}
 
 	public MethodExpectations getExpectations(Method method) {
@@ -43,11 +45,10 @@ public class MockData<T> {
 		return iface;
 	}
 
-	public T getVerifier(int min, int max) {
-		return ProxyUtil.newProxy(iface, new Verifier(this, min, max));
-	}
-
-	public T getVerifier() {
-		return ProxyUtil.newProxy(iface, new Verifier(this, 1, Integer.MAX_VALUE));
+	public synchronized MethodCall addCall(MockContext mockContext, Method method, Object[] objects, StackTraceElement[] stackTrace) {
+		int callNumber = mockContext.incrementSequence();
+		MethodCall call = new MethodCall(method, objects, callNumber, stackTrace);
+		calls.add(call);
+		return call;
 	}
 }

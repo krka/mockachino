@@ -15,20 +15,18 @@ public class Mock extends AbstractInvocationHandler {
 	private final MockContext context;
 	private final Object impl;
 
-	public Mock(MockContext context, Object impl, String kind) {
-		super(kind);
+	public Mock(MockContext context, Object impl, String kind, String type, String id) {
+		super(kind + ":" + type + ":" + id);
 		this.context = context;
 		this.impl = impl;
 	}
 
 	public Object doInvoke(Object o, Method method, Object[] objects) throws Throwable {
-		int callNumber = context.incrementSequence();
 		MockData data = context.getData(o);
-		List<MethodCall> list = data.getCalls();
-		MethodCall methodCall = new MethodCall(method, objects, callNumber, StacktraceCleaner.cleanError(new Throwable()).getStackTrace());
-		list.add(methodCall);
+		MethodCall methodCall = data.addCall(context, method, objects, StacktraceCleaner.cleanError(new Throwable()).getStackTrace());
 
 		data.getListeners(method).notifyListeners(methodCall);
+
 		MethodExpectations methodExpectations = data.getExpectations(method);
 		MethodExpectation expectation = methodExpectations.findMatch(methodCall);
 		if (expectation != null) {

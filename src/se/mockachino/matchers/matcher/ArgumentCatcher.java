@@ -4,7 +4,7 @@ public class ArgumentCatcher<T> extends Matcher<T> {
 	private final Matcher<T> delegate;
 	private T value;
 
-	public ArgumentCatcher(Matcher<T> delegate) {
+	protected ArgumentCatcher(Matcher<T> delegate) {
 		this.delegate = delegate;
 	}
 

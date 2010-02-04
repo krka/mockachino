@@ -44,7 +44,7 @@ public class StacktraceCleaner {
 	}};
 	private static boolean isClean(StackTraceElement stackTraceElement) {
 		String s = stackTraceElement.getClassName();
-		if (s.endsWith("Test")) {
+		if (s.contains("Test")) {
 			return true;
 		}
 		for (String bannedName : bannedNames) {

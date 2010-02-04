@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MethodListeners {
 	private final List<MethodListener> listeners;
-	public MethodListeners(Class<?> returnType) {
+	public MethodListeners() {
 		listeners = Collections.synchronizedList(new ArrayList<MethodListener>());
 	}
 

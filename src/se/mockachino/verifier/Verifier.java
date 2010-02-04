@@ -1,5 +1,6 @@
 package se.mockachino.verifier;
 
+import se.mockachino.cleaner.StacktraceCleaner;
 import se.mockachino.verifier.VerificationHandler;
 import se.mockachino.MockData;
 import se.mockachino.MethodCall;
@@ -9,12 +10,12 @@ import se.mockachino.matchers.MethodMatcher;
 import java.util.List;
 
 public class Verifier<T> extends VerificationHandler {
-	private MockData<T> mockData;
+	private final MockData<T> mockData;
 	private final int minCalls;
 	private final int maxCalls;
 
-	public Verifier(MockData<T> mockData, int minCalls, int maxCalls) {
-		super("Verifier");
+	public Verifier(T mock, MockData<T> mockData, int minCalls, int maxCalls) {
+		super("Verifier", mock.toString());
 		this.mockData = mockData;
 		this.minCalls = minCalls;
 		this.maxCalls = maxCalls;
@@ -63,7 +64,7 @@ public class Verifier<T> extends VerificationHandler {
 	private void error(String msg, MethodMatcher matcher) {
 		String matchingMethods = getBestMatches(matcher);
 		String expected = "EXPECTED:     mock." + matcher.toString();
-		throw new VerificationError(msg + "\n" + matchingMethods + expected);
+		throw StacktraceCleaner.cleanError(new VerificationError(msg + "\n" + matchingMethods + expected));
 	}
 
 	private String getBestMatches(MethodMatcher matcher) {

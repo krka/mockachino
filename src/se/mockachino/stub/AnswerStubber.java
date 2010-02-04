@@ -11,8 +11,8 @@ public class AnswerStubber extends VerificationHandler {
 	private final Answer answer;
 	private final MockData data;
 
-	public AnswerStubber(Answer answer, MockData data) {
-		super("AnswerStubber");
+	public AnswerStubber(Answer answer, Object mock, MockData data) {
+		super("AnswerStubber", mock.toString());
 		this.answer = answer;
 		this.data = data;
 	}

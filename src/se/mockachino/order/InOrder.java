@@ -23,24 +23,24 @@ public class InOrder {
 	public <T> T verify(T mock) {
 		MockData<T> data = context.getData(mock);
 		Class<T> clazz = data.getInterface();
-		return ProxyUtil.newProxy(clazz, new InOrderVerifier(this, data));
+		return ProxyUtil.newProxy(clazz, new InOrderVerifier(this, mock, data));
 	}
 
-	public int getCurrentCallNumber() {
+	int getCurrentCallNumber() {
 		return currentCallNumber;
 	}
 
-	public MethodCall getCurrentCall() {
+	MethodCall getCurrentCall() {
 		return currentCall;
 	}
 
-	public boolean consume(MethodCall call) {
+	boolean consume(MethodCall call) {
 		synchronized (consumedCalls) {
 			return consumedCalls.add(call);
 		}
 	}
 
-	public void setCurrent(int number, MethodCall call) {
+	void setCurrent(int number, MethodCall call) {
 		this.currentCallNumber = number;
 		this.currentCall = call;
 	}
