@@ -4,16 +4,14 @@ import se.mockachino.util.Formatting;
 
 public class IdentityMatcher<T> extends Matcher<T> {
 	private final T value;
-	private final boolean same;
 
-	public IdentityMatcher(T value, boolean same) {
+	public IdentityMatcher(T value) {
 		this.value = value;
-		this.same = same;
 	}
 
 	@Override
 	public boolean matches(T value) {
-		return (value == this.value) == same;
+		return value == this.value;
 
 	}
 

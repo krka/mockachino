@@ -63,5 +63,5 @@ public class ErrorMessageTest {
 	// TODO: test and improve verifyInOrder error message
 	// TODO: test and improve "only interfaces can be mocked" error
 	// TODO: test and improve argument is not a mocked object
-	// TODO: test and improve illegal matcher usage error
+	// TODO: test and improve illegal match usage error
 }

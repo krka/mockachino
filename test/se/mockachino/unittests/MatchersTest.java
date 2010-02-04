@@ -100,12 +100,11 @@ public class MatchersTest {
 
 		Mockachino.verifyExactly(2).on(mock).compare(
 				Matchers.and(
-						new EqualityMatcher("Foo"),
-						//new EqualityMatcher("Foo2"),
-						ClassMatcher.create(Object.class)),
+						Matchers.<Object>eqM("Foo"),
+						//Matchers.<Object>eqM("Foo2"),
+						Matchers.typeM(Object.class)),
 				Matchers.or(
-						new EqualityMatcher("Bar"),
-						new IdentityMatcher(null, true)));
+						Matchers.<Object>eqM("Bar"),
+						Matchers.isNullM()));
 	}
-
 }

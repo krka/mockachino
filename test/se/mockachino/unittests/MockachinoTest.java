@@ -184,7 +184,7 @@ public class MockachinoTest {
 			Matchers.anyInt();
 			Mockachino.stubReturn("Hello").on(mock).get(0);
 
-			fail("Not supposed to accept bad matcher usage");
+			fail("Not supposed to accept bad match usage");
 		} catch (Exception e) {
 
 		}

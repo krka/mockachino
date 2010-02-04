@@ -4,7 +4,6 @@ import org.junit.Test;
 import se.mockachino.Mockachino;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.Matchers;
-import se.mockachino.matchers.matcher.ClassMatcher;
 import se.mockachino.matchers.matcher.Matcher;
 import se.mockachino.order.InOrder;
 
@@ -167,7 +166,7 @@ public class ExamplesTest {
 		mock.compare("Foo", "Bar");
 		mock.compare("Foo", null);
 
-		Mockachino.verifyOnce().on(mock).compare(Matchers.not(ClassMatcher.create(List.class)), "World");
+		Mockachino.verifyOnce().on(mock).compare(Matchers.not(Matchers.typeM(List.class)), "World");
 	}
 
 	@Test
@@ -193,7 +192,7 @@ public class ExamplesTest {
 				return "(Foo or Bar)";
 			}
 		};
-		Mockachino.verifyOnce().on(mock).compare(Matchers.matcher(myFooBarMatcher), Matchers.matcher(myFooBarMatcher));
+		Mockachino.verifyOnce().on(mock).compare(Matchers.match(myFooBarMatcher), Matchers.match(myFooBarMatcher));
 	}
 
 }

@@ -16,7 +16,7 @@ public class ArgumentCatcherTest {
 		List mock = mock(List.class);
 		ArgumentCatcher<Integer> catcher = ArgumentCatcher.create(ClassMatcher.anyInt());
 		mock.get(123);
-		verifyOnce().on(mock).get(matcher(catcher));
+		verifyOnce().on(mock).get(match(catcher));
 		assertEquals(Integer.valueOf(123), catcher.getValue());
 	}
 }
