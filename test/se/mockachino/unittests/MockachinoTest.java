@@ -338,5 +338,21 @@ public class MockachinoTest {
 		Mockachino.mock(List.class, null);
 	}
 
+	@Test(expected = UsageError.class)
+	public void testBadUsage8() {
+		Mockachino.reset("Hello world");
+	}
+
+	@Test
+	public void testReset() {
+		List mock = Mockachino.mock(List.class);
+		mock.add("Hello");
+		mock.remove("Hello");
+		mock.add("World");
+
+		Mockachino.verifyExactly(2).on(mock).add(Matchers.any(Object.class));
+		Mockachino.reset(mock);
+		Mockachino.verifyExactly(0).on(mock).add(Matchers.any(Object.class));
+	}
 }
 
