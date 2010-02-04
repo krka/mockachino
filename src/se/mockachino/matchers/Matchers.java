@@ -18,12 +18,29 @@ public class Matchers {
 		return matcher(matcher);
 	}
 
+	public static <T> Matcher<T> notM(Matcher<T> matcher) {
+		return new NotMatcher<T>(matcher);
+	}
+
 	public static <T> T not(Matcher<T> matcher) {
-		return matcher(new NotMatcher<T>(matcher));
+		return matcher(notM(matcher));
+	}
+
+	public static <T> T and(Matcher<T>... matchers) {
+		return m(new AndMatcher<T>(matchers));
+	}
+
+	public static <T> T or(Matcher<T>... matchers) {
+		return m(new OrMatcher<T>(matchers));
+	}
+
+
+	private static RegexpMatcher regexpM(String s) {
+		return new RegexpMatcher(s);
 	}
 
 	public static String regexp(String s) {
-		return matcher(new RegexpMatcher(s));
+		return matcher(regexpM(s));
 	}
 
 	public static <T> T any(Class<T> clazz) {
@@ -84,14 +101,6 @@ public class Matchers {
 
 	public static <T> T notNull() {
 		return notSame((T) null);
-	}
-
-	public static <T> T and(Matcher<T>... matchers) {
-		return m(new AndMatcher<T>(matchers));
-	}
-
-	public static <T> T or(Matcher<T>... matchers) {
-		return m(new OrMatcher<T>(matchers));
 	}
 
 }
