@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 public abstract class AbstractInvocationHandler implements InvocationHandler {
 	private static final Method EQUALS = find("equals");
 	private static final Method HASHCODE = find("hashCode");
-	private static final Method TOSTRING = find("toString");
+	public static final Method TOSTRING = find("toString");
 
 	private final String name;
 

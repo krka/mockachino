@@ -9,9 +9,11 @@ import java.util.ListIterator;
 public class SafeIteratorList<T> implements List<T> {
 	private final List<T> delegate;
 	private final Object lock = new Object();
+	private final T nullObject;
 
-	public SafeIteratorList(List<T> delegate) {
+	public SafeIteratorList(List<T> delegate, T nullObject) {
 		this.delegate = delegate;
+		this.nullObject = nullObject;
 	}
 
 	@Override
@@ -36,7 +38,7 @@ public class SafeIteratorList<T> implements List<T> {
 				try {
 					return get(index);
 				} catch (Exception e) {
-					return null;
+					return nullObject;
 				} finally {
 					index++;
 				}

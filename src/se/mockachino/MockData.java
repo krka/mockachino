@@ -1,6 +1,7 @@
 package se.mockachino;
 
 import se.mockachino.expectations.MethodExpectations;
+import se.mockachino.invocationhandler.AbstractInvocationHandler;
 import se.mockachino.listener.MethodListeners;
 import se.mockachino.util.SafeIteratorList;
 
@@ -8,6 +9,7 @@ import java.util.*;
 import java.lang.reflect.Method;
 
 public class MockData<T> {
+	private final static MethodCall NULL_OBJECT = new MethodCall(AbstractInvocationHandler.TOSTRING, new Object[]{}, 0, new StackTraceElement[]{});
 	private final Class<T> iface;
 	private final List<MethodCall> calls;
 	private final List<MethodCall> readOnlyCalls;
@@ -16,7 +18,7 @@ public class MockData<T> {
 
 	public MockData(Class<T> iface) {
 		this.iface = iface;
-		calls = new SafeIteratorList<MethodCall>(new ArrayList<MethodCall>());
+		calls = new SafeIteratorList<MethodCall>(new ArrayList<MethodCall>(), NULL_OBJECT);
 		readOnlyCalls = Collections.unmodifiableList(calls);
 		expectations = new HashMap<Method,MethodExpectations>();
 		listeners = new HashMap<Method,MethodListeners>();
