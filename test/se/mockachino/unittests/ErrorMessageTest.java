@@ -35,8 +35,8 @@ public class ErrorMessageTest {
 			mock.add("World");
 
 			InOrder order = Mockachino.verifyOrder();
-			order.verify(mock).add("World");
-			order.verify(mock).add("Hello");
+			order.verify().on(mock).add("World");
+			order.verify().on(mock).add("Hello");
 			fail("Should not succeed");
 		} catch (VerificationError e) {
 			e.printStackTrace();
@@ -52,8 +52,8 @@ public class ErrorMessageTest {
 			mock.add("World");
 
 			InOrder order = Mockachino.verifyOrder();
-			order.verify(mock).add("World");
-			order.verify(mock).add("Hello2");
+			order.verify().on(mock).add("World");
+			order.verify().on(mock).add("Hello2");
 			fail("Should not succeed");
 		} catch (VerificationError e) {
 			e.printStackTrace();

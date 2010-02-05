@@ -22,6 +22,7 @@
 	<target name="compile">
 		<mkdir dir="${baseDir}/build/classes" />
 		<javac
+				debug="true"
 				destdir="${baseDir}/build/classes"
 				>
 			<classpath>
@@ -47,24 +48,24 @@
 		<delete dir="${test.emma.coverage.dir}" />
 	</target>
 
-	  <target name="emma" description="turns on EMMA instrumentation/reporting" >
-	    <property name="emma.enabled" value="true" />
-	    <!-- EMMA instr class output directory: -->
-	    <property name="out.instr.dir" value="${baseDir}/build/outinstr" />
-	    <property name="coverage.dir" value="${baseDir}/build/coverage" />
-	    
-	    <mkdir dir="${out.instr.dir}" />
-	  </target>
-	  
+	<target name="emma" description="turns on EMMA instrumentation/reporting" >
+		<property name="emma.enabled" value="true" />
+		<!-- EMMA instr class output directory: -->
+		<property name="out.instr.dir" value="${baseDir}/build/outinstr" />
+		<property name="coverage.dir" value="${baseDir}/build/coverage" />
+
+		<mkdir dir="${out.instr.dir}" />
+	</target>
+
 	<target name="test" depends="compile-test" description="Run unit tests">
-		    <emma enabled="${emma.enabled}" >
-		      <instr instrpath="${baseDir}/build/classes"
-			     destdir="${out.instr.dir}"	
-			     metadatafile="${coverage.dir}/metadata.emma"
-			     merge="true"
-		      />
-		    </emma>
-	
+		<emma enabled="${emma.enabled}" >
+			<instr instrpath="${baseDir}/build/classes"
+				   destdir="${out.instr.dir}"
+				   metadatafile="${coverage.dir}/metadata.emma"
+				   merge="true"
+					/>
+		</emma>
+
 		<mkdir dir="${reports.dir}" />
 		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="true" forkmode="perBatch" includeantruntime="true">
 			<classpath>
@@ -76,7 +77,7 @@
 				<fileset dir="${baseDir}/lib">
 					<include name="**/*.jar" />
 				</fileset>
-			        <path refid="emma.lib" />
+				<path refid="emma.lib" />
 			</classpath>
 
 			<formatter type="xml"/>
@@ -85,8 +86,8 @@
 					<include name="**/unittests/**/*Test*.java"/>
 				</fileset>
 			</batchtest>
-		      <jvmarg value="-Demma.coverage.out.file=${coverage.dir}/coverage.emma" />
-		      <jvmarg value="-Demma.coverage.out.merge=true" />
+			<jvmarg value="-Demma.coverage.out.file=${coverage.dir}/coverage.emma" />
+			<jvmarg value="-Demma.coverage.out.merge=true" />
 		</junit>
 		<junitreport todir="${reports.dir}">
 			<fileset dir="${reports.dir}">
@@ -94,17 +95,17 @@
 			</fileset>
 			<report format="frames" todir="${reports.dir}/html"/>
 		</junitreport>
-		    <emma enabled="${emma.enabled}" >
-		      <report sourcepath="${baseDir}/src" >
-			<fileset dir="${coverage.dir}" >
-			  <include name="*.emma" />
-			</fileset>
+		<emma enabled="${emma.enabled}" >
+			<report sourcepath="${baseDir}/src" >
+				<fileset dir="${coverage.dir}" >
+					<include name="*.emma" />
+				</fileset>
 
-			<txt outfile="${coverage.dir}/coverage.txt" />
-			<html outfile="${coverage.dir}/coverage.html" />
-		      </report>
-		    </emma>
-		
+				<txt outfile="${coverage.dir}/coverage.txt" />
+				<html outfile="${coverage.dir}/coverage.html" />
+			</report>
+		</emma>
+
 	</target>
 
 	<target name="javadoc" description="Generate javadoc">
@@ -114,7 +115,7 @@
 			</sourcepath>
 		</javadoc>
 	</target>
-	
+
 	<target name="package" depends="compile" description="Package jars">
 		<jar destfile="${baseDir}/build/mockachino-${suffix}.jar">
 			<fileset dir="${baseDir}/build/classes"/>

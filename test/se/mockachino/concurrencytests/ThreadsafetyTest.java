@@ -88,7 +88,7 @@ public class ThreadsafetyTest {
 			int count = counts[i];
 			InOrder order = Mockachino.verifyOrder();
 			for (int j = 0; j < count; j++) {
-				order.verify(mock).foo(name, 1 + j);
+				order.verify().on(mock).foo(name, 1 + j);
 			}
 			Mockachino.verifyExactly(count).on(mock).foo(name, Matchers.anyInt());
 		}

@@ -9,7 +9,7 @@ import java.util.*;
 import java.lang.reflect.Method;
 
 public class MockData<T> {
-	private final static MethodCall NULL_OBJECT = new MethodCall(AbstractInvocationHandler.TOSTRING, new Object[]{}, 0, new StackTraceElement[]{});
+	public final static MethodCall NULL_METHOD = new MethodCall(AbstractInvocationHandler.TOSTRING, new Object[]{}, 0, new StackTraceElement[]{});
 	private final Class<T> iface;
 	private final List<MethodCall> calls;
 	private final List<MethodCall> readOnlyCalls;
@@ -18,7 +18,7 @@ public class MockData<T> {
 
 	public MockData(Class<T> iface) {
 		this.iface = iface;
-		calls = new SafeIteratorList<MethodCall>(new ArrayList<MethodCall>(), NULL_OBJECT);
+		calls = new SafeIteratorList<MethodCall>(new ArrayList<MethodCall>(), NULL_METHOD);
 		readOnlyCalls = Collections.unmodifiableList(calls);
 		expectations = new HashMap<Method,MethodExpectations>();
 		listeners = new HashMap<Method,MethodListeners>();

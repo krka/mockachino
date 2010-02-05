@@ -1,6 +1,7 @@
 package se.mockachino.verifier;
 
 import se.mockachino.cleaner.StacktraceCleaner;
+import se.mockachino.util.Formatting;
 import se.mockachino.verifier.VerificationHandler;
 import se.mockachino.MockData;
 import se.mockachino.MethodCall;
@@ -34,31 +35,21 @@ public class Verifier<T> extends VerificationHandler {
 		if (counter < minCalls) {
 			String expected;
 			if (exact) {
-				expected = "Expected exactly " + calls(minCalls);
+				expected = "Expected exactly " + Formatting.calls(minCalls);
 			} else {
-				expected = "Expected at least " + calls(minCalls);
+				expected = "Expected at least " + Formatting.calls(minCalls);
 			}
-			error(expected + ", but got " + calls(counter), matcher);
+			error(expected + ", but got " + Formatting.calls(counter), matcher);
 		}
 		if (counter > maxCalls) {
 			String expected;
 			if (exact) {
-				expected = "Expected exactly " + calls(maxCalls);
+				expected = "Expected exactly " + Formatting.calls(maxCalls);
 			} else {
-				expected = "Expected at most" + calls(maxCalls);
+				expected = "Expected at most" + Formatting.calls(maxCalls);
 			}
-			error(expected + ", but got " + calls(counter), matcher);
+			error(expected + ", but got " + Formatting.calls(counter), matcher);
 		}
-	}
-
-	private String calls(int num) {
-		if (num == 1) {
-			return "1 call";
-		}
-		if (num == 0) {
-			return "no calls";
-		}
-		return num + " calls";
 	}
 
 	private void error(String msg, MethodMatcher matcher) {

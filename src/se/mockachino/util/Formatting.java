@@ -3,6 +3,17 @@ package se.mockachino.util;
 import se.mockachino.matchers.matcher.Matcher;
 
 public class Formatting {
+
+	public static String calls(int num) {
+		if (num == 1) {
+			return "1 call";
+		}
+		if (num == 0) {
+			return "no calls";
+		}
+		return num + " calls";
+	}
+
 	public static String list(Object[] args) {
 		return join(", ", args);
 	}

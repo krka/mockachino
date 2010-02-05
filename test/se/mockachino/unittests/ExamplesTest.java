@@ -124,10 +124,10 @@ public class ExamplesTest {
 		mock.add("Bar");
 
 		InOrder order = Mockachino.verifyOrder();
-		order.verify(mock).add("Hello");
-		order.verify(mock).add("World");
-		order.verify(mock).contains("Hello");
-		order.verify(mock).add("Bar");
+		order.verify().on(mock).add("Hello");
+		order.verify().on(mock).add("World");
+		order.verify().on(mock).contains("Hello");
+		order.verify().on(mock).add("Bar");
 	}
 
 	@Test

@@ -62,6 +62,7 @@ public class MockachinoTest {
 	@Test
 	public void testInOrder() {
 		List mock = Mockachino.mock(List.class);
+		mock.add("World");
 		mock.add("Hello");
 		mock.remove("Hello");
 		mock.add("World");
@@ -69,13 +70,26 @@ public class MockachinoTest {
 		Mockachino.verifyExactly(1).on(mock).add("Hello");
 
 		InOrder order = Mockachino.verifyOrder();
-		order.verify(mock).add("Hello");
-		order.verify(mock).add("World");
+		order.verify().on(mock).add("Hello");
+		order.verify().on(mock).add("World");
 
 		InOrder order2 = Mockachino.verifyOrder();
-		order2.verify(mock).add("Hello");
-		order2.verify(mock).remove(Matchers.type(Object.class));
+		order2.verify().on(mock).add("Hello");
+		order2.verify().on(mock).remove(Matchers.type(Object.class));
+	}
 
+	@Test
+	public void testInOrder2() {
+		List mock = Mockachino.mock(List.class);
+		mock.add("World");
+		mock.add("Hello");
+		mock.add("Hello");
+		mock.add("World");
+
+		InOrder order = Mockachino.verifyOrder();
+		order.verify().on(mock).add("World");
+		order.verifyAtLeast(2).on(mock).add("Hello");
+		order.verify().on(mock).add("World");
 	}
 
 	@Test
@@ -87,11 +101,11 @@ public class MockachinoTest {
 
 		try {
 			InOrder order = Mockachino.verifyOrder();
-			order.verify(mock).add("World");
-			order.verify(mock).add("Hello");
+			order.verify().on(mock).add("World");
+			order.verify().on(mock).add("Hello");
 			fail("Expected out of order calls to fail");
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 
@@ -240,9 +254,9 @@ public class MockachinoTest {
 		mock.add("Hello");
 
 		InOrder order = Mockachino.verifyOrder();
-		order.verify(mock).add("Hello");
-		order.verify(mock).add("World");
-		order.verify(mock).add("Hello");
+		order.verify().on(mock).add("Hello");
+		order.verify().on(mock).add("World");
+		order.verify().on(mock).add("Hello");
 	}
 
 	@Test
@@ -263,7 +277,7 @@ public class MockachinoTest {
 		}
 		InOrder order = Mockachino.verifyOrder();
 		for (int i = 0; i < 100; i++) {
-			order.verify(mock).get(i);
+			order.verify().on(mock).get(i);
 		}
 
 		Mockachino.verifyExactly(100).on(mock).get(Matchers.anyInt());
@@ -320,7 +334,7 @@ public class MockachinoTest {
 
 	@Test(expected = UsageError.class)
 	public void testBadUsage4() {
-		Mockachino.verifyOrder().verify(null);
+		Mockachino.verifyOrder().verify().on(null);
 	}
 
 	@Test(expected = UsageError.class)

@@ -11,37 +11,25 @@ import java.util.Set;
 
 public class InOrder {
 	private final MockContext context;
-	private final Set<MethodCall> consumedCalls;
-	private int currentCallNumber;
-	private MethodCall currentCall;
+	private MethodCall currentCall = MockData.NULL_METHOD;
 
 	public InOrder(MockContext context) {
 		this.context = context;
-		consumedCalls = new HashSet<MethodCall>();
 	}
 
-	public <T> T verify(T mock) {
-		MockData<T> data = context.getData(mock);
-		Class<T> clazz = data.getInterface();
-		return ProxyUtil.newProxy(clazz, new InOrderVerifier(this, mock, data));
+	public InOrderVerify verify() {
+		return verifyAtLeast(1);
 	}
 
-	int getCurrentCallNumber() {
-		return currentCallNumber;
+	public InOrderVerify verifyAtLeast(int min) {
+		return new InOrderVerify(this, context, min);
 	}
 
 	MethodCall getCurrentCall() {
 		return currentCall;
 	}
 
-	boolean consume(MethodCall call) {
-		synchronized (consumedCalls) {
-			return consumedCalls.add(call);
-		}
-	}
-
-	void setCurrent(int number, MethodCall call) {
-		this.currentCallNumber = number;
+	void setCurrent(MethodCall call) {
 		this.currentCall = call;
 	}
 }
