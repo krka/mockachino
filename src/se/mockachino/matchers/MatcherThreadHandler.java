@@ -16,9 +16,6 @@ public class MatcherThreadHandler {
 		if (value == null) {
 			return MatcherThreadHandler.getMatcher();
 		}
-		if (value instanceof Matcher) {
-			return (Matcher) value;
-		}
 		if (value instanceof Number) {
 			if (((Number) value).longValue() == 0) {
 				return MatcherThreadHandler.getMatcher();

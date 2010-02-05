@@ -1,17 +1,13 @@
 package se.mockachino.matchers;
 
-import se.mockachino.expectations.DefaultMethodExpectations;
+import se.mockachino.expectations.DefaultValues;
 import se.mockachino.matchers.matcher.*;
 
 public class Matchers {
 
 	public static <T> T match(Matcher<T> matcher) {
 		MatcherThreadHandler.pushMatcher(matcher);
-		try {
-			return DefaultMethodExpectations.forType(matcher.getType()).getValue(null);
-		} catch (Throwable throwable) {
-			return null;
-		}
+		return DefaultValues.forType(matcher.getType());
 	}
 
 	public static <T> T m(Matcher<T> matcher) {

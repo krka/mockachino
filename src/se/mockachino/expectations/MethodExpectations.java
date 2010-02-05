@@ -13,7 +13,6 @@ public class MethodExpectations {
 		expectations = new ArrayList<MethodExpectation>();
 	}
 
-
 	public synchronized MethodExpectation findMatch(MethodCall call) {
 		int n = expectations.size();
 		for (int i = n - 1; i >= 0; i--) {
