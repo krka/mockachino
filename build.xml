@@ -83,7 +83,7 @@
 			<formatter type="xml"/>
 			<batchtest fork="yes" todir="${reports.dir}">
 				<fileset dir="${basedir}/test">
-					<include name="**/unittests/**/*Test*.java"/>
+					<exclude name="**/concurrencytests/**"/>
 				</fileset>
 			</batchtest>
 			<jvmarg value="-Demma.coverage.out.file=${coverage.dir}/coverage.emma" />
