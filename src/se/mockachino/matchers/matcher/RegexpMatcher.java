@@ -1,10 +1,16 @@
 package se.mockachino.matchers.matcher;
 
+import java.util.regex.Pattern;
+
 public class RegexpMatcher extends Matcher<String> {
-	private final String s;
+	private final Pattern pattern;
 
 	public RegexpMatcher(String s) {
-		this.s = s;
+		pattern = Pattern.compile(s);
+	}
+
+	public RegexpMatcher(Pattern pattern) {
+		this.pattern = pattern;
 	}
 
 	@Override
@@ -12,7 +18,7 @@ public class RegexpMatcher extends Matcher<String> {
 		if (value == null) {
 			return false;
 		}
-		return value.matches(s);
+		return pattern.matcher(value).matches();
 	}
 
 	@Override
@@ -21,7 +27,7 @@ public class RegexpMatcher extends Matcher<String> {
 	}
 
 	public String asString() {
-		return "regexp(\"" + s + "\")";
+		return "regexp(\"" + pattern + "\")";
 	}
 
 }

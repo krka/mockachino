@@ -41,6 +41,10 @@ public class ClassMatcher<T> extends Matcher<T> {
 		return create(Boolean.class);
 	}
 
+	public static ClassMatcher<Character> anyChar() {
+		return create(Character.class);
+	}
+
 	@Override
 	public boolean matches(T value) {
 		if (clazz.isInstance(value)) {

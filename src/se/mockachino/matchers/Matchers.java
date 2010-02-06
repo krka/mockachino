@@ -2,6 +2,7 @@ package se.mockachino.matchers;
 
 import se.mockachino.expectations.DefaultValues;
 import se.mockachino.matchers.matcher.*;
+import se.mockachino.util.Formatting;
 
 public class Matchers {
 
@@ -143,6 +144,14 @@ public class Matchers {
 		return ClassMatcher.anyBoolean();
 	}
 
+	public static char anyChar() {
+		return m(anyCharM());
+	}
+
+	public static ClassMatcher<Character> anyCharM() {
+		return ClassMatcher.anyChar();
+	}
+
 	public static <T> Matcher<T> isNullM() {
 		return sameM(null);
 	}
@@ -165,6 +174,30 @@ public class Matchers {
 
 	public static boolean isFalse() {
 		return eq(Boolean.FALSE);
+	}
+
+	public static String contains(String s) {
+		return m(containsM(s));
+	}
+
+	public static Matcher<String> containsM(String s) {
+		return new RegexpMatcher(".*" + Formatting.quote(s) + ".*");
+	}
+
+	public static String startsWith(String s) {
+		return m(startsWithM(s));
+	}
+
+	public static Matcher<String> startsWithM(String s) {
+		return new RegexpMatcher(Formatting.quote(s) + ".*");
+	}
+
+	public static String endsWith(String s) {
+		return m(endsWithM(s));
+	}
+
+	public static Matcher<String> endsWithM(String s) {
+		return new RegexpMatcher(".*" + Formatting.quote(s));
 	}
 
 }

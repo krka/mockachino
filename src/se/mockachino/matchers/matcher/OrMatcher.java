@@ -29,6 +29,9 @@ public class OrMatcher<T> extends Matcher<T> {
 
 	@Override
 	protected String asString() {
+		if (delegates.length == 0) {
+			return "false";
+		}
 		return "(" + Formatting.join(" | ", (Object[]) delegates) + ")";
 	}
 }

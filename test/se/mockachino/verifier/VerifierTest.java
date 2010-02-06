@@ -22,7 +22,13 @@ public class VerifierTest {
 		List mock = Mockachino.mock(List.class);
 		mock.add("Foo");
 		Mockachino.verifyAtLeast(2).on(mock).add("Foo");
+	}
 
+	@Test(expected = VerificationError.class)
+	public void testTooFew2() {
+		List mock = Mockachino.mock(List.class);
+		mock.add("Foo");
+		Mockachino.verifyExactly(2).on(mock).add("Foo");
 	}
 
 	@Test(expected = VerificationError.class)
@@ -35,4 +41,13 @@ public class VerifierTest {
 
 	}
 
+	@Test(expected = VerificationError.class)
+	public void testTooMany2() {
+		List mock = Mockachino.mock(List.class);
+		mock.add("Foo");
+		mock.add("Foo");
+		mock.add("Foo");
+		Mockachino.verifyExactly(2).on(mock).add("Foo");
+
+	}
 }

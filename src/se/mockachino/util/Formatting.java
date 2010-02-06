@@ -2,6 +2,8 @@ package se.mockachino.util;
 
 import se.mockachino.matchers.matcher.Matcher;
 
+import java.util.regex.Pattern;
+
 public class Formatting {
 
 	public static String calls(int num) {
@@ -75,4 +77,11 @@ public class Formatting {
 		return builder.toString();
 	}
 
+	public static String quote(String s) {
+		String ret = Pattern.quote(s);
+		if (ret.equals("\\Q" + s + "\\E")) {
+			return s;
+		}
+		return ret;
+	}
 }
