@@ -21,8 +21,4 @@ public class AnyMatcher<T> extends Matcher<T> {
 	protected String asString() {
 		return "<any>";
 	}
-
-	public static <T> AnyMatcher<T> create(Class<T> clazz) {
-		return new AnyMatcher<T>(clazz);
-	}
 }

@@ -26,5 +26,10 @@ public class FormattingTest {
 		s = Formatting.join(", ", null, null, 1, 2);
 		assertEquals("null, null, 1, 2", s);
 
+		s = Formatting.join(", ", (Iterable) null);
+		assertEquals("", s);
+
+		s = Formatting.join(", ", (Object[]) null);
+		assertEquals("", s);
 	}
 }
