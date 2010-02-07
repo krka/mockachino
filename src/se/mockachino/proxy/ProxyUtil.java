@@ -19,12 +19,10 @@ public class ProxyUtil {
 		}
 	}
 
-	private static boolean useJavaReflect() {
-		return !(USE_CGLIB && CGLIB_FOR_INTERFACES);
-	}
+	private static final boolean useJavaReflect = !(USE_CGLIB && CGLIB_FOR_INTERFACES);
 
 	public static <T> T newProxy(Class<T> clazz, final InvocationHandler handler) {
-		if (useJavaReflect() && clazz.isInterface()) {
+		if (useJavaReflect && clazz.isInterface()) {
 			return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[]{clazz}, handler);
 		}
 		if (!USE_CGLIB) {

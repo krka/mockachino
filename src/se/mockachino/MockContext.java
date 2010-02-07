@@ -17,12 +17,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.Collections;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MockContext {
 	private static final InvocationHandler DEFAULT_INVOCATION_HANDLER = new DefaultInvocationHandler();
 
-	private final Map<Object, MockData> mockData = Collections.synchronizedMap(new WeakHashMap<Object, MockData>());
+	private final Map<Object, MockData> mockData = new ConcurrentHashMap<Object, MockData>();
 	private final AtomicInteger nextSequenceNumber = new AtomicInteger();
 	private final AtomicInteger nextMockId = new AtomicInteger();
 
@@ -50,7 +51,6 @@ public class MockContext {
 
 	private <T> T spy(Class<T> clazz, T impl, String kind) {
 		assertClass(clazz);
-		MatcherThreadHandler.assertEmpty();
 		T mock = ProxyUtil.newProxy(clazz, new Mock(this, impl, kind, clazz.getSimpleName(), nextMockId()));
 		mockData.put(mock, new MockData(clazz));
 		return mock;
@@ -84,6 +84,7 @@ public class MockContext {
 	}
 
 	public VerifyRangeStart verifyRange(int min, int max) {
+		MatcherThreadHandler.assertEmpty();
 		return new VerifyRangeStart(this, min, max);
 	}
 
@@ -130,10 +131,12 @@ public class MockContext {
 		if (e == null) {
 			throw new UsageError("exception can not be null");
 		}
+		MatcherThreadHandler.assertEmpty();
 		return new StubThrow(this, e);
 	}
 
 	public StubReturn stubReturn(Object returnValue) {
+		MatcherThreadHandler.assertEmpty();
 		return new StubReturn(this, returnValue);
 	}
 
@@ -141,6 +144,7 @@ public class MockContext {
 		if (answer== null) {
 			throw new UsageError("answer can not be null");
 		}
+		MatcherThreadHandler.assertEmpty();
 		return new StubAnswer(this, answer);
 	}
 
@@ -148,10 +152,14 @@ public class MockContext {
 		if (listener == null) {
 			throw new UsageError("Listener can not be null");
 		}
+		MatcherThreadHandler.assertEmpty();
 		return new ListenerAdder(this, listener);
 	}
 
 	public <T> MockData<T> getData(T mock) {
+		if (mock == null) {
+			throw new UsageError("Did not expect null value");
+		}
 		MockData data = mockData.get(mock);
 		if (data == null) {
 			throw new UsageError(
