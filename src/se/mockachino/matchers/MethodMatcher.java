@@ -1,19 +1,18 @@
 package se.mockachino.matchers;
 
 import se.mockachino.MethodCall;
-import se.mockachino.invocationhandler.AbstractInvocationHandler;
 import se.mockachino.matchers.matcher.EqualityMatcher;
 import se.mockachino.matchers.matcher.Matcher;
 import se.mockachino.util.Formatting;
+import se.mockachino.util.MockachinoMethod;
 
 import java.util.ArrayList;
-import java.lang.reflect.Method;
 
 public class MethodMatcher {
-	private final Method method;
+	private final MockachinoMethod method;
 	private final ArrayList<Matcher> argumentMatchers;
 
-	public MethodMatcher(Method method, Object[] arguments) {
+	public MethodMatcher(MockachinoMethod method, Object[] arguments) {
 		this.method = method;
 		argumentMatchers = new ArrayList<Matcher>();
 		if (arguments != null) {
@@ -30,7 +29,7 @@ public class MethodMatcher {
 	}
 
 	public boolean matches(MethodCall methodCall) {
-		if (!AbstractInvocationHandler.equals(method, methodCall.getMethod())) {
+		if (!method.equals(methodCall.getMethod())) {
 			return false;
 		}
 
@@ -55,7 +54,7 @@ public class MethodMatcher {
 		return method.getName() + "(" + Formatting.list(argumentMatchers) + ")";
 	}
 
-	public Method getMethod() {
+	public MockachinoMethod getMethod() {
 		return method;
 	}
 }

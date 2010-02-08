@@ -2,29 +2,28 @@ package se.mockachino.order;
 
 import se.mockachino.MockData;
 import se.mockachino.MethodCall;
-import se.mockachino.cleaner.StacktraceCleaner;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.util.Formatting;
-import se.mockachino.verifier.VerificationHandler;
+import se.mockachino.verifier.MatchingHandler;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.order.InOrder;
 
 import java.util.List;
 
-public class InOrderVerifier extends VerificationHandler {
+public class InOrderVerifyHandler extends MatchingHandler {
 	private final MockData data;
 	private final int min;
 	private final InOrder inOrder;
 
-	public InOrderVerifier(InOrder inOrder, Object mock, MockData data, int min) {
-		super("InOrderVerifier", mock.toString());
+	public InOrderVerifyHandler(InOrder inOrder, Object mock, MockData data, int min) {
+		super("InOrderVerifyHandler", mock.toString());
 		this.inOrder = inOrder;
 		this.data = data;
 		this.min = min;
 	}
-	
+
 	@Override
-	public void verify(Object o, MethodMatcher matcher) {
+	public void match(Object o, MethodMatcher matcher) {
 		if (min <= 0) {
 			return;
 		}

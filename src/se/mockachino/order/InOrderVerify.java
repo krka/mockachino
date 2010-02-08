@@ -18,6 +18,6 @@ public class InOrderVerify {
 	public <T> T on(T mock) {
 		MockData<T> data = context.getData(mock);
 		Class<T> clazz = data.getInterface();
-		return ProxyUtil.newProxy(clazz, new InOrderVerifier(inOrder, mock, data, min));
+		return ProxyUtil.newProxy(clazz, new InOrderVerifyHandler(inOrder, mock, data, min));
 	}
 }

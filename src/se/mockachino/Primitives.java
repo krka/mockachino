@@ -1,11 +1,11 @@
-package se.mockachino.expectations;
+package se.mockachino;
 
 import se.mockachino.MethodCall;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class DefaultValues {
+public class Primitives {
 	private static final Map<Class<?>, Object> defaultValues = new HashMap<Class<?>, Object>();
 	private static final Map<Class<?>, Class<?>> realClasses = new HashMap<Class<?>, Class<?>>();
 	static {

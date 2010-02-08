@@ -15,6 +15,6 @@ public class StubAnswer {
 
 	public <T> T on(T mock) {
 		MockData data = mockContext.getData(mock);
-		return mockContext.createProxy(mock, new AnswerStubber(answer, mock, data));
+		return mockContext.createProxy(mock, new StubAnswerHandler(answer, mock, data));
 	}
 }

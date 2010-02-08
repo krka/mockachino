@@ -100,7 +100,7 @@ public class MockachinoTest {
 
 		List inlinedMock = mock.get(0);
 
-		// Do some stubbing on the inlined mock to verify that it works.
+		// Do some stubbing on the inlined mock to match that it works.
 		Mockachino.stubReturn("Foo").on(inlinedMock).get(123);
 		assertEquals("Foo", inlinedMock.get(123));
 		assertEquals(null, inlinedMock.get(124));

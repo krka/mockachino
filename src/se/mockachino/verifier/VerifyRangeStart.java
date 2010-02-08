@@ -16,6 +16,6 @@ public class VerifyRangeStart {
 
 	public <T> T on(T mock) {
 		MockData data = mockContext.getData(mock);
-		return mockContext.createProxy(mock, new Verifier(mock, data, min, max));
+		return mockContext.createProxy(mock, new VerifyHandler(mock, data, min, max));
 	}
 }

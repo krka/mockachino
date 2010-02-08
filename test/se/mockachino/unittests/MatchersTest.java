@@ -3,15 +3,10 @@ package se.mockachino.unittests;
 import org.junit.Test;
 import se.mockachino.Mockachino;
 import se.mockachino.matchers.Matchers;
-import se.mockachino.matchers.matcher.ClassMatcher;
-import se.mockachino.matchers.matcher.EqualityMatcher;
-import se.mockachino.matchers.matcher.IdentityMatcher;
-import se.mockachino.matchers.matcher.Matcher;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.List;
 
 public class MatchersTest {
 	@Test

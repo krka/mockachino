@@ -1,11 +1,10 @@
 package se.mockachino;
 
-import se.mockachino.cleaner.StacktraceCleaner;
 import se.mockachino.exceptions.UsageError;
 import se.mockachino.invocationhandler.*;
 import se.mockachino.listener.ListenerAdder;
 import se.mockachino.listener.MethodCallListener;
-import se.mockachino.mock.Mock;
+import se.mockachino.mock.MockHandler;
 import se.mockachino.order.InOrder;
 import se.mockachino.proxy.ProxyUtil;
 import se.mockachino.matchers.MatcherThreadHandler;
@@ -15,8 +14,6 @@ import se.mockachino.verifier.VerifyRangeStart;
 import java.lang.reflect.InvocationHandler;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
-import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -51,7 +48,7 @@ public class MockContext {
 
 	private <T> T spy(Class<T> clazz, T impl, String kind) {
 		assertClass(clazz);
-		T mock = ProxyUtil.newProxy(clazz, new Mock(this, impl, kind, clazz.getSimpleName(), nextMockId()));
+		T mock = ProxyUtil.newProxy(clazz, new MockHandler(this, impl, kind, clazz.getSimpleName(), nextMockId()));
 		mockData.put(mock, new MockData(clazz));
 		return mock;
 	}

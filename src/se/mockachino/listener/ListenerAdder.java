@@ -14,6 +14,6 @@ public class ListenerAdder {
 
 	public <T> T on(T mock) {
 		MockData data = mockContext.getData(mock);
-		return mockContext.createProxy(mock, new AddListener(data, mock, listener));
+		return mockContext.createProxy(mock, new AddListenerHandler(data, mock, listener));
 	}
 }

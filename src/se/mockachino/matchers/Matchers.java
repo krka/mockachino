@@ -1,6 +1,6 @@
 package se.mockachino.matchers;
 
-import se.mockachino.expectations.DefaultValues;
+import se.mockachino.Primitives;
 import se.mockachino.matchers.matcher.*;
 import se.mockachino.util.Formatting;
 
@@ -8,7 +8,7 @@ public class Matchers {
 
 	public static <T> T match(Matcher<T> matcher) {
 		MatcherThreadHandler.pushMatcher(matcher);
-		return DefaultValues.forType(matcher.getType());
+		return Primitives.forType(matcher.getType());
 	}
 
 	public static <T> T m(Matcher<T> matcher) {

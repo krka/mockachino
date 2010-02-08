@@ -1,23 +1,23 @@
 package se.mockachino.stub;
 
 import se.mockachino.MockData;
+import se.mockachino.Primitives;
 import se.mockachino.exceptions.UsageError;
-import se.mockachino.expectations.DefaultValues;
 import se.mockachino.stub.MethodStub;
-import se.mockachino.verifier.VerificationHandler;
+import se.mockachino.verifier.MatchingHandler;
 import se.mockachino.matchers.MethodMatcher;
 
-public class Stubber<T> extends VerificationHandler {
+public class StubReturnHandler<T> extends MatchingHandler {
 	private final Object returnValue;
 	private final MockData<T> data;
 
-	public Stubber(Object returnValue, T mock, MockData<T> data) {
-		super("Stubber", mock.toString());
+	public StubReturnHandler(Object returnValue, T mock, MockData<T> data) {
+		super("StubReturnHandler", mock.toString());
 		this.returnValue = returnValue;
 		this.data = data;
 	}
 
-	public void verify(Object o, MethodMatcher matcher) {
+	public void match(Object o, MethodMatcher matcher) {
 		Class<?> returnType = matcher.getMethod().getReturnType();
 		if (returnType == void.class) {
 			if (returnValue != null) {
@@ -30,7 +30,7 @@ public class Stubber<T> extends VerificationHandler {
 				}
 			} else {
 				if (returnType.isPrimitive()) {
-					if (returnValue.getClass() != DefaultValues.getRealClass(returnType)) {
+					if (returnValue.getClass() != Primitives.getRealClass(returnType)) {
 						error(returnType);
 					}
 				} else {

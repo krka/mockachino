@@ -1,16 +1,14 @@
 package se.mockachino.invocationhandler;
 
-import se.mockachino.expectations.DefaultValues;
-import se.mockachino.expectations.MethodExpectation;
-
-import java.lang.reflect.Method;
+import se.mockachino.Primitives;
+import se.mockachino.util.MockachinoMethod;
 
 public class DefaultInvocationHandler extends AbstractInvocationHandler {
 	public DefaultInvocationHandler() {
 		super("DefaultResult");
 	}
 
-	public Object doInvoke(Object o, Method method, Object[] objects) throws Throwable {
-		return DefaultValues.forType(method.getReturnType());
+	public Object doInvoke(Object o, MockachinoMethod method, Object[] objects) throws Throwable {
+		return Primitives.forType(method.getReturnType());
 	}
 }

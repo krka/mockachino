@@ -3,11 +3,6 @@ package se.mockachino.order;
 import se.mockachino.MockData;
 import se.mockachino.MethodCall;
 import se.mockachino.MockContext;
-import se.mockachino.proxy.ProxyUtil;
-import se.mockachino.order.InOrderVerifier;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class InOrder {
 	private final MockContext context;

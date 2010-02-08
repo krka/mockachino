@@ -1,9 +1,7 @@
 package se.mockachino.verifier;
 
-import se.mockachino.cleaner.StacktraceCleaner;
-import se.mockachino.invocationhandler.AbstractInvocationHandler;
 import se.mockachino.util.Formatting;
-import se.mockachino.verifier.VerificationHandler;
+import se.mockachino.verifier.MatchingHandler;
 import se.mockachino.MockData;
 import se.mockachino.MethodCall;
 import se.mockachino.exceptions.VerificationError;
@@ -11,20 +9,20 @@ import se.mockachino.matchers.MethodMatcher;
 
 import java.util.List;
 
-public class Verifier<T> extends VerificationHandler {
+public class VerifyHandler<T> extends MatchingHandler {
 	private final MockData<T> mockData;
 	private final int minCalls;
 	private final int maxCalls;
 
-	public Verifier(T mock, MockData<T> mockData, int minCalls, int maxCalls) {
-		super("Verifier", mock.toString());
+	public VerifyHandler(T mock, MockData<T> mockData, int minCalls, int maxCalls) {
+		super("VerifyHandler", mock.toString());
 		this.mockData = mockData;
 		this.minCalls = minCalls;
 		this.maxCalls = maxCalls;
 	}
 
 	@Override
-	public void verify(Object o, MethodMatcher matcher) {
+	public void match(Object o, MethodMatcher matcher) {
 		int counter = 0;
 		List<MethodCall> calls = mockData.getCalls();
 		for (MethodCall call : calls) {
@@ -63,7 +61,7 @@ public class Verifier<T> extends VerificationHandler {
 		String matchingMethods = "";
 		List<MethodCall> calls = mockData.getCalls();
 		for (MethodCall call : calls) {
-			if (AbstractInvocationHandler.equals(call.getMethod(), matcher.getMethod())) {
+			if (call.getMethod().equals(matcher.getMethod())) {
 				String prefix = (matcher.matches(call)) ? "ACTUAL: (HIT) " : "ACTUAL:       ";
 				matchingMethods += prefix + "mock." + call + "\n" + getStacktrace(call);
 			}

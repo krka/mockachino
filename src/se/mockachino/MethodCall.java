@@ -1,18 +1,15 @@
 package se.mockachino;
 
 import se.mockachino.util.Formatting;
-import se.mockachino.cleaner.StacktraceCleaner;
-
-import java.lang.reflect.Method;
-import java.util.List;
+import se.mockachino.util.MockachinoMethod;
 
 public class MethodCall {
-	private final Method method;
+	private final MockachinoMethod method;
 	private final int callNumber;
 	private final Object[] args;
 	private final StackTraceElement[] stacktrace;
 
-	public MethodCall(Method method, Object[] args, int callNumber, StackTraceElement[] stacktrace) {
+	public MethodCall(MockachinoMethod method, Object[] args, int callNumber, StackTraceElement[] stacktrace) {
 		this.method = method;
 		this.callNumber = callNumber;
 		this.args = args;
@@ -28,7 +25,7 @@ public class MethodCall {
 		return args;
 	}
 
-	public Method getMethod() {
+	public MockachinoMethod getMethod() {
 		return method;
 	}
 

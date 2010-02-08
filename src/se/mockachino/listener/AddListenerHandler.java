@@ -1,17 +1,17 @@
 package se.mockachino.listener;
 
 import se.mockachino.listener.MethodCallListener;
-import se.mockachino.verifier.VerificationHandler;
+import se.mockachino.verifier.MatchingHandler;
 import se.mockachino.listener.MethodListener;
 import se.mockachino.MockData;
 import se.mockachino.matchers.MethodMatcher;
 
-public class AddListener extends VerificationHandler {
+public class AddListenerHandler extends MatchingHandler {
 	private final MockData mockData;
 	private final Object mock;
 	private final MethodCallListener listener;
 
-	public AddListener(MockData mockData, Object mock, MethodCallListener listener) {
+	public AddListenerHandler(MockData mockData, Object mock, MethodCallListener listener) {
 		super("Listener", mock.toString());
 		this.mockData = mockData;
 		this.mock = mock;
@@ -19,7 +19,7 @@ public class AddListener extends VerificationHandler {
 	}
 
 	@Override
-	public void verify(Object o, MethodMatcher matcher) {
+	public void match(Object o, MethodMatcher matcher) {
 		mockData.getListeners(matcher.getMethod()).add(new MethodListener(mock, listener, matcher));
 	}
 }
