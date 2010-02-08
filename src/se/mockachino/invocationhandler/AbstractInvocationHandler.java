@@ -44,7 +44,7 @@ public abstract class AbstractInvocationHandler implements InvocationHandler {
 		return null;
 	}
 
-	private static boolean equals(Method a, Method b) {
+	public static boolean equals(Method a, Method b) {
 		if (!a.getName().equals(b.getName())) {
 			return false;
 		}

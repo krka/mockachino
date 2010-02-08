@@ -1,6 +1,7 @@
 package se.mockachino.verifier;
 
 import se.mockachino.cleaner.StacktraceCleaner;
+import se.mockachino.invocationhandler.AbstractInvocationHandler;
 import se.mockachino.util.Formatting;
 import se.mockachino.verifier.VerificationHandler;
 import se.mockachino.MockData;
@@ -62,7 +63,7 @@ public class Verifier<T> extends VerificationHandler {
 		String matchingMethods = "";
 		List<MethodCall> calls = mockData.getCalls();
 		for (MethodCall call : calls) {
-			if (call.getMethod().equals(matcher.getMethod())) {
+			if (AbstractInvocationHandler.equals(call.getMethod(), matcher.getMethod())) {
 				String prefix = (matcher.matches(call)) ? "ACTUAL: (HIT) " : "ACTUAL:       ";
 				matchingMethods += prefix + "mock." + call + "\n" + getStacktrace(call);
 			}
