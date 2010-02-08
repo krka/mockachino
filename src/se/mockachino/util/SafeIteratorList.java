@@ -25,20 +25,13 @@ public class SafeIteratorList<T> implements List<T> {
 				if (index >= size()) {
 					return false;
 				}
-				try {
-					return get(index) != null;
-				} catch (Exception e) {
-					return false;
-				}
-
+				return get(index) != nullObject;
 			}
 
 			@Override
 			public T next() {
 				try {
 					return get(index);
-				} catch (Exception e) {
-					return nullObject;
 				} finally {
 					index++;
 				}
@@ -146,7 +139,14 @@ public class SafeIteratorList<T> implements List<T> {
 	@Override
 	public T get(int i) {
 		synchronized (lock) {
-			return delegate.get(i);
+			if (i < 0 || i >= size()) {
+				return nullObject;
+			}
+			try {
+				return delegate.get(i);
+			} catch (IndexOutOfBoundsException e) {
+				return nullObject;
+			}
 		}
 	}
 
