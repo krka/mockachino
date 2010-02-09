@@ -5,7 +5,7 @@ import se.mockachino.Mockachino;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.Matchers;
 import se.mockachino.matchers.matcher.Matcher;
-import se.mockachino.order.InOrder;
+import se.mockachino.order.OrderingContext;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -123,7 +123,7 @@ public class ExamplesTest {
 		mock.contains("Hello");
 		mock.add("Bar");
 
-		InOrder order = Mockachino.verifyOrder();
+		OrderingContext order = Mockachino.verifyOrder();
 		order.verify().on(mock).add("Hello");
 		order.verify().on(mock).add("World");
 		order.verify().on(mock).contains("Hello");

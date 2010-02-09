@@ -4,7 +4,7 @@ import org.junit.Test;
 import se.mockachino.Mockachino;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.Matchers;
-import se.mockachino.order.InOrder;
+import se.mockachino.order.OrderingContext;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class ErrorMessageTest {
 			mock.add(2);
 			mock.add("World");
 
-			InOrder order = Mockachino.verifyOrder();
+			OrderingContext order = Mockachino.verifyOrder();
 			order.verify().on(mock).add("World");
 			order.verify().on(mock).add("Hello");
 			fail("Should not succeed");
@@ -51,7 +51,7 @@ public class ErrorMessageTest {
 			mock.add(2);
 			mock.add("World");
 
-			InOrder order = Mockachino.verifyOrder();
+			OrderingContext order = Mockachino.verifyOrder();
 			order.verify().on(mock).add("World");
 			order.verify().on(mock).add("Hello2");
 			fail("Should not succeed");

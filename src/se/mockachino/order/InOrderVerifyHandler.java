@@ -6,18 +6,18 @@ import se.mockachino.exceptions.VerificationError;
 import se.mockachino.util.Formatting;
 import se.mockachino.verifier.MatchingHandler;
 import se.mockachino.matchers.MethodMatcher;
-import se.mockachino.order.InOrder;
+import se.mockachino.order.OrderingContext;
 
 import java.util.List;
 
 public class InOrderVerifyHandler extends MatchingHandler {
 	private final MockData data;
 	private final int min;
-	private final InOrder inOrder;
+	private final OrderingContext orderingContext;
 
-	public InOrderVerifyHandler(InOrder inOrder, Object mock, MockData data, int min) {
+	public InOrderVerifyHandler(OrderingContext orderingContext, Object mock, MockData data, int min) {
 		super("InOrderVerifyHandler", mock.toString());
-		this.inOrder = inOrder;
+		this.orderingContext = orderingContext;
 		this.data = data;
 		this.min = min;
 	}
@@ -28,7 +28,7 @@ public class InOrderVerifyHandler extends MatchingHandler {
 			return;
 		}
 
-		MethodCall lastCall = inOrder.getCurrentCall();
+		MethodCall lastCall = orderingContext.getCurrentCall();
 		int lastCallNumber = lastCall.getCallNumber();
 
 		int count = 0;
@@ -45,7 +45,7 @@ public class InOrderVerifyHandler extends MatchingHandler {
 			if (matcher.matches(call)) {
 				count++;
 				if (count >= min) {
-					inOrder.setCurrent(call);
+					orderingContext.setCurrent(call);
 					return;
 				}
 			}

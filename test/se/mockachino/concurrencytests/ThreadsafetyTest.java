@@ -1,12 +1,9 @@
 package se.mockachino.concurrencytests;
 
 import org.junit.Test;
-import se.mockachino.MethodCall;
 import se.mockachino.Mockachino;
 import se.mockachino.matchers.Matchers;
-import se.mockachino.order.InOrder;
-
-import java.util.List;
+import se.mockachino.order.OrderingContext;
 
 import static org.junit.Assert.assertEquals;
 
@@ -86,7 +83,7 @@ public class ThreadsafetyTest {
 		for (int i = 0; i < numThreads; i++) {
 			final String name = "Thread:" + i;
 			int count = counts[i];
-			InOrder order = Mockachino.verifyOrder();
+			OrderingContext order = Mockachino.verifyOrder();
 			for (int j = 0; j < count; j++) {
 				order.verify().on(mock).foo(name, 1 + j);
 			}

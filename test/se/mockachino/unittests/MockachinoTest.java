@@ -8,7 +8,7 @@ import se.mockachino.Mockachino;
 import se.mockachino.exceptions.UsageError;
 import se.mockachino.listener.MethodCallListener;
 import se.mockachino.matchers.Matchers;
-import se.mockachino.order.InOrder;
+import se.mockachino.order.OrderingContext;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -204,7 +204,7 @@ public class MockachinoTest {
 		mock.add("World");
 		mock.add("Hello");
 
-		InOrder order = Mockachino.verifyOrder();
+		OrderingContext order = Mockachino.verifyOrder();
 		order.verify().on(mock).add("Hello");
 		order.verify().on(mock).add("World");
 		order.verify().on(mock).add("Hello");
@@ -226,7 +226,7 @@ public class MockachinoTest {
 			String s2 = s + s;
 			assertEquals(s2, mock.get(i));
 		}
-		InOrder order = Mockachino.verifyOrder();
+		OrderingContext order = Mockachino.verifyOrder();
 		for (int i = 0; i < 100; i++) {
 			order.verify().on(mock).get(i);
 		}

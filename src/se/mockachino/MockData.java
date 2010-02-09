@@ -58,8 +58,16 @@ public class MockData<T> {
 		return call;
 	}
 
-	public synchronized void reset() {
+	public synchronized void resetCalls() {
 		calls.clear();
+	}
+
+	public synchronized void resetListeners() {
+		listeners.clear();
+	}
+
+	public synchronized void resetStubs() {
+		expectations.clear();
 	}
 
 }
