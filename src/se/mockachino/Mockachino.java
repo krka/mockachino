@@ -3,7 +3,6 @@ package se.mockachino;
 import se.mockachino.listener.ListenerAdder;
 import se.mockachino.listener.MethodCallListener;
 import se.mockachino.order.OrderingContext;
-import se.mockachino.MockContext;
 import se.mockachino.stub.StubAnswer;
 import se.mockachino.stub.StubReturn;
 import se.mockachino.stub.StubThrow;

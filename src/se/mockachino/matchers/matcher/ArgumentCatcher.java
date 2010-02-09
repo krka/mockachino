@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ArgumentCatcher<T> extends Matcher<T> {
+public class ArgumentCatcher<T> extends BasicMatcher<T> {
 	private final Matcher<T> delegate;
 	private final List<T> values = new SafeIteratorList<T>(new ArrayList<T>(), null);
 
@@ -34,7 +34,7 @@ public class ArgumentCatcher<T> extends Matcher<T> {
 
 	@Override
 	protected String asString() {
-		return delegate.asString();
+		return delegate.toString();
 	}
 
 	public T getValue() {

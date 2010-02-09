@@ -3,9 +3,8 @@ package se.mockachino.stub;
 import se.mockachino.MockData;
 import se.mockachino.Primitives;
 import se.mockachino.exceptions.UsageError;
-import se.mockachino.stub.MethodStub;
-import se.mockachino.verifier.MatchingHandler;
 import se.mockachino.matchers.MethodMatcher;
+import se.mockachino.verifier.MatchingHandler;
 
 public class StubReturnHandler<T> extends MatchingHandler {
 	private final Object returnValue;

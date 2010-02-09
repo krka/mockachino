@@ -1,10 +1,8 @@
 package se.mockachino.listener;
 
-import se.mockachino.listener.MethodCallListener;
-import se.mockachino.verifier.MatchingHandler;
-import se.mockachino.listener.MethodListener;
 import se.mockachino.MockData;
 import se.mockachino.matchers.MethodMatcher;
+import se.mockachino.verifier.MatchingHandler;
 
 public class AddListenerHandler extends MatchingHandler {
 	private final MockData mockData;

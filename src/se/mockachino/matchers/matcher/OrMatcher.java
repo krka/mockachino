@@ -2,7 +2,7 @@ package se.mockachino.matchers.matcher;
 
 import se.mockachino.util.Formatting;
 
-public class OrMatcher<T> extends Matcher<T> {
+public class OrMatcher<T> extends BasicMatcher<T> {
 	private final Matcher<T>[] delegates;
 
 	public OrMatcher(Matcher<T>... delegates) {

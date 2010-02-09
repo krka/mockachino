@@ -1,13 +1,11 @@
 package se.mockachino.matchers;
 
-import se.mockachino.cleaner.StacktraceCleaner;
 import se.mockachino.exceptions.UsageError;
-import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.matcher.EqualityMatcher;
 import se.mockachino.matchers.matcher.Matcher;
 
-import java.util.Queue;
 import java.util.LinkedList;
+import java.util.Queue;
 
 public class MatcherThreadHandler {
 	private static final Character ZERO_CHARACTER = Character.valueOf('\0');

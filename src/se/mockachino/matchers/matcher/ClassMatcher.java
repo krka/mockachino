@@ -1,6 +1,6 @@
 package se.mockachino.matchers.matcher;
 
-public class ClassMatcher<T> extends Matcher<T> {
+public class ClassMatcher<T> extends BasicMatcher<T> {
 	private final Class<T> clazz;
 	private final Class[] classes;
 

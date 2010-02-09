@@ -2,7 +2,7 @@ package se.mockachino.matchers.matcher;
 
 import java.util.regex.Pattern;
 
-public class RegexpMatcher extends Matcher<String> {
+public class RegexpMatcher extends BasicMatcher<String> {
 	private final Pattern pattern;
 
 	public RegexpMatcher(String s) {

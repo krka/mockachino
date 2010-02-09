@@ -6,6 +6,7 @@ import se.mockachino.util.Formatting;
 
 /**
  * Matchers is a utility class, containing a lot of useful default matchers.
+ *
  *  
  */
 public class Matchers {

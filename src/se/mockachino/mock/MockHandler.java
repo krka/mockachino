@@ -1,11 +1,11 @@
 package se.mockachino.mock;
 
-import se.mockachino.MockData;
 import se.mockachino.MethodCall;
 import se.mockachino.MockContext;
-import se.mockachino.expectations.MethodExpectations;
-import se.mockachino.expectations.MethodExpectation;
+import se.mockachino.MockData;
 import se.mockachino.cleaner.StacktraceCleaner;
+import se.mockachino.expectations.MethodExpectation;
+import se.mockachino.expectations.MethodExpectations;
 import se.mockachino.invocationhandler.AbstractInvocationHandler;
 import se.mockachino.listener.MethodListener;
 import se.mockachino.util.MockachinoMethod;

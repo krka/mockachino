@@ -1,7 +1,6 @@
 package se.mockachino.listener;
 
 import se.mockachino.MethodCall;
-import se.mockachino.listener.MethodCallListener;
 import se.mockachino.matchers.MethodMatcher;
 
 public class MethodListener {

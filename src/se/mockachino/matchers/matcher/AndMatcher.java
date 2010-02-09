@@ -2,7 +2,7 @@ package se.mockachino.matchers.matcher;
 
 import se.mockachino.util.Formatting;
 
-public class AndMatcher<T> extends Matcher<T> {
+public class AndMatcher<T> extends BasicMatcher<T> {
 	private final Matcher<T>[] delegates;
 
 	public AndMatcher(Matcher<T>... delegates) {

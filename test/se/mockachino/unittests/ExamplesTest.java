@@ -4,7 +4,7 @@ import org.junit.Test;
 import se.mockachino.Mockachino;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.Matchers;
-import se.mockachino.matchers.matcher.Matcher;
+import se.mockachino.matchers.matcher.BasicMatcher;
 import se.mockachino.order.OrderingContext;
 
 import java.util.ArrayList;
@@ -176,7 +176,7 @@ public class ExamplesTest {
 		mock.compare("Foo", "Bar");
 		mock.compare("Foo", null);
 
-		Matcher<Object> myFooBarMatcher = new Matcher<Object>() {
+		BasicMatcher<Object> myFooBarMatcher = new BasicMatcher<Object>() {
 			@Override
 			public boolean matches(Object value) {
 				return "Foo".equals(value) || "Bar".equals(value);

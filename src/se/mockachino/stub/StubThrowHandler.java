@@ -1,9 +1,8 @@
 package se.mockachino.stub;
 
 import se.mockachino.MockData;
-import se.mockachino.stub.MethodThrow;
-import se.mockachino.verifier.MatchingHandler;
 import se.mockachino.matchers.MethodMatcher;
+import se.mockachino.verifier.MatchingHandler;
 
 public class StubThrowHandler<T> extends MatchingHandler {
 	private final Throwable e;

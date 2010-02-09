@@ -1,7 +1,5 @@
 package se.mockachino;
 
-import se.mockachino.MethodCall;
-
 import java.util.HashMap;
 import java.util.Map;
 

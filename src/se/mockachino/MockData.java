@@ -6,11 +6,7 @@ import se.mockachino.util.MockachinoMethod;
 import se.mockachino.util.SafeIteratorList;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MockData<T> {
 	public final static MethodCall NULL_METHOD = new MethodCall(MockachinoMethod.TOSTRING, new Object[]{}, 0, new StackTraceElement[]{});

@@ -22,7 +22,7 @@ public class AndOrMatcherTest {
 		assertEquals(false, orMatcher.matches("X"));
 		assertEquals(true, orMatcher.matches("Hello"));
 		assertEquals(true, orMatcher.matches("AFooA"));
-		assertEquals("(regexp(\".*Foo.*\") | \"Hello\")", orMatcher.asString());
+		assertEquals("(regexp(\".*Foo.*\") | \"Hello\")", orMatcher.toString());
 	}
 
 	@Test
@@ -31,7 +31,7 @@ public class AndOrMatcherTest {
 		assertEquals(false, andMatcher.matches("aloa"));
 		assertEquals(false, andMatcher.matches("Hellas"));
 		assertEquals(true, andMatcher.matches("Hello"));
-		assertEquals("(regexp(\".*lo.*\") & regexp(\".*Hell.*\"))", andMatcher.asString());
+		assertEquals("(regexp(\".*lo.*\") & regexp(\".*Hell.*\"))", andMatcher.toString());
 	}
 
 

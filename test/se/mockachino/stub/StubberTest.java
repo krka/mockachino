@@ -6,9 +6,7 @@ import se.mockachino.exceptions.UsageError;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.util.List;
-import java.util.ListIterator;
 
 import static org.junit.Assert.fail;
 

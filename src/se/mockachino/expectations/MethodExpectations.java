@@ -2,9 +2,8 @@ package se.mockachino.expectations;
 
 import se.mockachino.MethodCall;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MethodExpectations {
 	private final List<MethodExpectation> expectations;

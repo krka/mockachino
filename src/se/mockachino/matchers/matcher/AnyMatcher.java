@@ -1,6 +1,6 @@
 package se.mockachino.matchers.matcher;
 
-public class AnyMatcher<T> extends Matcher<T> {
+public class AnyMatcher<T> extends BasicMatcher<T> {
 	private final Class<T> clazz;
 
 	public AnyMatcher(Class<T> clazz) {

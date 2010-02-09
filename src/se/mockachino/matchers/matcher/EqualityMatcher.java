@@ -2,7 +2,7 @@ package se.mockachino.matchers.matcher;
 
 import se.mockachino.util.Formatting;
 
-public class EqualityMatcher<T> extends Matcher<T> {
+public class EqualityMatcher<T> extends BasicMatcher<T> {
 	private final Object value;
 
 	public EqualityMatcher(Object value) {

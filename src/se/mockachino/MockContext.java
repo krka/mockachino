@@ -1,14 +1,16 @@
 package se.mockachino;
 
 import se.mockachino.exceptions.UsageError;
-import se.mockachino.invocationhandler.*;
+import se.mockachino.invocationhandler.DefaultInvocationHandler;
 import se.mockachino.listener.ListenerAdder;
 import se.mockachino.listener.MethodCallListener;
+import se.mockachino.matchers.MatcherThreadHandler;
 import se.mockachino.mock.MockHandler;
 import se.mockachino.order.OrderingContext;
 import se.mockachino.proxy.ProxyUtil;
-import se.mockachino.matchers.MatcherThreadHandler;
-import se.mockachino.stub.*;
+import se.mockachino.stub.StubAnswer;
+import se.mockachino.stub.StubReturn;
+import se.mockachino.stub.StubThrow;
 import se.mockachino.verifier.VerifyRangeStart;
 
 import java.lang.reflect.InvocationHandler;

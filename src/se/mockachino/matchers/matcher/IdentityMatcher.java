@@ -2,7 +2,7 @@ package se.mockachino.matchers.matcher;
 
 import se.mockachino.util.Formatting;
 
-public class IdentityMatcher<T> extends Matcher<T> {
+public class IdentityMatcher<T> extends BasicMatcher<T> {
 	private final T value;
 
 	public IdentityMatcher(T value) {

@@ -1,8 +1,6 @@
 package se.mockachino.matchers.matcher;
 
-import se.mockachino.matchers.matcher.Matcher;
-
-public class NotMatcher<T> extends Matcher<T> {
+public class NotMatcher<T> extends BasicMatcher<T> {
 	private final Matcher<T> delegate;
 
 	public NotMatcher(Matcher<T> delegate) {
@@ -21,7 +19,7 @@ public class NotMatcher<T> extends Matcher<T> {
 
 	@Override
 	protected String asString() {
-		return "!" + delegate.asString();
+		return "!" + delegate.toString();
 
 	}
 }

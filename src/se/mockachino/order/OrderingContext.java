@@ -1,8 +1,8 @@
 package se.mockachino.order;
 
-import se.mockachino.MockData;
 import se.mockachino.MethodCall;
 import se.mockachino.MockContext;
+import se.mockachino.MockData;
 
 public class OrderingContext {
 	private final MockContext context;

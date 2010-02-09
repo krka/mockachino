@@ -1,11 +1,10 @@
 package se.mockachino.verifier;
 
-import se.mockachino.util.Formatting;
-import se.mockachino.verifier.MatchingHandler;
-import se.mockachino.MockData;
 import se.mockachino.MethodCall;
+import se.mockachino.MockData;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.MethodMatcher;
+import se.mockachino.util.Formatting;
 
 import java.util.List;
 

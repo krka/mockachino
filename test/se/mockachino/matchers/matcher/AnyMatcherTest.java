@@ -9,7 +9,7 @@ public class AnyMatcherTest {
 	@Test
 	public void testSimple() {
 		Matcher<Integer> matcher = Matchers.anyM(Integer.class);
-		assertEquals("<any>", matcher.asString());
+		assertEquals("<any>", matcher.toString());
 		assertEquals(true, matcher.matches(null));
 		assertEquals(true, matcher.matches(124));
 	}
