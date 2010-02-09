@@ -7,7 +7,38 @@ import se.mockachino.util.Formatting;
 /**
  * Matchers is a utility class, containing a lot of useful default matchers.
  *
- *  
+ * A matcher is just a plain java object of the {@link se.mockachino.matchers.matcher.Matcher} type,
+ * which can be used by verifying and stubbing.
+ *
+ * The only important thing is that when using a matcher for a method call, you need to wrap it in
+ * Matchers.match() (or Matchers.m() as a shortcut).
+ *
+ * This wrapping MUST be directly in the actual method call for it to work.
+ * Example:
+ * <pre>
+ * List myMock = mock(List.class);
+ * Matcher<Integer> myMatcher = new Matcher<Integer>{...};
+ *
+ * // won't work, get expects an integer, not a matcher
+ * stubReturn(1).on(myMock).get(myMatcher));
+ *
+ * // Will work:
+ * stubReturn(1).on(myMock).get(Matchers.match(myMatcher)));
+ * </pre>
+ *
+ * Apart from using custom matchers, you can use some predefined.
+ * All methods here that return a Matcher needs to be wrapped in Matchers.match()
+ * when using in an argument.
+ * The methods that return a primitive or a &lt;T> have already been wrapped in Matchers.match()
+ * and can be used directly as is.
+ *
+ * Example:
+ * <pre>
+ * stubReturn(1).on(myMock).get(Matchers.match(Matchers.anyIntM()));
+ * stubReturn(1).on(myMock).get(Matchers.anyInt());
+ * </pre>
+ *
+ *
  */
 public class Matchers {
 

@@ -3,10 +3,14 @@ package se.mockachino.unittests;
 import org.junit.Test;
 import se.mockachino.Mockachino;
 import se.mockachino.matchers.Matchers;
+import se.mockachino.matchers.matcher.Matcher;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class MatchersTest {
 	@Test
@@ -101,5 +105,24 @@ public class MatchersTest {
 				Matchers.or(
 						Matchers.<Object>eqM("Bar"),
 						Matchers.isNullM()));
+	}
+
+	@Test
+	public void testCustom() {
+		List mock = Mockachino.mock(List.class);
+		Matcher<Integer> myMatcher = new Matcher<Integer>() {
+			@Override
+			public boolean matches(Integer value) {
+				return true;
+			}
+
+			@Override
+			public Class<Integer> getType() {
+				return Integer.class;
+			}
+		};
+
+		Mockachino.stubReturn("Foo").on(mock).get(Matchers.match(myMatcher));
+		assertEquals("Foo", mock.get(1));
 	}
 }
