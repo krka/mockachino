@@ -1,11 +1,10 @@
 package se.mockachino.concurrencytests;
 
 import org.junit.Test;
-import se.mockachino.Mockachino;
-import se.mockachino.matchers.Matchers;
 import se.mockachino.order.OrderingContext;
 
 import static org.junit.Assert.assertEquals;
+import static se.mockachino.Mockachino.*;
 
 public class ThreadsafetyTest {
 	private static interface TestInterface {
@@ -26,12 +25,12 @@ public class ThreadsafetyTest {
 					long t1 = System.currentTimeMillis();
 					int count = 0;
 					while (System.currentTimeMillis() - t1 < TIMEOUT) {
-						TestInterface mock = Mockachino.mock(TestInterface.class);
+						TestInterface mock = mock(TestInterface.class);
 						count++;
-						Mockachino.stubReturn(count).on(mock).foo(name, 123);
-						Mockachino.verifyNever().on(mock).foo(name, 123);
+						stubReturn(count).on(mock).foo(name, 123);
+						verifyNever().on(mock).foo(name, 123);
 						assertEquals(count, mock.foo(name, 123));
-						Mockachino.verifyOnce().on(mock).foo(name, 123);
+						verifyOnce().on(mock).foo(name, 123);
 					}
 					System.out.println(name + " did " + count + " iterations");
 				}
@@ -50,7 +49,7 @@ public class ThreadsafetyTest {
 		final int numThreads = 100;
 		final long TIMEOUT = 20000;
 
-		final TestInterface mock = Mockachino.mock(TestInterface.class);
+		final TestInterface mock = mock(TestInterface.class);
 
 		Thread[] threads = new Thread[numThreads];
 		final int[] counts = new int[numThreads];
@@ -64,10 +63,10 @@ public class ThreadsafetyTest {
 					int count = 0;
 					while (System.currentTimeMillis() - t1 < TIMEOUT) {
 						count++;
-						Mockachino.stubReturn(count).on(mock).foo(name, count);
-						Mockachino.verifyNever().on(mock).foo(name, count);
+						stubReturn(count).on(mock).foo(name, count);
+						verifyNever().on(mock).foo(name, count);
 						assertEquals(count, mock.foo(name, count));
-						Mockachino.verifyOnce().on(mock).foo(name, count);
+						verifyOnce().on(mock).foo(name, count);
 					}
 					counts[finalI] = count;
 					System.out.println(name + " did " + count + " iterations");
@@ -83,11 +82,11 @@ public class ThreadsafetyTest {
 		for (int i = 0; i < numThreads; i++) {
 			final String name = "Thread:" + i;
 			int count = counts[i];
-			OrderingContext order = Mockachino.verifyOrder();
+			OrderingContext order = verifyOrder();
 			for (int j = 0; j < count; j++) {
 				order.verify().on(mock).foo(name, 1 + j);
 			}
-			Mockachino.verifyExactly(count).on(mock).foo(name, Matchers.anyInt());
+			verifyExactly(count).on(mock).foo(name, mAnyInt());
 		}
 	}
 }

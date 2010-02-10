@@ -40,7 +40,7 @@ public class MockContext {
 	 * Creates a new mock with a custom handler.
 	 * @param clazz the class of the returned object
 	 * @param handler the handler that is called for each mock method invocation
-	 * @returna mock object of the same class
+	 * @return a mock object of the same class
 	 */
 	public <T> T mock(Class<T> clazz, InvocationHandler handler) {
 		assertClass(clazz);

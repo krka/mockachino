@@ -33,7 +33,7 @@ public class InOrderTest {
 
 		OrderingContext order2 = Mockachino.verifyOrder();
 		order2.verify().on(mock).add("Hello");
-		order2.verify().on(mock).remove(Matchers.type(Object.class));
+		order2.verify().on(mock).remove(Matchers.mType(Object.class));
 	}
 
 	@Test

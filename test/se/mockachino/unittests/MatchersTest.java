@@ -2,7 +2,6 @@ package se.mockachino.unittests;
 
 import org.junit.Test;
 import se.mockachino.Mockachino;
-import se.mockachino.matchers.Matchers;
 import se.mockachino.matchers.matcher.Matcher;
 
 import java.io.DataOutput;
@@ -11,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static se.mockachino.matchers.Matchers.*;
 
 public class MatchersTest {
 	@Test
@@ -18,7 +18,7 @@ public class MatchersTest {
 		DataOutput mock = Mockachino.mock(DataOutput.class);
 		mock.writeInt(123);
 		Mockachino.verifyOnce().on(mock).writeInt(123);
-		Mockachino.verifyOnce().on(mock).writeInt(Matchers.anyInt());
+		Mockachino.verifyOnce().on(mock).writeInt(mAnyInt());
 	}
 
 	@Test
@@ -26,7 +26,7 @@ public class MatchersTest {
 		DataOutput mock = Mockachino.mock(DataOutput.class);
 		mock.writeLong(123);
 		Mockachino.verifyOnce().on(mock).writeLong(123);
-		Mockachino.verifyOnce().on(mock).writeLong(Matchers.anyLong());
+		Mockachino.verifyOnce().on(mock).writeLong(mAnyLong());
 	}
 
 	@Test
@@ -34,7 +34,7 @@ public class MatchersTest {
 		DataOutput mock = Mockachino.mock(DataOutput.class);
 		mock.writeDouble(123.0);
 		Mockachino.verifyOnce().on(mock).writeDouble(123.0);
-		Mockachino.verifyOnce().on(mock).writeDouble(Matchers.anyDouble());
+		Mockachino.verifyOnce().on(mock).writeDouble(mAnyDouble());
 	}
 
 	@Test
@@ -42,7 +42,7 @@ public class MatchersTest {
 		DataOutput mock = Mockachino.mock(DataOutput.class);
 		mock.writeFloat(123.0f);
 		Mockachino.verifyOnce().on(mock).writeFloat(123.0f);
-		Mockachino.verifyOnce().on(mock).writeFloat(Matchers.anyFloat());
+		Mockachino.verifyOnce().on(mock).writeFloat(mAnyFloat());
 	}
 
 	@Test
@@ -50,7 +50,7 @@ public class MatchersTest {
 		DataOutput mock = Mockachino.mock(DataOutput.class);
 		mock.writeShort(123);
 		Mockachino.verifyOnce().on(mock).writeShort(123);
-		Mockachino.verifyOnce().on(mock).writeShort(Matchers.anyShort());
+		Mockachino.verifyOnce().on(mock).writeShort(mAnyShort());
 	}
 
 	@Test
@@ -58,7 +58,7 @@ public class MatchersTest {
 		DataOutput mock = Mockachino.mock(DataOutput.class);
 		mock.writeByte(123);
 		Mockachino.verifyOnce().on(mock).writeByte(123);
-		Mockachino.verifyOnce().on(mock).writeByte(Matchers.anyByte());
+		Mockachino.verifyOnce().on(mock).writeByte(mAnyByte());
 	}
 
 	@Test
@@ -66,7 +66,7 @@ public class MatchersTest {
 		DataOutput mock = Mockachino.mock(DataOutput.class);
 		mock.writeBoolean(true);
 		Mockachino.verifyOnce().on(mock).writeBoolean(true);
-		Mockachino.verifyOnce().on(mock).writeBoolean(Matchers.anyBoolean());
+		Mockachino.verifyOnce().on(mock).writeBoolean(mAnyBoolean());
 	}
 
 	@Test
@@ -79,14 +79,14 @@ public class MatchersTest {
 		Mockachino.verifyOnce().on(mock).compare("Hello", "World");
 		Mockachino.verifyNever().on(mock).compare("Hello", "Worldz");
 		Mockachino.verifyNever().on(mock).compare("Helloz", "World");
-		Mockachino.verifyExactly(2).on(mock).compare(Matchers.type(Object.class), Matchers.type(Object.class));
-		Mockachino.verifyExactly(3).on(mock).compare(Matchers.any(Object.class), Matchers.any(Object.class));
+		Mockachino.verifyExactly(2).on(mock).compare(mType(Object.class), mType(Object.class));
+		Mockachino.verifyExactly(3).on(mock).compare(mAny(Object.class), mAny(Object.class));
 		Mockachino.verifyOnce().on(mock).compare("Foo", null);
-		Mockachino.verifyOnce().on(mock).compare("Foo", Matchers.type(Object.class));
-		Mockachino.verifyExactly(2).on(mock).compare(Matchers.type(String.class), Matchers.type(String.class));
-		Mockachino.verifyExactly(2).on(mock).compare(Matchers.type(String.class), Matchers.type(Object.class));
-		Mockachino.verifyOnce().on(mock).compare(Matchers.type(String.class), Matchers.isNull());
-		Mockachino.verifyOnce().on(mock).compare(Matchers.notNull(), Matchers.isNull());
+		Mockachino.verifyOnce().on(mock).compare("Foo", mType(Object.class));
+		Mockachino.verifyExactly(2).on(mock).compare(mType(String.class), mType(String.class));
+		Mockachino.verifyExactly(2).on(mock).compare(mType(String.class), mType(Object.class));
+		Mockachino.verifyOnce().on(mock).compare(mType(String.class), mNull());
+		Mockachino.verifyOnce().on(mock).compare(mNotNull(), mNull());
 		
 	}
 
@@ -98,13 +98,9 @@ public class MatchersTest {
 		mock.compare("Foo", null);
 
 		Mockachino.verifyExactly(2).on(mock).compare(
-				Matchers.and(
-						Matchers.<Object>eqM("Foo"),
-						//Matchers.<Object>eqM("Foo2"),
-						Matchers.typeM(Object.class)),
-				Matchers.or(
-						Matchers.<Object>eqM("Bar"),
-						Matchers.isNullM()));
+				mAnd(
+						eq("Foo", Object.class), type(Object.class)),
+				mOr(eq("Bar", Object.class), isNull()));
 	}
 
 	@Test
@@ -122,7 +118,7 @@ public class MatchersTest {
 			}
 		};
 
-		Mockachino.stubReturn("Foo").on(mock).get(Matchers.match(myMatcher));
+		Mockachino.stubReturn("Foo").on(mock).get(match(myMatcher));
 		assertEquals("Foo", mock.get(1));
 	}
 }

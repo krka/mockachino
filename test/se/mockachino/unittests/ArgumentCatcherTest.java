@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static se.mockachino.Mockachino.mock;
 import static se.mockachino.Mockachino.verifyOnce;
-import static se.mockachino.matchers.Matchers.match;
+import static se.mockachino.matchers.MatchersBase.match;
 
 public class ArgumentCatcherTest {
 	@Test

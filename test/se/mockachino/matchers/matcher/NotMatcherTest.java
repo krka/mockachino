@@ -1,14 +1,14 @@
 package se.mockachino.matchers.matcher;
 
 import org.junit.Test;
-import se.mockachino.matchers.Matchers;
+import se.mockachino.matchers.MatchersBase;
 
 import static org.junit.Assert.assertEquals;
 
 public class NotMatcherTest {
 	@Test
 	public void testSimple() {
-		Matcher<Integer> matcher = Matchers.notM(Matchers.eqM(123));
+		Matcher<Integer> matcher = MatchersBase.not(MatchersBase.eq(123));
 		assertEquals("!123", matcher.toString());
 		assertEquals(false, matcher.matches(123));
 		assertEquals(true, matcher.matches(124));

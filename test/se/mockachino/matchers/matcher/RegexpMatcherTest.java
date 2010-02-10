@@ -1,7 +1,7 @@
 package se.mockachino.matchers.matcher;
 
 import org.junit.Test;
-import se.mockachino.matchers.Matchers;
+import se.mockachino.matchers.MatchersBase;
 
 import java.util.regex.Pattern;
 
@@ -30,7 +30,7 @@ public class RegexpMatcherTest {
 
 	@Test
 	public void testContains() {
-		Matcher<String> matcher = Matchers.containsM("A");
+		Matcher<String> matcher = MatchersBase.contains("A");
 		assertEquals("regexp(\".*A.*\")", matcher.toString());
 		assertEquals(false, matcher.matches("B"));
 		assertEquals(true, matcher.matches("BAB"));
@@ -39,7 +39,7 @@ public class RegexpMatcherTest {
 
 	@Test
 	public void testStartsWith() {
-		Matcher<String> matcher = Matchers.startsWithM("A");
+		Matcher<String> matcher = MatchersBase.startsWith("A");
 		assertEquals("regexp(\"A.*\")", matcher.toString());
 		assertEquals(false, matcher.matches("B"));
 		assertEquals(true, matcher.matches("AB"));
@@ -48,7 +48,7 @@ public class RegexpMatcherTest {
 
 	@Test
 	public void testEndsWith() {
-		Matcher<String> matcher = Matchers.endsWithM("A");
+		Matcher<String> matcher = MatchersBase.endsWith("A");
 		assertEquals("regexp(\".*A\")", matcher.toString());
 		assertEquals(false, matcher.matches("B"));
 		assertEquals(true, matcher.matches("BA"));

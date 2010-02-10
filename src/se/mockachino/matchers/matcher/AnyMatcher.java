@@ -19,6 +19,6 @@ public class AnyMatcher<T> extends BasicMatcher<T> {
 
 	@Override
 	protected String asString() {
-		return "<any>";
+		return "<mAny>";
 	}
 }

@@ -1,18 +1,19 @@
 package se.mockachino.matchers;
 
-import se.mockachino.Primitives;
 import se.mockachino.matchers.matcher.*;
-import se.mockachino.util.Formatting;
 
 /**
  * Matchers is a utility class, containing a lot of useful default matchers.
  *
+ * <p>
  * A matcher is just a plain java object of the {@link se.mockachino.matchers.matcher.Matcher} type,
  * which can be used by verifying and stubbing.
  *
+ * <p>
  * The only important thing is that when using a matcher for a method call, you need to wrap it in
  * Matchers.match() (or Matchers.m() as a shortcut).
  *
+ * <p>
  * This wrapping MUST be directly in the actual method call for it to work.
  * Example:
  * <pre>
@@ -23,218 +24,141 @@ import se.mockachino.util.Formatting;
  * stubReturn(1).on(myMock).get(myMatcher));
  *
  * // Will work:
- * stubReturn(1).on(myMock).get(Matchers.match(myMatcher)));
+ * stubReturn(1).on(myMock).get(match(myMatcher)));
  * </pre>
  *
+ * <p>
  * Apart from using custom matchers, you can use some predefined.
  * All methods here that return a Matcher needs to be wrapped in Matchers.match()
  * when using in an argument.
  * The methods that return a primitive or a &lt;T> have already been wrapped in Matchers.match()
  * and can be used directly as is.
  *
+ * <p>
  * Example:
  * <pre>
- * stubReturn(1).on(myMock).get(Matchers.match(Matchers.anyIntM()));
- * stubReturn(1).on(myMock).get(Matchers.anyInt());
+ * stubReturn(1).on(myMock).get(match(anyInt()));
+ * stubReturn(1).on(myMock).get(m(anyInt()));
+ * stubReturn(1).on(myMock).get(mAnyInt());
  * </pre>
  *
  *
  */
-public class Matchers {
-
-	public static <T> T match(Matcher<T> matcher) {
-		MatcherThreadHandler.pushMatcher(matcher);
-		return Primitives.forType(matcher.getType());
-	}
-
+public class Matchers extends MatchersBase {
 	public static <T> T m(Matcher<T> matcher) {
 		return match(matcher);
 	}
 
-	public static <T> Matcher<T> notM(Matcher<T> matcher) {
-		return new NotMatcher<T>(matcher);
+	// Null shortcuts
+
+	public static <T> T mNotNull() {
+		return m(Matchers.<T>notNull());
 	}
 
-	public static <T> T not(Matcher<T> matcher) {
-		return match(notM(matcher));
+	public static <T> T mNull() {
+		return m(Matchers.<T>isNull());
 	}
 
-	public static <T> AndMatcher<T> andM(Matcher<T>... matchers) {
-		return new AndMatcher(matchers);
+	// Boolean shortcuts
+
+	public static <T> T mSame(T value) {
+		return match(same(value));
 	}
 
-	public static <T, U extends T> T and(Matcher<U>... matchers) {
-		return match(andM(matchers));
+	public static <T> T mNotSame(T value) {
+		return mNot(same(value));
 	}
 
-	public static <T> OrMatcher<T> orM(Matcher<T>... matchers) {
-		return new OrMatcher<T>(matchers);
+	public static <T> T mEq(T value) {
+		return match(eq(value));
 	}
 
-	public static <T> T or(Matcher<T>... matchers) {
-		return match(orM(matchers));
+	public static <T> T mNotEq(T value) {
+		return mNot(eq(value));
+	}
+
+	public static <T> T mAnd(Matcher<T>... matchers) {
+		return match(and(matchers));
+	}
+
+	public static <T> T mOr(Matcher<T>... matchers) {
+		return match(or(matchers));
+	}
+
+	public static <T> T mNot(Matcher<T> matcher) {
+		return match(not(matcher));
+	}
+
+	public static boolean mAnyBoolean() {
+		return m(anyBoolean());
+	}
+
+	public static boolean mTrue() {
+		return mEq(Boolean.TRUE);
 	}
 
 
-	public static RegexpMatcher regexpM(String s) {
-		return new RegexpMatcher(s);
+	public static boolean mFalse() {
+		return mEq(Boolean.FALSE);
 	}
 
-	public static String regexp(String s) {
-		return match(regexpM(s));
+	// String shortcuts
+
+
+	public static String mContains(String s) {
+		return m(contains(s));
 	}
 
-	public static <T> AnyMatcher<T> anyM(Class<T> clazz) {
-		return new AnyMatcher<T>(clazz);
+	public static String mStartsWith(String s) {
+		return m(startsWith(s));
 	}
 
-	public static <T> T any(Class<T> clazz) {
-		return match(anyM(clazz));
+	public static String mEndsWith(String s) {
+		return m(endsWith(s));
 	}
 
-	public static <T> ClassMatcher<T> typeM(Class<T> clazz, Class<?>... classes) {
-		return new ClassMatcher<T>(clazz, classes);
+	public static String mRegexp(String s) {
+		return match(regexp(s));
 	}
 
-	public static <T> T type(Class<T> clazz, Class<?>... classes) {
-		return match(typeM(clazz, classes));
+	// Primitive shortcuts
+
+	public static <T> T mAny(Class<T> clazz) {
+		return match(any(clazz));
 	}
 
-	public static <T> Matcher<T> eqM(T value) {
-		return new EqualityMatcher<T>(value);
+	public static char mAnyChar() {
+		return m(anyChar());
 	}
 
-	public static <T> T eq(T value) {
-		return match(eqM(value));
+	public static long mAnyLong() {
+		return m(anyLong());
 	}
 
-	public static <T> T notEq(T value) {
-		return not(eqM(value));
+	public static float mAnyFloat() {
+		return m(anyFloat());
 	}
 
-	public static <T> IdentityMatcher<T> sameM(T value) {
-		return new IdentityMatcher<T>(value);
+	public static double mAnyDouble() {
+		return m(anyDouble());
 	}
 
-	public static <T> T same(T value) {
-		return match(sameM(value));
+	public static short mAnyShort() {
+		return m(anyShort());
 	}
 
-	public static <T> T notSame(T value) {
-		return not(sameM(value));
+	public static byte mAnyByte() {
+		return m(anyByte());
 	}
 
-	public static int anyInt() {
-		return m(anyIntM());
+	public static int mAnyInt() {
+		return m(anyInt());
 	}
 
-	public static ClassMatcher<Integer> anyIntM() {
-		return ClassMatcher.anyInt();
+	// Type shortcut
+	public static <T> T mType(Class<T> clazz, Class<?>... classes) {
+		return match(type(clazz, classes));
 	}
 
-	public static long anyLong() {
-		return m(anyLongM());
-	}
-
-	public static ClassMatcher<Long> anyLongM() {
-		return ClassMatcher.anyLong();
-	}
-
-	public static double anyDouble() {
-		return m(anyDoubleM());
-	}
-
-	public static ClassMatcher<Double> anyDoubleM() {
-		return ClassMatcher.anyDouble();
-	}
-
-	public static float anyFloat() {
-		return m(anyFloatM());
-	}
-
-	public static ClassMatcher<Float> anyFloatM() {
-		return ClassMatcher.anyFloat();
-	}
-
-	public static short anyShort() {
-		return m(anyShortM());
-	}
-
-	public static ClassMatcher<Short> anyShortM() {
-		return ClassMatcher.anyShort();
-	}
-
-	public static byte anyByte() {
-		return m(anyByteM());
-	}
-
-	public static ClassMatcher<Byte> anyByteM() {
-		return ClassMatcher.anyByte();
-	}
-
-	public static boolean anyBoolean() {
-		return m(anyBooleanM());
-	}
-
-	public static ClassMatcher<Boolean> anyBooleanM() {
-		return ClassMatcher.anyBoolean();
-	}
-
-	public static char anyChar() {
-		return m(anyCharM());
-	}
-
-	public static ClassMatcher<Character> anyCharM() {
-		return ClassMatcher.anyChar();
-	}
-
-	public static <T> Matcher<T> isNullM() {
-		return sameM(null);
-	}
-
-	public static <T> T isNull() {
-		return m(Matchers.<T>isNullM());
-	}
-
-	public static <T> Matcher<T> notNullM() {
-		return (Matcher<T>) notM(sameM(null));
-	}
-
-	public static <T> T notNull() {
-		return m(Matchers.<T>notNullM());
-	}
-
-	public static boolean isTrue() {
-		return eq(Boolean.TRUE);
-	}
-
-	public static boolean isFalse() {
-		return eq(Boolean.FALSE);
-	}
-
-	public static String contains(String s) {
-		return m(containsM(s));
-	}
-
-	public static Matcher<String> containsM(String s) {
-		return new RegexpMatcher(".*" + Formatting.quote(s) + ".*");
-	}
-
-	public static String startsWith(String s) {
-		return m(startsWithM(s));
-	}
-
-	public static Matcher<String> startsWithM(String s) {
-		return new RegexpMatcher(Formatting.quote(s) + ".*");
-	}
-
-	public static String endsWith(String s) {
-		return m(endsWithM(s));
-	}
-
-	public static Matcher<String> endsWithM(String s) {
-		return new RegexpMatcher(".*" + Formatting.quote(s));
-	}
 
 }
-

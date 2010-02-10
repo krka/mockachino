@@ -2,6 +2,7 @@ package se.mockachino;
 
 import se.mockachino.listener.ListenerAdder;
 import se.mockachino.listener.MethodCallListener;
+import se.mockachino.matchers.Matchers;
 import se.mockachino.order.OrderingContext;
 import se.mockachino.stub.StubAnswer;
 import se.mockachino.stub.StubReturn;
@@ -15,12 +16,18 @@ import java.util.List;
  * This is the main entry point of all your mocking needs.
  * All operations delegates to a singleton {@link se.mockachino.MockContext}.
  *
+ * <p>
  * For most use cases, using this singleton is the most convenient approach,
  * but are also free to use a {@link se.mockachino.MockContext} object directly.
+ * <p>
+ * Consider statically import this class to increase the readability.
  * 
- * See {@link se.mockachino.matchers.Matchers} for available matchers.
+ * <p>
+ * See {@link se.mockachino.matchers.MatchersBase} for available matchers
+ * and
+ * see {@link se.mockachino.matchers.Matchers} for useful matcher shortcuts.
  */
-public class Mockachino {
+public class Mockachino extends Matchers {
 	private static final MockContext DEFAULT_CONTEXT = new MockContext();
 
 	/**
