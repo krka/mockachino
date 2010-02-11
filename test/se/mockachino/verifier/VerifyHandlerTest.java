@@ -91,6 +91,7 @@ public class VerifyHandlerTest {
 			mock.add("Hello");
 			mock.add("Goodbye");
 			mock.add("Hello");
+			mock.add("Skipped");
 		}
 
 		try {

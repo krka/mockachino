@@ -73,20 +73,64 @@ public class MethodComparator implements Comparator<MethodCall> {
 		// Compare on argument hashcodes in order to put equal
 		// argument lists next to each other
 
-		return specialHash(o1) - specialHash(o2);
+		return compareOrigin(o1, o2);
 	}
 
-	private int specialHash(MethodCall o1) {
-		StackTraceElement[] stackTraceElements = o1.getStackTrace();
-		int stacktracehash;
-		if (stackTraceElements.length >= 1) {
-			stacktracehash = stackTraceElements[0].hashCode();
-		} else {
-			stacktracehash = 0;
+	private int compareOrigin(MethodCall o1, MethodCall o2) {
+		Object[] args1 = o1.getArguments();
+		Object[] args2 = o2.getArguments();
+		int n = args1.length;
+		for (int i = 0; i < n; i++) {
+			long arg1Hash = args1[i].hashCode();
+			long arg2Hash = args2[i].hashCode();
+			long val = arg1Hash - arg2Hash;
+			if (val != 0) {
+				return (int) Long.signum(val);
+			}
 		}
-		return Arrays.hashCode(o1.getArguments()) + stacktracehash;
-	}
+		int len1 = o1.getStackTrace().length;
+		int len2 = o2.getStackTrace().length;
+		if (len1 == 0 && len2 == 0) {
+			return 0;
+		}
+		int val = comp(len1 > 0, len2 > 0);
+		if (val != 0) {
+			return val;
+		}
 
+		StackTraceElement element1 = o1.getStackTrace()[0];
+		StackTraceElement element2 = o2.getStackTrace()[0];
+
+		val = element1.getClassName().compareTo(element2.getClassName());
+		if (val != 0) {
+			return val;
+		}
+
+		val = element1.getMethodName().compareTo(element2.getMethodName());
+		if (val != 0) {
+			return val;
+		}
+
+		String file1 = element1.getFileName();
+		String file2 = element2.getFileName();
+
+		if (file1 == null && file2 == null) {
+			return 0;
+		}
+		if (file1 == null) {
+			return 1;
+		}
+		if (file2 == null) {
+			return -1;
+		}
+		val = file1.compareTo(file2);
+		if (val != 0) {
+			return val;
+		}
+
+		return element1.getLineNumber() - element2.getLineNumber();
+	}
+	
 	private boolean matchNull(MethodCall methodCall, int index) {
 		Object[] args = methodCall.getArguments();
 		if (index >= args.length) {

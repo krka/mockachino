@@ -36,7 +36,7 @@ public class VerifyHandler<T> extends MatchingHandler {
 		if (counter < minCalls) {
 			String expected;
 			if (exact) {
-				expected = "Expected exactly " + Formatting.calls(minCalls);
+				expected = "Expected " + Formatting.calls(minCalls);
 			} else {
 				expected = "Expected at least " + Formatting.calls(minCalls);
 			}
@@ -45,9 +45,9 @@ public class VerifyHandler<T> extends MatchingHandler {
 		if (counter > maxCalls) {
 			String expected;
 			if (exact) {
-				expected = "Expected exactly " + Formatting.calls(maxCalls);
+				expected = "Expected " + Formatting.calls(maxCalls);
 			} else {
-				expected = "Expected at most" + Formatting.calls(maxCalls);
+				expected = "Expected at most " + Formatting.calls(maxCalls);
 			}
 			error(expected + ", but got " + Formatting.calls(counter), matcher, 0);
 		}
@@ -68,34 +68,34 @@ public class VerifyHandler<T> extends MatchingHandler {
 		List<MethodCallCount> calls = getMethodCallCount(getSortedMatches(matcher));
 		List<MethodCallCount> toOutput = new ArrayList<MethodCallCount>();
 
-		int numHits = 0;
 		int numMisses = 0;
-		int maxSequence = 0;
 
 		for (MethodCallCount call : calls) {
 			boolean hit = matcher.matches(call);
-			if (hit) {
-				numHits += 1;
-			} else {
+			if (!hit) {
 				numMisses += 1;
 			}
 			if (hit || numMisses <= maxMisses) {
 				toOutput.add(call);
-				maxSequence = Math.max(maxSequence, call.getCallNumber());
 			}
 		}
-		int digits = Integer.toString(maxSequence).length();
-		String formatString = "%0" + digits;
-		String formatString2 = "%-" + (10 + digits);
-
-		String expected = String.format(formatString2 + "s %s", "MATCHER: ", matcher.toString());
+		String expected = "Method pattern:\n"  + matcher.toString();
 		String matchingMethods = "\n" + expected + "\n";
 
+		boolean reachedHit = false;
+		boolean reachedMiss = false;
 		for (MethodCallCount call : toOutput) {
 			boolean hit = matcher.matches(call);
-			String prefix = hit ? "HIT:" : "MISS:";
+			if (hit && !reachedHit) {
+				matchingMethods += "Hits:\n";
+				reachedHit = true;
+			}
+			if (!hit && !reachedMiss) {
+				matchingMethods += "Misses:\n";
+				reachedMiss = true;
+			}
 
-			matchingMethods += String.format("%-8s #" + formatString + "d %s", prefix, call.getCallNumber(), call.toString()) + count(call) + "\n" + getStacktrace(call);
+			matchingMethods += call.toString() + count(call) + "\n" + getStacktrace(call);
 		}
 		if (maxMisses < numMisses) {
 			matchingMethods += "... skipping " + (numMisses - maxMisses) + " unmatched calls\n";
