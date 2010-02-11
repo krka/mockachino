@@ -24,6 +24,10 @@ public class EqualityMatcher<T> extends BasicMatcher<T> {
 
 	@Override
 	public Class<T> getType() {
-		return (Class<T>) value.getClass();
+		if (value != null) {
+			return (Class<T>) value.getClass();
+		}
+		return (Class<T>) Object.class;
+
 	}
 }

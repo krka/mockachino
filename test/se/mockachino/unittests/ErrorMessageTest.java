@@ -18,7 +18,7 @@ public class ErrorMessageTest {
 			mock.add(2);
 			mock.add("World");
 
-			verifyAtLeast(2).on(mock).add(mAnyInt());
+			verifyAtLeast(2).on(mock).add(anyInt());
 			fail("Should not succeed");
 		} catch (VerificationError e) {
 			e.printStackTrace();

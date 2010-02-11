@@ -12,93 +12,85 @@ public class MatchersBase {
 	}
 
 	// Boolean matchers
-	public static <T> Matcher<T> not(Matcher<T> matcher) {
+	public static <T> Matcher<T> mNot(Matcher<T> matcher) {
 		return new NotMatcher<T>(matcher);
 	}
 
-	public static <T> AndMatcher<T> and(Matcher<T>... matchers) {
+	public static <T> AndMatcher<T> mAnd(Matcher<T>... matchers) {
 		return new AndMatcher(matchers);
 	}
 
-	public static <T> OrMatcher<T> or(Matcher<T>... matchers) {
+	public static <T> OrMatcher<T> mOr(Matcher<T>... matchers) {
 		return new OrMatcher<T>(matchers);
 	}
 
 	// String matchers
-	public static RegexpMatcher regexp(String s) {
+	public static RegexpMatcher mRegexp(String s) {
 		return new RegexpMatcher(s);
 	}
 
 	// Any matchers
-	public static <T> AnyMatcher<T> any(Class<T> clazz) {
+	public static <T> AnyMatcher<T> mAny(Class<T> clazz) {
 		return new AnyMatcher<T>(clazz);
 	}
 
-	public static <T> ClassMatcher<T> type(Class<T> clazz, Class<?>... classes) {
+	public static <T> ClassMatcher<T> mType(Class<T> clazz, Class<?>... classes) {
 		return new ClassMatcher<T>(clazz, classes);
 	}
 
-	public static <T> Matcher<T> eq(T value) {
+	public static <T> Matcher<T> mEq(T value) {
 		return new EqualityMatcher<T>(value);
 	}
 
-	public static <T> Matcher<T> eq(T value, Class<T> clazz) {
-		return eq(value);
+	public static <T> Matcher<T> matchEq(T value, Class<T> clazz) {
+		return mEq(value);
 	}
 
-	public static <T> IdentityMatcher<T> same(T value) {
+	public static <T> IdentityMatcher<T> mSame(T value) {
 		return new IdentityMatcher<T>(value);
 	}
 
-	public static ClassMatcher<Integer> anyInt() {
+	public static ClassMatcher<Integer> mAnyInt() {
 		return ClassMatcher.anyInt();
 	}
 
-	public static ClassMatcher<Long> anyLong() {
+	public static ClassMatcher<Long> mAnyLong() {
 		return ClassMatcher.anyLong();
 	}
 
-	public static ClassMatcher<Double> anyDouble() {
+	public static ClassMatcher<Double> mAnyDouble() {
 		return ClassMatcher.anyDouble();
 	}
 
-	public static ClassMatcher<Float> anyFloat() {
+	public static ClassMatcher<Float> mAnyFloat() {
 		return ClassMatcher.anyFloat();
 	}
 
-	public static ClassMatcher<Short> anyShort() {
+	public static ClassMatcher<Short> mAnyShort() {
 		return ClassMatcher.anyShort();
 	}
 
-	public static ClassMatcher<Byte> anyByte() {
+	public static ClassMatcher<Byte> mAnyByte() {
 		return ClassMatcher.anyByte();
 	}
 
-	public static ClassMatcher<Boolean> anyBoolean() {
+	public static ClassMatcher<Boolean> mAnyBoolean() {
 		return ClassMatcher.anyBoolean();
 	}
 
-	public static ClassMatcher<Character> anyChar() {
+	public static ClassMatcher<Character> mAnyChar() {
 		return ClassMatcher.anyChar();
 	}
 
-	public static <T> Matcher<T> isNull() {
-		return same(null);
-	}
-
-	public static <T> Matcher<T> notNull() {
-		return (Matcher<T>) not(same(null));
-	}
-
-	public static Matcher<String> contains(String s) {
+	public static Matcher<String> mContains(String s) {
 		return new RegexpMatcher(".*" + Formatting.quote(s) + ".*");
 	}
 
-	public static Matcher<String> startsWith(String s) {
+	public static Matcher<String> mStartsWith(String s) {
 		return new RegexpMatcher(Formatting.quote(s) + ".*");
 	}
 
-	public static Matcher<String> endsWith(String s) {
+	public static Matcher<String> mEndsWith(String s) {
 		return new RegexpMatcher(".*" + Formatting.quote(s));
 	}
 }

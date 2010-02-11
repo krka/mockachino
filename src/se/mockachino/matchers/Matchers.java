@@ -28,7 +28,7 @@ import se.mockachino.matchers.matcher.*;
  * </pre>
  *
  * <p>
- * Apart from using custom matchers, you can use some predefined.
+ * Apart from using custom matchers, you can use some predefined ones.
  * All methods here that return a Matcher needs to be wrapped in Matchers.match()
  * when using in an argument.
  * The methods that return a primitive or a &lt;T> have already been wrapped in Matchers.match()
@@ -37,9 +37,9 @@ import se.mockachino.matchers.matcher.*;
  * <p>
  * Example:
  * <pre>
- * stubReturn(1).on(myMock).get(match(anyInt()));
- * stubReturn(1).on(myMock).get(m(anyInt()));
- * stubReturn(1).on(myMock).get(mAnyInt());
+ * stubReturn(1).on(myMock).get(match(mAnyInt()));
+ * stubReturn(1).on(myMock).get(m(mAnyInt()));
+ * stubReturn(1).on(myMock).get(anyInt());
  * </pre>
  *
  *
@@ -49,115 +49,95 @@ public class Matchers extends MatchersBase {
 		return match(matcher);
 	}
 
-	// Null shortcuts
-
-	public static <T> T mNotNull() {
-		return m(Matchers.<T>notNull());
-	}
-
-	public static <T> T mNull() {
-		return m(Matchers.<T>isNull());
-	}
-
 	// Boolean shortcuts
 
-	public static <T> T mSame(T value) {
-		return match(same(value));
+	public static <T> T same(T value) {
+		return match(mSame(value));
 	}
 
-	public static <T> T mNotSame(T value) {
-		return mNot(same(value));
+	public static <T> T notSame(T value) {
+		return not(mSame(value));
 	}
 
-	public static <T> T mEq(T value) {
-		return match(eq(value));
+	public static <T> T eq(T value) {
+		return match(mEq(value));
 	}
 
-	public static <T> T mNotEq(T value) {
-		return mNot(eq(value));
+	public static <T> T notEq(T value) {
+		return not(mEq(value));
 	}
 
-	public static <T> T mAnd(Matcher<T>... matchers) {
-		return match(and(matchers));
+	public static <T> T and(Matcher<T>... matchers) {
+		return match(mAnd(matchers));
 	}
 
-	public static <T> T mOr(Matcher<T>... matchers) {
-		return match(or(matchers));
+	public static <T> T or(Matcher<T>... matchers) {
+		return match(mOr(matchers));
 	}
 
-	public static <T> T mNot(Matcher<T> matcher) {
-		return match(not(matcher));
+	public static <T> T not(Matcher<T> matcher) {
+		return match(mNot(matcher));
 	}
 
-	public static boolean mAnyBoolean() {
-		return m(anyBoolean());
-	}
-
-	public static boolean mTrue() {
-		return mEq(Boolean.TRUE);
-	}
-
-
-	public static boolean mFalse() {
-		return mEq(Boolean.FALSE);
+	public static boolean anyBoolean() {
+		return m(mAnyBoolean());
 	}
 
 	// String shortcuts
 
-
-	public static String mContains(String s) {
-		return m(contains(s));
+	public static String contains(String s) {
+		return m(mContains(s));
 	}
 
-	public static String mStartsWith(String s) {
-		return m(startsWith(s));
+	public static String startsWith(String s) {
+		return m(mStartsWith(s));
 	}
 
-	public static String mEndsWith(String s) {
-		return m(endsWith(s));
+	public static String endsWith(String s) {
+		return m(mEndsWith(s));
 	}
 
-	public static String mRegexp(String s) {
-		return match(regexp(s));
+	public static String regexp(String s) {
+		return match(mRegexp(s));
 	}
 
 	// Primitive shortcuts
 
-	public static <T> T mAny(Class<T> clazz) {
-		return match(any(clazz));
+	public static <T> T any(Class<T> clazz) {
+		return match(mAny(clazz));
 	}
 
-	public static char mAnyChar() {
-		return m(anyChar());
+	public static char anyChar() {
+		return m(mAnyChar());
 	}
 
-	public static long mAnyLong() {
-		return m(anyLong());
+	public static long anyLong() {
+		return m(mAnyLong());
 	}
 
-	public static float mAnyFloat() {
-		return m(anyFloat());
+	public static float anyFloat() {
+		return m(mAnyFloat());
 	}
 
-	public static double mAnyDouble() {
-		return m(anyDouble());
+	public static double anyDouble() {
+		return m(mAnyDouble());
 	}
 
-	public static short mAnyShort() {
-		return m(anyShort());
+	public static short anyShort() {
+		return m(mAnyShort());
 	}
 
-	public static byte mAnyByte() {
-		return m(anyByte());
+	public static byte anyByte() {
+		return m(mAnyByte());
 	}
 
-	public static int mAnyInt() {
-		return m(anyInt());
+	public static int anyInt() {
+		return m(mAnyInt());
 	}
 
 	// Type shortcut
-	public static <T> T mType(Class<T> clazz, Class<?>... classes) {
-		return match(type(clazz, classes));
+	public static <T> T type(Class<T> clazz, Class<?>... classes) {
+		return match(mType(clazz, classes));
 	}
 
 

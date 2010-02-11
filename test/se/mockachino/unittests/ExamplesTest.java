@@ -59,8 +59,8 @@ public class ExamplesTest {
 		mock.add("World");
 
 		// Verify calls
-		verifyOnce().on(mock).add(mEq("Hello"));
-		verifyExactly(2).on(mock).add(mAny(String.class));
+		verifyOnce().on(mock).add(eq("Hello"));
+		verifyExactly(2).on(mock).add(any(String.class));
 	}
 
 	@Test
@@ -69,7 +69,7 @@ public class ExamplesTest {
 		List mock = mock(List.class);
 
 		// Stub a return value
-		stubReturn("NullString").on(mock).get(mAnyInt());
+		stubReturn("NullString").on(mock).get(anyInt());
 		stubReturn("Hello").on(mock).get(123);
 
 		// Interact with it
@@ -78,7 +78,7 @@ public class ExamplesTest {
 		assertEquals("NullString", mock.get(2));
 
 		// Verify calls
-		verifyExactly(3).on(mock).get(mAnyInt());
+		verifyExactly(3).on(mock).get(anyInt());
 	}
 
 	@Test
@@ -87,11 +87,11 @@ public class ExamplesTest {
 		List mock = mock(List.class);
 
 		// This works
-		verifyNever().on(mock).add(mEq(0), mAny(Object.class));
+		verifyNever().on(mock).add(eq(0), any(Object.class));
 
 		// This doesn't
 		try {
-			verifyNever().on(mock).add(0, mAny(Object.class));
+			verifyNever().on(mock).add(0, any(Object.class));
 			fail("This should never pass");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -154,8 +154,8 @@ public class ExamplesTest {
 
 		// Verifying the calls still work of course
 		verifyExactly(2).on(spy).size();
-		verifyExactly(3).on(spy).get(mAnyInt());
-		verifyExactly(1).on(spy).add(mAny(Object.class));
+		verifyExactly(3).on(spy).get(anyInt());
+		verifyExactly(1).on(spy).add(any(Object.class));
 	}
 
 	@Test
@@ -165,7 +165,7 @@ public class ExamplesTest {
 		mock.compare("Foo", "Bar");
 		mock.compare("Foo", null);
 
-		verifyOnce().on(mock).compare(mNot(type(List.class)), "World");
+		verifyOnce().on(mock).compare(not(mType(List.class)), "World");
 	}
 
 	@Test

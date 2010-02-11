@@ -30,7 +30,7 @@ public class RegexpMatcherTest {
 
 	@Test
 	public void testContains() {
-		Matcher<String> matcher = MatchersBase.contains("A");
+		Matcher<String> matcher = MatchersBase.mContains("A");
 		assertEquals("regexp(\".*A.*\")", matcher.toString());
 		assertEquals(false, matcher.matches("B"));
 		assertEquals(true, matcher.matches("BAB"));
@@ -39,7 +39,7 @@ public class RegexpMatcherTest {
 
 	@Test
 	public void testStartsWith() {
-		Matcher<String> matcher = MatchersBase.startsWith("A");
+		Matcher<String> matcher = MatchersBase.mStartsWith("A");
 		assertEquals("regexp(\"A.*\")", matcher.toString());
 		assertEquals(false, matcher.matches("B"));
 		assertEquals(true, matcher.matches("AB"));
@@ -48,7 +48,7 @@ public class RegexpMatcherTest {
 
 	@Test
 	public void testEndsWith() {
-		Matcher<String> matcher = MatchersBase.endsWith("A");
+		Matcher<String> matcher = MatchersBase.mEndsWith("A");
 		assertEquals("regexp(\".*A\")", matcher.toString());
 		assertEquals(false, matcher.matches("B"));
 		assertEquals(true, matcher.matches("BA"));

@@ -86,7 +86,7 @@ public class ThreadsafetyTest {
 			for (int j = 0; j < count; j++) {
 				order.verify().on(mock).foo(name, 1 + j);
 			}
-			verifyExactly(count).on(mock).foo(name, mAnyInt());
+			verifyExactly(count).on(mock).foo(name, anyInt());
 		}
 	}
 }

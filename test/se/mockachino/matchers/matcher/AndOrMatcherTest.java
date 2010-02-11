@@ -8,17 +8,17 @@ import static se.mockachino.matchers.MatchersBase.*;
 public class AndOrMatcherTest {
 	@Test
 	public void testSimple() {
-		OrMatcher<Object> orMatcher = or();
+		OrMatcher<Object> orMatcher = mOr();
 		assertEquals("false", orMatcher.asString());
 
-		AndMatcher<Object> andMatcher = and();
+		AndMatcher<Object> andMatcher = mAnd();
 		assertEquals("true", andMatcher.asString());
 
 	}
 
 	@Test
 	public void testOr() {
-		Matcher<String> orMatcher = or(contains("Foo"), eq("Hello"));
+		Matcher<String> orMatcher = mOr(mContains("Foo"), mEq("Hello"));
 		assertEquals(false, orMatcher.matches("X"));
 		assertEquals(true, orMatcher.matches("Hello"));
 		assertEquals(true, orMatcher.matches("AFooA"));
@@ -27,7 +27,7 @@ public class AndOrMatcherTest {
 
 	@Test
 	public void testAnd() {
-		Matcher<String> andMatcher = and(contains("lo"), contains("Hell"));
+		Matcher<String> andMatcher = mAnd(mContains("lo"), mContains("Hell"));
 		assertEquals(false, andMatcher.matches("aloa"));
 		assertEquals(false, andMatcher.matches("Hellas"));
 		assertEquals(true, andMatcher.matches("Hello"));
