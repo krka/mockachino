@@ -84,4 +84,20 @@ public class VerifyHandlerTest {
 		}
 	}
 
+	@Test
+	public void testMultipleInvocationGrouping() {
+		List mock = Mockachino.mock(List.class);
+		for (int i = 0; i < 100; i++) {
+			mock.add("Hello");
+			mock.add("Goodbye");
+			mock.add("Hello");
+		}
+
+		try {
+			Mockachino.verifyOnce().on(mock).add("World");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

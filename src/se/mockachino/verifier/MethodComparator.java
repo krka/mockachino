@@ -72,7 +72,19 @@ public class MethodComparator implements Comparator<MethodCall> {
 
 		// Compare on argument hashcodes in order to put equal
 		// argument lists next to each other
-		return Arrays.hashCode(o1.getArguments()) - Arrays.hashCode(o2.getArguments());
+
+		return specialHash(o1) - specialHash(o2);
+	}
+
+	private int specialHash(MethodCall o1) {
+		StackTraceElement[] stackTraceElements = o1.getStackTrace();
+		int stacktracehash;
+		if (stackTraceElements.length >= 1) {
+			stacktracehash = stackTraceElements[0].hashCode();
+		} else {
+			stacktracehash = 0;
+		}
+		return Arrays.hashCode(o1.getArguments()) + stacktracehash;
 	}
 
 	private boolean matchNull(MethodCall methodCall, int index) {

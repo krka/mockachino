@@ -50,7 +50,13 @@ public class MethodCall {
 		if (!method.equals(other.method)) {
 			return false;
 		}
-		return Arrays.equals(args, other.args);
+		if (!Arrays.equals(args, other.args)) {
+			return false;
+		}
+		if (stacktrace.length == 0 && other.stacktrace.length == 0) {
+			return true;
+		}
+		return stacktrace[0].equals(other.stacktrace[0]);
 	}
 
 	public StackTraceElement[] getStackTrace() {
