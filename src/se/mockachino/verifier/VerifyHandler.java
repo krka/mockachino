@@ -5,7 +5,10 @@ import se.mockachino.MockData;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.util.Formatting;
+import se.mockachino.util.MockachinoMethod;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class VerifyHandler<T> extends MatchingHandler {
@@ -51,25 +54,100 @@ public class VerifyHandler<T> extends MatchingHandler {
 	}
 
 	private void error(String msg, MethodMatcher matcher) {
-		String matchingMethods = getBestMatches(matcher);
-		String expected = "EXPECTED:     mock." + matcher.toString();
-		throw new VerificationError(msg + "\n" + matchingMethods + expected);
+		String matchingMethods = getBestMatches(matcher, 3);
+		throw new VerificationError(msg + matchingMethods);
 	}
 
-	private String getBestMatches(MethodMatcher matcher) {
-		String matchingMethods = "";
-		List<MethodCall> calls = mockData.getCalls();
-		for (MethodCall call : calls) {
-			if (call.getMethod().equals(matcher.getMethod())) {
-				String prefix = (matcher.matches(call)) ? "ACTUAL: (HIT) " : "ACTUAL:       ";
-				matchingMethods += prefix + "mock." + call + "\n" + getStacktrace(call);
+	private List<MethodCall> getSortedMatches(MethodMatcher matcher) {
+		List<MethodCall> list = new ArrayList<MethodCall>(mockData.getCalls());
+		Collections.sort(list, new MethodComparator(matcher));
+		return list;
+	}
+
+	private String getBestMatches(MethodMatcher matcher, int maxMisses) {
+		List<MethodCallCount> calls = getMethodCallCount(getSortedMatches(matcher));
+		List<MethodCallCount> toOutput = new ArrayList<MethodCallCount>();
+
+		int numHits = 0;
+		int numMisses = 0;
+		int maxSequence = 0;
+
+		for (MethodCallCount call : calls) {
+			boolean hit = matcher.matches(call);
+			if (hit) {
+				numHits += 1;
+			} else {
+				numMisses += 1;
 			}
+			if (hit || numMisses <= maxMisses) {
+				toOutput.add(call);
+				maxSequence = Math.max(maxSequence, call.getCallNumber());
+			}
+		}
+		int digits = Integer.toString(maxSequence).length();
+		String formatString = "%0" + digits;
+		String formatString2 = "%-" + (10 + digits);
+
+		String expected = String.format(formatString2 + "s %s", "EXPECTED:", matcher.toString());
+		String matchingMethods = "\n" + expected + "\n";
+
+		for (MethodCallCount call : toOutput) {
+			boolean hit = matcher.matches(call);
+			String prefix = hit ? "HIT:" : "MISS:";
+
+			matchingMethods += String.format("%-8s #" + formatString + "d %s", prefix, call.getCallNumber(), call.toString()) + count(call) + "\n" + getStacktrace(call);
+		}
+		if (maxMisses < numMisses) {
+			matchingMethods += "... skipping " + (numMisses - maxMisses) + " unmatched calls\n";
 		}
 		return matchingMethods;
 	}
 
+	private String count(MethodCallCount call) {
+		if (call.count <= 1) {
+			return "";
+		}
+		return "\t\t[invoked " + call.count + " times]";
+	}
+
+	private List<MethodCallCount> getMethodCallCount(List<MethodCall> calls) {
+		List<MethodCallCount> res = new ArrayList<MethodCallCount>();
+
+		MethodCall prev = null;
+		MethodCallCount current = null;
+		for (MethodCall call : calls) {
+			if (call.equals(prev)) {
+				current.count++;
+			} else {
+				if (current != null) {
+					res.add(current);
+				}
+				current = new MethodCallCount(
+						call.getMethod(),
+						call.getArguments(),
+						call.getCallNumber(),
+						call.getStackTrace());
+				prev = call;
+			}
+		}
+		if (current != null) {
+			res.add(current);
+		}
+		return res;
+	}
+
 	private String getStacktrace(MethodCall call) {
-		return "";
-		//return call.getStackTrace();
+		String traceString = call.getStackTraceString(1);
+		if (traceString == null) {
+			return "";
+		}
+		return traceString;
+	}
+
+	private static class MethodCallCount extends MethodCall {
+		int count = 1;
+		public MethodCallCount(MockachinoMethod method, Object[] args, int callNumber, StackTraceElement[] stacktrace) {
+			super(method, args, callNumber, stacktrace);
+		}
 	}
 }

@@ -68,8 +68,18 @@ public class Formatting {
 		return builder.toString();
 	}
 	public static String toString(StackTraceElement[] stacktrace) {
+		return toString(stacktrace, Integer.MAX_VALUE);
+	}
+
+	public static String toString(StackTraceElement[] stacktrace, int maxLines) {
+		if (stacktrace == null || stacktrace.length == 0) {
+			return null;
+		}
 		StringBuilder builder = new StringBuilder();
 		for (StackTraceElement element : stacktrace) {
+			if (--maxLines < 0) {
+				break;
+			}
 			builder.append("\tat ").append(element.getClassName()).append(".").append(element.getMethodName());
 			builder.append("(").append(element.getFileName()).append(":").append(element.getLineNumber()).append(")");
 			builder.append("\n");
@@ -84,4 +94,5 @@ public class Formatting {
 		}
 		return ret;
 	}
+
 }

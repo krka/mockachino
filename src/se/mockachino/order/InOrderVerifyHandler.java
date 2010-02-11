@@ -52,7 +52,7 @@ public class InOrderVerifyHandler extends MatchingHandler {
 		String errorMessage = "Expected " + Formatting.calls(min) + " to mock." + matcher + " but only got "
 				+ Formatting.calls(count);
 		if (lastCallNumber > 0) {
-			errorMessage += " after mock." + lastCall + "\n\t\t" + lastCall.getStackTrace();
+			errorMessage += " after mock." + lastCall + "\n\t\t" + lastCall.getStackTraceString();
 		}
 		throw new VerificationError(errorMessage);
 	}

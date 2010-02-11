@@ -57,4 +57,8 @@ public class MethodMatcher {
 	public MockachinoMethod getMethod() {
 		return method;
 	}
+
+	public ArrayList<Matcher> getArgumentMatchers() {
+		return argumentMatchers;
+	}
 }
