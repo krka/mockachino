@@ -40,7 +40,7 @@ public class VerifyHandler<T> extends MatchingHandler {
 			} else {
 				expected = "Expected at least " + Formatting.calls(minCalls);
 			}
-			error(expected + ", but got " + Formatting.calls(counter), matcher);
+			error(expected + ", but got " + Formatting.calls(counter), matcher, 3);
 		}
 		if (counter > maxCalls) {
 			String expected;
@@ -49,12 +49,12 @@ public class VerifyHandler<T> extends MatchingHandler {
 			} else {
 				expected = "Expected at most" + Formatting.calls(maxCalls);
 			}
-			error(expected + ", but got " + Formatting.calls(counter), matcher);
+			error(expected + ", but got " + Formatting.calls(counter), matcher, 0);
 		}
 	}
 
-	private void error(String msg, MethodMatcher matcher) {
-		String matchingMethods = getBestMatches(matcher, 3);
+	private void error(String msg, MethodMatcher matcher, int maxMisses) {
+		String matchingMethods = getBestMatches(matcher, maxMisses);
 		throw new VerificationError(msg + matchingMethods);
 	}
 
@@ -88,7 +88,7 @@ public class VerifyHandler<T> extends MatchingHandler {
 		String formatString = "%0" + digits;
 		String formatString2 = "%-" + (10 + digits);
 
-		String expected = String.format(formatString2 + "s %s", "EXPECTED:", matcher.toString());
+		String expected = String.format(formatString2 + "s %s", "MATCHER: ", matcher.toString());
 		String matchingMethods = "\n" + expected + "\n";
 
 		for (MethodCallCount call : toOutput) {

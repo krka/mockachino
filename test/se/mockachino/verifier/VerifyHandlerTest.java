@@ -1,6 +1,7 @@
 package se.mockachino.verifier;
 
 import org.junit.Test;
+import se.mockachino.Mockachino;
 import se.mockachino.exceptions.VerificationError;
 
 import java.util.List;
@@ -52,4 +53,35 @@ public class VerifyHandlerTest {
 	private void foo(List mock) {
 		mock.add(3, "World");
 	}
+
+	@Test
+	public void testMatchNever() {
+		try {
+			List mock = mock(List.class);
+
+			mock.add(3, "Hello");
+			mock.add(3, "World");
+
+			verifyNever().on(mock).add(3, "Hello");
+			fail("Should not succeed");
+		} catch (VerificationError e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testMultipleInvocations() {
+		List mock = Mockachino.mock(List.class);
+		for (int i = 0; i < 100; i++) {
+			mock.add("Hello");
+			mock.add("Goodbye");
+		}
+
+		try {
+			Mockachino.verifyOnce().on(mock).add("World");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

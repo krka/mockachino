@@ -7,6 +7,7 @@ import se.mockachino.matchers.matcher.Matcher;
 import se.mockachino.util.MockachinoMethod;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 
 public class MethodComparator implements Comparator<MethodCall> {
@@ -69,7 +70,9 @@ public class MethodComparator implements Comparator<MethodCall> {
 			return value;
 		}
 
-		return o1.getCallNumber() - o2.getCallNumber();
+		// Compare on argument hashcodes in order to put equal
+		// argument lists next to each other
+		return Arrays.hashCode(o1.getArguments()) - Arrays.hashCode(o2.getArguments());
 	}
 
 	private boolean matchNull(MethodCall methodCall, int index) {
