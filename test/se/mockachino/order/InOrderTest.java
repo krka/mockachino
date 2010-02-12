@@ -13,7 +13,7 @@ public class InOrderTest {
 	public void testVerifyWithZero() {
 		List mock = Mockachino.mock(List.class);
 
-		OrderingContext order = Mockachino.verifyOrder();
+		OrderingContext order = Mockachino.newOrdering();
 		order.verifyAtLeast(0).on(mock).add("Hello world");
 	}
 
@@ -27,11 +27,11 @@ public class InOrderTest {
 
 		Mockachino.verifyExactly(1).on(mock).add("Hello");
 
-		OrderingContext order = Mockachino.verifyOrder();
+		OrderingContext order = Mockachino.newOrdering();
 		order.verify().on(mock).add("Hello");
 		order.verify().on(mock).add("World");
 
-		OrderingContext order2 = Mockachino.verifyOrder();
+		OrderingContext order2 = Mockachino.newOrdering();
 		order2.verify().on(mock).add("Hello");
 		order2.verify().on(mock).remove(Matchers.type(Object.class));
 	}
@@ -44,7 +44,7 @@ public class InOrderTest {
 		mock.add("Hello");
 		mock.add("World");
 
-		OrderingContext order = Mockachino.verifyOrder();
+		OrderingContext order = Mockachino.newOrdering();
 		order.verify().on(mock).add("World");
 		order.verifyAtLeast(2).on(mock).add("Hello");
 		order.verify().on(mock).add("World");
@@ -58,7 +58,7 @@ public class InOrderTest {
 		mock.add("World");
 
 		try {
-			OrderingContext order = Mockachino.verifyOrder();
+			OrderingContext order = Mockachino.newOrdering();
 			order.verify().on(mock).add("World");
 			order.verify().on(mock).add("Hello");
 			fail("Expected out of order calls to fail");
@@ -75,7 +75,7 @@ public class InOrderTest {
 		mock.add("Hello");
 
 		try {
-			OrderingContext order = Mockachino.verifyOrder();
+			OrderingContext order = Mockachino.newOrdering();
 			order.verify().on(mock).add("World");
 			order.verifyAtLeast(3).on(mock).add("Hello");
 			fail("Expected out of order calls to fail");
@@ -92,7 +92,7 @@ public class InOrderTest {
 		mock.add("Hello");
 
 		try {
-			OrderingContext order = Mockachino.verifyOrder();
+			OrderingContext order = Mockachino.newOrdering();
 			order.verify().on(mock).add("Foo");
 			fail("Expected out of order calls to fail");
 		} catch (Exception e) {
@@ -103,7 +103,7 @@ public class InOrderTest {
 	@Test
 	public void testInOrderVerifyZero() {
 		List mock = Mockachino.mock(List.class);
-		OrderingContext order = Mockachino.verifyOrder();
+		OrderingContext order = Mockachino.newOrdering();
 		order.verifyAtLeast(0).on(mock).add("Foo");
 	}
 }

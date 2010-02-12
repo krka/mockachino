@@ -7,6 +7,7 @@ import se.mockachino.MockData;
 public class OrderingContext {
 	private final MockContext context;
 	private MethodCall currentCall = MockData.NULL_METHOD;
+	private MockPoint mockPoint;
 
 	public OrderingContext(MockContext context) {
 		this.context = context;
@@ -48,4 +49,22 @@ public class OrderingContext {
 	void setCurrent(MethodCall call) {
 		this.currentCall = call;
 	}
+
+	private MockPoint getPoint(int offset) {
+		int base = currentCall.getCallNumber();
+		return new MockPoint(context, base + offset);
+	}
+
+	public MockPoint atLastCall() {
+		return getPoint(0);
+	}
+
+	public MockPoint beforeLastCall() {
+		return getPoint(-1);
+	}
+
+	public MockPoint afterLastCall() {
+		return getPoint(1);
+	}
+
 }

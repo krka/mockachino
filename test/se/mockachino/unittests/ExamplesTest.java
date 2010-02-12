@@ -122,7 +122,7 @@ public class ExamplesTest {
 		mock.contains("Hello");
 		mock.add("Bar");
 
-		OrderingContext order = verifyOrder();
+		OrderingContext order = newOrdering();
 		order.verify().on(mock).add("Hello");
 		order.verify().on(mock).add("World");
 		order.verify().on(mock).contains("Hello");

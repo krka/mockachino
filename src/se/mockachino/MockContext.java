@@ -6,6 +6,8 @@ import se.mockachino.listener.ListenerAdder;
 import se.mockachino.listener.MethodCallListener;
 import se.mockachino.matchers.MatcherThreadHandler;
 import se.mockachino.mock.MockHandler;
+import se.mockachino.order.BetweenVerifyContext;
+import se.mockachino.order.MockPoint;
 import se.mockachino.order.OrderingContext;
 import se.mockachino.proxy.ProxyUtil;
 import se.mockachino.stub.StubAnswer;
@@ -21,6 +23,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MockContext {
 	private static final InvocationHandler DEFAULT_INVOCATION_HANDLER = new DefaultInvocationHandler();
+
+	public final MockPoint BIG_BANG = new MockPoint(this, 0);
+	public final MockPoint BIG_CRUNCH = new MockPoint(this, Integer.MAX_VALUE);
+
 
 	private final Map<Object, MockData> mockData = new ConcurrentHashMap<Object, MockData>();
 	private final AtomicInteger nextSequenceNumber = new AtomicInteger();
@@ -113,7 +119,7 @@ public class MockContext {
 	 *
 	 * @return the new ordering context
 	 */
-	public OrderingContext verifyOrder() {
+	public OrderingContext newOrdering() {
 		MatcherThreadHandler.assertEmpty();
 		return new OrderingContext(this);
 	}
@@ -420,4 +426,20 @@ public class MockContext {
 		}
 	}
 
+	public BetweenVerifyContext between(MockPoint start, MockPoint end) {
+		if (start == null) {
+			throw new UsageError("start can not be null");
+		}
+		if (end == null) {
+			throw new UsageError("end can not be null");
+		}
+		if (start.getMockContext() != this) {
+			throw new UsageError("start came from the wrong mock context");
+
+		}
+		if (end.getMockContext() != this) {
+			throw new UsageError("end came from the wrong mock context");
+		}
+		return new BetweenVerifyContext(this, start, end);
+	}
 }

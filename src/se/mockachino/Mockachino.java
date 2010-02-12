@@ -3,6 +3,8 @@ package se.mockachino;
 import se.mockachino.listener.ListenerAdder;
 import se.mockachino.listener.MethodCallListener;
 import se.mockachino.matchers.Matchers;
+import se.mockachino.order.BetweenVerifyContext;
+import se.mockachino.order.MockPoint;
 import se.mockachino.order.OrderingContext;
 import se.mockachino.stub.StubAnswer;
 import se.mockachino.stub.StubReturn;
@@ -82,8 +84,8 @@ public class Mockachino extends Matchers {
 	 *
 	 * @return the new ordering context
 	 */
-	public static OrderingContext verifyOrder() {
-		return DEFAULT_CONTEXT.verifyOrder();
+	public static OrderingContext newOrdering() {
+		return DEFAULT_CONTEXT.newOrdering();
 	}
 
 	/**
@@ -316,4 +318,7 @@ public class Mockachino extends Matchers {
 		DEFAULT_CONTEXT.resetListeners(mock, mocks);
 	}
 
+	public static BetweenVerifyContext between(MockPoint start, MockPoint end) {
+		return DEFAULT_CONTEXT.between(start, end);
+	}
 }

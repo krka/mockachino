@@ -74,6 +74,7 @@ public class MethodComparator implements Comparator<MethodCall> {
 		// argument lists next to each other
 
 		return compareOrigin(o1, o2);
+
 	}
 
 	private int compareOrigin(MethodCall o1, MethodCall o2) {

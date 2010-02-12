@@ -33,7 +33,7 @@ public class ErrorMessageTest {
 			mock.add(2);
 			mock.add("World");
 
-			OrderingContext order = verifyOrder();
+			OrderingContext order = newOrdering();
 			order.verify().on(mock).add("World");
 			order.verify().on(mock).add("Hello");
 			fail("Should not succeed");
@@ -50,7 +50,7 @@ public class ErrorMessageTest {
 			mock.add(2);
 			mock.add("World");
 
-			OrderingContext order = verifyOrder();
+			OrderingContext order = newOrdering();
 			order.verify().on(mock).add("World");
 			order.verify().on(mock).add("Hello2");
 			fail("Should not succeed");

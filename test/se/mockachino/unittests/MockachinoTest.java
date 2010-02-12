@@ -205,7 +205,7 @@ public class MockachinoTest {
 		mock.add("World");
 		mock.add("Hello");
 
-		OrderingContext order = Mockachino.verifyOrder();
+		OrderingContext order = Mockachino.newOrdering();
 		order.verify().on(mock).add("Hello");
 		order.verify().on(mock).add("World");
 		order.verify().on(mock).add("Hello");
@@ -227,7 +227,7 @@ public class MockachinoTest {
 			String s2 = s + s;
 			assertEquals(s2, mock.get(i));
 		}
-		OrderingContext order = Mockachino.verifyOrder();
+		OrderingContext order = Mockachino.newOrdering();
 		for (int i = 0; i < 100; i++) {
 			order.verify().on(mock).get(i);
 		}
@@ -286,7 +286,7 @@ public class MockachinoTest {
 
 	@Test(expected = UsageError.class)
 	public void testBadUsage4() {
-		Mockachino.verifyOrder().verify().on(null);
+		Mockachino.newOrdering().verify().on(null);
 	}
 
 	@Test(expected = UsageError.class)

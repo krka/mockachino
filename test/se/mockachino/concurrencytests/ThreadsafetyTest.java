@@ -82,7 +82,7 @@ public class ThreadsafetyTest {
 		for (int i = 0; i < numThreads; i++) {
 			final String name = "Thread:" + i;
 			int count = counts[i];
-			OrderingContext order = verifyOrder();
+			OrderingContext order = newOrdering();
 			for (int j = 0; j < count; j++) {
 				order.verify().on(mock).foo(name, 1 + j);
 			}
