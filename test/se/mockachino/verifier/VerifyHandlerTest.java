@@ -34,10 +34,10 @@ public class VerifyHandlerTest {
 
 			mock.remove(null);
 			mock.add(null);
-			mock.add("World");
-			mock.add(3);
-			mock.add(2, "Hello");
-			foo(mock);
+			mock.add("World"); // Should be #4
+			mock.add(3); // Should be #3 - matches first argument
+			mock.add(2, "Hello"); // Should be #2 - signature + matches second argument
+			foo(mock); // Should be #1 - signature + matches first argument
 
 			for (int i = 0; i < 20; i++) {
 				mock.add(123);
@@ -92,10 +92,11 @@ public class VerifyHandlerTest {
 			mock.add("Goodbye");
 			mock.add("Hello");
 			mock.add("Skipped");
+			mock.add("World");
 		}
 
 		try {
-			Mockachino.verifyOnce().on(mock).add("World");
+			Mockachino.verifyAtLeast(200).on(mock).add("World");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -4,8 +4,8 @@ import se.mockachino.MethodCall;
 import se.mockachino.MockData;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.MethodMatcher;
-import se.mockachino.util.Formatting;
 import se.mockachino.verifier.MatchingHandler;
+import se.mockachino.verifier.Reporter;
 
 import java.util.List;
 
@@ -49,10 +49,10 @@ public class InOrderVerifyHandler extends MatchingHandler {
 				}
 			}
 		}
-		String errorMessage = "Expected " + Formatting.calls(min) + " to mock." + matcher + " but only got "
-				+ Formatting.calls(count);
+		String errorMessage = new Reporter(count, min, Integer.MAX_VALUE).getErrorLine();
+		errorMessage += "\nMethod pattern:\n"  + matcher.toString() + "\n";
 		if (lastCallNumber > 0) {
-			errorMessage += " after mock." + lastCall + "\n\t\t" + lastCall.getStackTraceString();
+			errorMessage += "\nAfter:\n" + lastCall + "\n" + lastCall.getStackTraceString();
 		}
 		throw new VerificationError(errorMessage);
 	}

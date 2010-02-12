@@ -67,5 +67,43 @@ public class InOrderTest {
 		}
 	}
 
+	@Test
+	public void testInOrderFailAtLeast() {
+		List mock = Mockachino.mock(List.class);
+		mock.add("World");
+		mock.add("Hello");
+		mock.add("Hello");
 
+		try {
+			OrderingContext order = Mockachino.verifyOrder();
+			order.verify().on(mock).add("World");
+			order.verifyAtLeast(3).on(mock).add("Hello");
+			fail("Expected out of order calls to fail");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testInOrderFailNoFirst() {
+		List mock = Mockachino.mock(List.class);
+		mock.add("World");
+		mock.add("Hello");
+		mock.add("Hello");
+
+		try {
+			OrderingContext order = Mockachino.verifyOrder();
+			order.verify().on(mock).add("Foo");
+			fail("Expected out of order calls to fail");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testInOrderVerifyZero() {
+		List mock = Mockachino.mock(List.class);
+		OrderingContext order = Mockachino.verifyOrder();
+		order.verifyAtLeast(0).on(mock).add("Foo");
+	}
 }
