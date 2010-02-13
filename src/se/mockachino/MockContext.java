@@ -336,13 +336,6 @@ public class MockContext {
 		return getData(mock).getCalls();
 	}
 
-	public Iterable<MethodCall> getCalls(Object mock, MockPoint start, MockPoint end) {
-		assertMockPoint(start, "start");
-		assertMockPoint(end, "end");
-		return getData(mock).getCalls(start, end);
-	}
-
-
 	/**
 	 * Increments the sequence of method calls.
 	 * This is not relevant for end users.
@@ -431,6 +424,10 @@ public class MockContext {
 		for (Object mock2 : mocks) {
 			resetStubs(mock2);
 		}
+	}
+
+	public MockPoint getCurrentPoint() {
+		return new MockPoint(this, nextSequenceNumber.get());
 	}
 
 	public BetweenVerifyContext between(MockPoint start, MockPoint end) {

@@ -1,6 +1,8 @@
 package se.mockachino.order;
 
+import se.mockachino.MethodCall;
 import se.mockachino.MockContext;
+import se.mockachino.MockData;
 import se.mockachino.matchers.MatcherThreadHandler;
 import se.mockachino.verifier.VerifyRangeStart;
 
@@ -17,6 +19,13 @@ public class BetweenVerifyContext {
 		this.start = start;
 		this.end = end;
 	}
+
+	public Iterable<MethodCall> getCalls(Object mock) {
+		MockData<Object> data = mockContext.getData(mock);
+		return data.getCalls(start, end);
+	}
+
+
 
 	/**
 	 * Verifies that a method call is called between min and max times, inclusive.

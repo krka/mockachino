@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Mockachino" basedir="." default="all">
-
 	<property name="emma.dir" value="/usr/share/java" />
 	<path id="emma.lib" >
 		<pathelement location="${emma.dir}/emma.jar" />
@@ -12,6 +11,8 @@
 	<property name="reports.dir" value="${basedir}/build/testreport"/>
 	<property file="${baseDir}/version.properties" />
 	<property name="suffix" value="${version.major}.${version.minor}.${version.fix}" />
+
+	<property name="coverage.dir" value="${baseDir}/build/coverage" />
 
 	<target name="all" depends="compile, test, package" description="Test and package"/>
 
@@ -84,7 +85,6 @@
 		<property name="emma.enabled" value="true" />
 		<!-- EMMA instr class output directory: -->
 		<property name="out.instr.dir" value="${baseDir}/build/outinstr" />
-		<property name="coverage.dir" value="${baseDir}/build/coverage" />
 
 		<mkdir dir="${out.instr.dir}" />
 	</target>

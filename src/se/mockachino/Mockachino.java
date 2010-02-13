@@ -318,6 +318,11 @@ public class Mockachino extends Matchers {
 		DEFAULT_CONTEXT.resetListeners(mock, mocks);
 	}
 
+	public MockPoint getCurrentPoint() {
+		return DEFAULT_CONTEXT.getCurrentPoint();
+	}
+
+
 	public static BetweenVerifyContext between(MockPoint start, MockPoint end) {
 		return DEFAULT_CONTEXT.between(start, end);
 	}
