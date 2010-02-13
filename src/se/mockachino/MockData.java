@@ -2,10 +2,8 @@ package se.mockachino;
 
 import se.mockachino.expectations.MethodExpectations;
 import se.mockachino.listener.MethodListener;
-import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.order.MockPoint;
 import se.mockachino.order.MockPointIterable;
-import se.mockachino.stub.MethodStub;
 import se.mockachino.util.MockachinoMethod;
 import se.mockachino.util.SafeIteratorList;
 

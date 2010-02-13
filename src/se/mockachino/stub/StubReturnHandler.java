@@ -1,6 +1,5 @@
 package se.mockachino.stub;
 
-import se.mockachino.Mock;
 import se.mockachino.MockData;
 import se.mockachino.Primitives;
 import se.mockachino.exceptions.UsageError;
