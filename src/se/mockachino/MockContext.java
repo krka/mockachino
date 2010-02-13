@@ -16,9 +16,6 @@ import se.mockachino.stub.StubThrow;
 import se.mockachino.verifier.VerifyRangeStart;
 
 import java.lang.reflect.InvocationHandler;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MockContext {
@@ -27,8 +24,6 @@ public class MockContext {
 	public final MockPoint BIG_BANG = new MockPoint(this, 0);
 	public final MockPoint BIG_CRUNCH = new MockPoint(this, Integer.MAX_VALUE);
 
-
-	private final Map<Object, MockData> mockData = new ConcurrentHashMap<Object, MockData>();
 	private final AtomicInteger nextSequenceNumber = new AtomicInteger();
 	private final AtomicInteger nextMockId = new AtomicInteger();
 
@@ -80,8 +75,7 @@ public class MockContext {
 
 	private <T> T spy(Class<T> clazz, T impl, String kind) {
 		assertClass(clazz);
-		T mock = ProxyUtil.newProxy(clazz, new MockHandler(this, impl, kind, clazz.getSimpleName(), nextMockId()));
-		mockData.put(mock, new MockData(clazz));
+		T mock = ProxyUtil.newProxy(clazz, new MockHandler(this, impl, kind, clazz.getSimpleName(), nextMockId(), new MockData(clazz)));
 		return mock;
 	}
 
@@ -317,12 +311,19 @@ public class MockContext {
 		if (mock == null) {
 			throw new UsageError("Did not expect null value");
 		}
-		MockData data = mockData.get(mock);
-		if (data == null) {
-			throw new UsageError(
-							"Argument " + mock + " is not a mocked object.");
+		try {
+			Mock<T> mock2 = (Mock) mock;
+			if (mock2.mockachino_getContext() != this) {
+				throw new UsageError("argument " + mock + " belongs to a different mock context");
+			}
+			MockData<T> data = mock2.mockachino_getMockData();
+			if (data == null) {
+				throw new UsageError("argument " + mock + " is not a mock object");
+			}
+			return data;
+		} catch (ClassCastException e) {
+			throw new UsageError("argument " + mock + " is not a mock object");
 		}
-		return data;
 	}
 
 	/**

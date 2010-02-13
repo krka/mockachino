@@ -76,7 +76,7 @@ public class MockachinoMethod {
 	}
 
 	public static MockachinoMethod find(Class clazz, String name) {
-		for (Method method : Object.class.getMethods()) {
+		for (Method method : clazz.getMethods()) {
 			if (method.getName().equals(name)) {
 				return new MockachinoMethod(method);
 			}

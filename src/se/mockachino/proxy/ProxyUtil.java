@@ -1,10 +1,12 @@
 package se.mockachino.proxy;
 
+import se.mockachino.Mock;
 import se.mockachino.cleaner.StacktraceCleaner;
 import se.mockachino.exceptions.UsageError;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+import java.util.List;
 
 public class ProxyUtil {
 	private static final boolean CGLIB_FOR_INTERFACES = false;
@@ -23,7 +25,7 @@ public class ProxyUtil {
 
 	public static <T> T newProxy(Class<T> clazz, final InvocationHandler handler) {
 		if (useJavaReflect && clazz.isInterface()) {
-			return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[]{clazz}, handler);
+			return (T) Proxy.newProxyInstance(ProxyUtil.class.getClassLoader(), new Class<?>[]{clazz, Mock.class}, handler);
 		}
 		if (!USE_CGLIB) {
 			throw new UsageError("Only interfaces can be mocked without cglib and asm installed");
