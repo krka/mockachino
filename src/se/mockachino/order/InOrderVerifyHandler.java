@@ -10,14 +10,14 @@ import se.mockachino.verifier.Reporter;
 import java.util.List;
 
 public class InOrderVerifyHandler extends MatchingHandler {
-	private final MockData data;
+	private final Iterable<MethodCall> calls;
 	private final int min;
 	private final OrderingContext orderingContext;
 
-	public InOrderVerifyHandler(OrderingContext orderingContext, Object mock, MockData data, int min) {
+	public InOrderVerifyHandler(OrderingContext orderingContext, Object mock, Iterable<MethodCall> calls, int min) {
 		super("InOrderVerifyHandler", mock.toString());
 		this.orderingContext = orderingContext;
-		this.data = data;
+		this.calls = calls;
 		this.min = min;
 	}
 
@@ -32,7 +32,6 @@ public class InOrderVerifyHandler extends MatchingHandler {
 
 		int count = 0;
 
-		List<MethodCall> calls = data.getCalls();
 		for (MethodCall call : calls) {
 			int number = call.getCallNumber();
 

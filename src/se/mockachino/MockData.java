@@ -2,6 +2,8 @@ package se.mockachino;
 
 import se.mockachino.expectations.MethodExpectations;
 import se.mockachino.listener.MethodListener;
+import se.mockachino.order.MockPoint;
+import se.mockachino.order.MockPointIterable;
 import se.mockachino.util.MockachinoMethod;
 import se.mockachino.util.SafeIteratorList;
 
@@ -31,8 +33,12 @@ public class MockData<T> {
 		}
 	}
 
-	public List<MethodCall> getCalls() {
+	public Iterable<MethodCall> getCalls() {
 		return readOnlyCalls;
+	}
+
+	public Iterable<MethodCall> getCalls(MockPoint start, MockPoint end) {
+		return new MockPointIterable(readOnlyCalls, start, end);
 	}
 
 	public MethodExpectations getExpectations(MockachinoMethod method) {

@@ -10,27 +10,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VerifyHandler<T> extends MatchingHandler {
-	private final MockData<T> mockData;
+	private final Iterable<MethodCall> calls;
 	private final int minCalls;
 	private final int maxCalls;
-	private final MockPoint start;
-	private final MockPoint end;
 
-	public VerifyHandler(T mock, MockData<T> mockData,
-						 int minCalls, int maxCalls,
-						 MockPoint start, MockPoint end) {
+	public VerifyHandler(T mock, Iterable<MethodCall> calls,
+						 int minCalls, int maxCalls) {
 		super("VerifyHandler", mock.toString());
-		this.mockData = mockData;
+		this.calls = calls;
 		this.minCalls = minCalls;
 		this.maxCalls = maxCalls;
-		this.start = start;
-		this.end = end;
 	}
 
 	@Override
 	public void match(Object o, MethodMatcher matcher) {
 		int counter = 0;
-		List<MethodCall> calls = filter(mockData.getCalls(), start, end);
 		for (MethodCall call : calls) {
 			if (matcher.matches(call)) {
 				counter++;
@@ -39,28 +33,12 @@ public class VerifyHandler<T> extends MatchingHandler {
 		String errorMessage = new Reporter(counter, minCalls, maxCalls).getErrorLine();
 		if (errorMessage != null) {
 			boolean wantsMisses = minCalls > 0;
-			error(calls, errorMessage, matcher, wantsMisses ? 3 : 0);
+			error(errorMessage, matcher, wantsMisses ? 3 : 0);
 
 		}
 	}
 
-	private List<MethodCall> filter(List<MethodCall> calls, MockPoint start, MockPoint end) {
-		int startNumber = start.getCallNumber();
-		int endNumber = end.getCallNumber();
-		List<MethodCall> res = new ArrayList<MethodCall>();
-		for (MethodCall call : calls) {
-			if (call.getCallNumber() < startNumber) {
-				continue;
-			}
-			if (call.getCallNumber() > endNumber) {
-				break;
-			}
-			res.add(call);
-		}
-		return res;
-	}
-
-	private void error(List<MethodCall> calls, String msg, MethodMatcher matcher, int maxMisses) {
+	private void error(String msg, MethodMatcher matcher, int maxMisses) {
 		MethodCallGrouper grouper = new MethodCallGrouper(matcher, calls);
 		grouper.getGroupedCalls();
 		String matchingMethods = getBestMatches(matcher, maxMisses, grouper);

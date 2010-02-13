@@ -250,7 +250,7 @@ public class Mockachino extends Matchers {
 	 * @param mock
 	 * @return the list of calls.
 	 */
-	public static List<MethodCall> getCalls(Object mock) {
+	public static Iterable<MethodCall> getCalls(Object mock) {
 		return DEFAULT_CONTEXT.getCalls(mock);
 	}
 

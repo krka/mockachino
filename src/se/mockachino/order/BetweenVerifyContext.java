@@ -107,4 +107,21 @@ public class BetweenVerifyContext {
 	public VerifyRangeStart verifyAtMost(int max) {
 		return verifyRange(0, max);
 	}
+
+	/**
+	 * Creates a new ordering context which is used to verify method calls in order.
+	 * Ordering contexts are completely independent of each other.
+	 *
+	 * Typical usage:
+	 * <pre>
+	 * OrderingContext context = Mockachino.verifyOrder();
+	 * context.verifyAtLeast(3).on(mock).method();
+	 * </pre>
+	 *
+	 * @return the new ordering context
+	 */
+	public OrderingContext newOrdering() {
+		MatcherThreadHandler.assertEmpty();
+		return new OrderingContext(mockContext, start, end);
+	}
 }

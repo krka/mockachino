@@ -6,11 +6,14 @@ import se.mockachino.MockData;
 
 public class OrderingContext {
 	private final MockContext context;
+	private final MockPoint start;
+	private final MockPoint end;
 	private MethodCall currentCall = MockData.NULL_METHOD;
-	private MockPoint mockPoint;
 
-	public OrderingContext(MockContext context) {
+	public OrderingContext(MockContext context, MockPoint start, MockPoint end) {
 		this.context = context;
+		this.start = start;
+		this.end = end;
 	}
 
 	/**
@@ -39,7 +42,7 @@ public class OrderingContext {
 	 * @return a verifier
 	 */
 	public InOrderVerify verifyAtLeast(int min) {
-		return new InOrderVerify(this, context, min);
+		return new InOrderVerify(this, context, min, start, end);
 	}
 
 	MethodCall getCurrentCall() {

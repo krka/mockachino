@@ -121,7 +121,7 @@ public class MockContext {
 	 */
 	public OrderingContext newOrdering() {
 		MatcherThreadHandler.assertEmpty();
-		return new OrderingContext(this);
+		return new OrderingContext(this, BIG_BANG, BIG_CRUNCH);
 	}
 
 	/**
@@ -332,9 +332,16 @@ public class MockContext {
 	 * @param mock
 	 * @return the list of calls.
 	 */
-	public List<MethodCall> getCalls(Object mock) {
+	public Iterable<MethodCall> getCalls(Object mock) {
 		return getData(mock).getCalls();
 	}
+
+	public Iterable<MethodCall> getCalls(Object mock, MockPoint start, MockPoint end) {
+		assertMockPoint(start, "start");
+		assertMockPoint(end, "end");
+		return getData(mock).getCalls(start, end);
+	}
+
 
 	/**
 	 * Increments the sequence of method calls.
@@ -427,19 +434,18 @@ public class MockContext {
 	}
 
 	public BetweenVerifyContext between(MockPoint start, MockPoint end) {
+		assertMockPoint(start, "start");
+		assertMockPoint(end, "end");
+		return new BetweenVerifyContext(this, start, end);
+	}
+
+	private void assertMockPoint(MockPoint start, String name) {
 		if (start == null) {
-			throw new UsageError("start can not be null");
-		}
-		if (end == null) {
-			throw new UsageError("end can not be null");
+			throw new UsageError(name + " can not be null");
 		}
 		if (start.getMockContext() != this) {
-			throw new UsageError("start came from the wrong mock context");
+			throw new UsageError(name + " came from the wrong mock context");
 
 		}
-		if (end.getMockContext() != this) {
-			throw new UsageError("end came from the wrong mock context");
-		}
-		return new BetweenVerifyContext(this, start, end);
 	}
 }

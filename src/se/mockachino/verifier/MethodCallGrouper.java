@@ -9,9 +9,9 @@ import java.util.List;
 
 public class MethodCallGrouper {
 	private final MethodMatcher matcher;
-	private final List<MethodCall> calls;
+	private final Iterable<MethodCall> calls;
 
-	public MethodCallGrouper(MethodMatcher matcher, List<MethodCall> calls) {
+	public MethodCallGrouper(MethodMatcher matcher, Iterable<MethodCall> calls) {
 		this.matcher = matcher;
 		this.calls = calls;
 	}
@@ -62,7 +62,10 @@ public class MethodCallGrouper {
 	}
 
 	public List<MethodCall> sortCalls() {
-		List<MethodCall> list = new ArrayList<MethodCall>(calls);
+		List<MethodCall> list = new ArrayList<MethodCall>();
+		for (MethodCall call : calls) {
+			list.add(call);
+		}
 		Collections.sort(list, new MethodComparator(matcher));
 		return list;
 	}

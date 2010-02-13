@@ -1,4 +1,4 @@
-package se.mockachino.unittests;
+package se.mockachino;
 
 import org.junit.Test;
 import se.mockachino.matchers.matcher.ArgumentCatcher;
