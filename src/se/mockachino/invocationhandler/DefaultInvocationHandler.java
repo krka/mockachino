@@ -5,7 +5,7 @@ import se.mockachino.util.MockachinoMethod;
 
 public class DefaultInvocationHandler extends AbstractInvocationHandler {
 	public DefaultInvocationHandler() {
-		super("DefaultResult");
+		super(null);
 	}
 
 	public Object doInvoke(Object o, MockachinoMethod method, Object[] objects) throws Throwable {

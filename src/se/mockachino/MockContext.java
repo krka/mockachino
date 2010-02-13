@@ -76,6 +76,7 @@ public class MockContext {
 	private <T> T spy(Class<T> clazz, T impl, String kind) {
 		assertClass(clazz);
 		T mock = ProxyUtil.newProxy(clazz, new MockHandler(this, impl, kind, clazz.getSimpleName(), nextMockId(), new MockData(clazz)));
+		resetStubs(mock);
 		return mock;
 	}
 
@@ -414,6 +415,8 @@ public class MockContext {
 	public void resetStubs(Object mock) {
 		MockData<Object> data = getData(mock);
 		data.resetStubs();
+		stubReturn(System.identityHashCode(mock)).on(mock).hashCode();
+		stubReturn(true).on(mock).equals(Mockachino.same(mock));
 	}
 
 	/**

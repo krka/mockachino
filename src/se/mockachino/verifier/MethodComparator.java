@@ -7,7 +7,6 @@ import se.mockachino.matchers.matcher.Matcher;
 import se.mockachino.util.MockachinoMethod;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 
 public class MethodComparator implements Comparator<MethodCall> {
@@ -70,6 +69,16 @@ public class MethodComparator implements Comparator<MethodCall> {
 			return value;
 		}
 
+		// Compare number of arguments
+		int len1 = getNumArgs(o1);
+		int len2 = getNumArgs(o2);
+		if (len1 < len2) {
+			return -1;
+		}
+		if (len1 > len2) {
+			return 1;
+		}
+		
 		// Compare on argument hashcodes in order to put equal
 		// argument lists next to each other
 
@@ -78,9 +87,9 @@ public class MethodComparator implements Comparator<MethodCall> {
 	}
 
 	private int compareOrigin(MethodCall o1, MethodCall o2) {
+		int n = getNumArgs(o1);
 		Object[] args1 = o1.getArguments();
 		Object[] args2 = o2.getArguments();
-		int n = args1.length;
 		for (int i = 0; i < n; i++) {
 			long arg1Hash = args1[i].hashCode();
 			long arg2Hash = args2[i].hashCode();
@@ -141,7 +150,11 @@ public class MethodComparator implements Comparator<MethodCall> {
 	}
 
 	private boolean compareLength(MethodCall o1) {
-		return o1.getArguments().length == argumentMatchers.size();
+		return getNumArgs(o1) == argumentMatchers.size();
+	}
+
+	private int getNumArgs(MethodCall o1) {
+		return o1.getArguments().length;
 	}
 
 	private int comp(boolean first, boolean second) {

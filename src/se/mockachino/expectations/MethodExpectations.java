@@ -26,4 +26,8 @@ public class MethodExpectations {
 	public synchronized void add(MethodExpectation expectation) {
 		expectations.add(expectation);
 	}
+
+	public void clear() {
+		expectations.clear();
+	}
 }

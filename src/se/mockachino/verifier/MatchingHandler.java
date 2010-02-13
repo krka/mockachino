@@ -13,6 +13,7 @@ public abstract class MatchingHandler extends AbstractInvocationHandler {
 	public final Object doInvoke(Object o, MockachinoMethod method, Object[] objects) throws Throwable {
 		MethodMatcher matcher = new MethodMatcher(method, objects);
 		match(o, matcher);
+
 		return Primitives.forType(method.getReturnType());
 	}
 

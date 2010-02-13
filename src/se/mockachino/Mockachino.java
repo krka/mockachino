@@ -12,7 +12,6 @@ import se.mockachino.stub.StubThrow;
 import se.mockachino.verifier.VerifyRangeStart;
 
 import java.lang.reflect.InvocationHandler;
-import java.util.List;
 
 /**
  * This is the main entry point of all your mocking needs.

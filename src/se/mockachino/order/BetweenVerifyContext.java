@@ -6,8 +6,6 @@ import se.mockachino.MockData;
 import se.mockachino.matchers.MatcherThreadHandler;
 import se.mockachino.verifier.VerifyRangeStart;
 
-import java.security.DigestOutputStream;
-
 public class BetweenVerifyContext {
 	private final MockContext mockContext;
 	private final MockPoint start;

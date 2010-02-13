@@ -1,9 +1,12 @@
 package se.mockachino.stub;
 
+import se.mockachino.Mock;
 import se.mockachino.MockData;
 import se.mockachino.Primitives;
 import se.mockachino.exceptions.UsageError;
+import se.mockachino.expectations.MethodExpectations;
 import se.mockachino.matchers.MethodMatcher;
+import se.mockachino.util.MockachinoMethod;
 import se.mockachino.verifier.MatchingHandler;
 
 public class StubReturnHandler<T> extends MatchingHandler {
@@ -17,7 +20,8 @@ public class StubReturnHandler<T> extends MatchingHandler {
 	}
 
 	public void match(Object o, MethodMatcher matcher) {
-		Class<?> returnType = matcher.getMethod().getReturnType();
+		MockachinoMethod method = matcher.getMethod();
+		Class<?> returnType = method.getReturnType();
 		if (returnType == void.class) {
 			if (returnValue != null) {
 				throw new UsageError(("Void methods must return null"));
@@ -40,7 +44,8 @@ public class StubReturnHandler<T> extends MatchingHandler {
 			}
 		}
 
-		data.getExpectations(matcher.getMethod()).add(new MethodStub(returnValue, matcher));
+		MethodExpectations methodExpectations = data.getExpectations(method);
+		methodExpectations.add(new MethodStub(returnValue, matcher));
 	}
 
 	private void error(Class<?> returnType) {

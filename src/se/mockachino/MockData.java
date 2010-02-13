@@ -2,16 +2,22 @@ package se.mockachino;
 
 import se.mockachino.expectations.MethodExpectations;
 import se.mockachino.listener.MethodListener;
+import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.order.MockPoint;
 import se.mockachino.order.MockPointIterable;
+import se.mockachino.stub.MethodStub;
 import se.mockachino.util.MockachinoMethod;
 import se.mockachino.util.SafeIteratorList;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MockData<T> {
-	public final static MethodCall NULL_METHOD = new MethodCall(MockachinoMethod.TOSTRING, new Object[]{}, 0, new StackTraceElement[]{});
+	public final static MethodCall NULL_METHOD = new MethodCall(MockachinoMethod.NULL, new Object[]{}, 0, new StackTraceElement[]{});
 	private final Class<T> iface;
 	private final List<MethodCall> calls;
 	private final List<MethodCall> readOnlyCalls;
@@ -22,15 +28,23 @@ public class MockData<T> {
 		this.iface = iface;
 		calls = new SafeIteratorList<MethodCall>(new ArrayList<MethodCall>(), NULL_METHOD);
 		readOnlyCalls = Collections.unmodifiableList(calls);
-		expectations = new HashMap<MockachinoMethod,MethodExpectations>();
 		listeners = new HashMap<MockachinoMethod,List<MethodListener>>();
+
+		expectations = new HashMap<MockachinoMethod,MethodExpectations>();
 		for (Method reflectMethod : iface.getMethods()) {
-			MockachinoMethod method = new MockachinoMethod(reflectMethod);
-			expectations.put(method, new MethodExpectations());
-			listeners.put(method,
-					new SafeIteratorList<MethodListener>(
-							new ArrayList<MethodListener>(), null));
+			addExpectation(reflectMethod);
 		}
+		for (Method reflectMethod : Object.class.getMethods()) {
+			addExpectation(reflectMethod);
+		}
+	}
+
+	private void addExpectation(Method reflectMethod) {
+		MockachinoMethod method = new MockachinoMethod(reflectMethod);
+		expectations.put(method, new MethodExpectations());
+		listeners.put(method,
+				new SafeIteratorList<MethodListener>(
+						new ArrayList<MethodListener>(), null));
 	}
 
 	public Iterable<MethodCall> getCalls() {
@@ -64,12 +78,15 @@ public class MockData<T> {
 		calls.clear();
 	}
 
-	public synchronized void resetListeners() {
-		listeners.clear();
-	}
-
 	public synchronized void resetStubs() {
-		expectations.clear();
+		for (MethodExpectations methodExpectations : expectations.values()) {
+			methodExpectations.clear();
+		}
 	}
-
+	
+	public synchronized void resetListeners() {
+		for (List<MethodListener> methodListeners : listeners.values()) {
+			methodListeners.clear();
+		}
+	}
 }

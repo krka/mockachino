@@ -1,10 +1,6 @@
 package se.mockachino;
 
 import org.junit.Test;
-import se.mockachino.Answer;
-import se.mockachino.MethodCall;
-import se.mockachino.MockContext;
-import se.mockachino.Mockachino;
 import se.mockachino.exceptions.UsageError;
 import se.mockachino.listener.MethodCallListener;
 import se.mockachino.matchers.Matchers;
@@ -14,8 +10,20 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static se.mockachino.matchers.Matchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static se.mockachino.matchers.Matchers.any;
+import static se.mockachino.matchers.Matchers.anyInt;
+import static se.mockachino.matchers.Matchers.eq;
+import static se.mockachino.matchers.Matchers.notEq;
+import static se.mockachino.matchers.Matchers.notSame;
+import static se.mockachino.matchers.Matchers.regexp;
+import static se.mockachino.matchers.Matchers.same;
+import static se.mockachino.matchers.Matchers.type;
 
 public class MockachinoTest {
 	
@@ -326,6 +334,7 @@ public class MockachinoTest {
 		MockContext context = new MockContext();
 		List mock1 = context.mock(List.class);
 		List mock2 = context.mock(List.class);
+
 		assertEquals("Mock:List:1", mock1.toString());
 		assertEquals("Mock:List:2", mock2.toString());
 

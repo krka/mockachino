@@ -5,10 +5,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class MockachinoMethod {
-	public static final MockachinoMethod EQUALS = MockachinoMethod.find(Object.class, "equals");
-	public static final MockachinoMethod HASHCODE = MockachinoMethod.find(Object.class, "hashCode");
-	public static final MockachinoMethod TOSTRING = MockachinoMethod.find(Object.class, "toString");
-
+	public static final MockachinoMethod TOSTRING = find(Object.class, "toString");	
+	public static final MockachinoMethod NULL = new MockachinoMethod("<null>", new Class[0], void.class);
 
 	private final Method method;
 	private final String name;
@@ -21,6 +19,13 @@ public class MockachinoMethod {
 		name = method.getName();
 		parameters = method.getParameterTypes();
 		returnType = method.getReturnType();
+	}
+
+	public MockachinoMethod(String name, Class<Object>[] parameterTypes, Class<?> returnType) {
+		this.method = null;
+		this.name = name;
+		this.parameters = parameterTypes;
+		this.returnType = returnType;
 	}
 
 	public String getName() {

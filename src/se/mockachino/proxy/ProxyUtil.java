@@ -6,7 +6,6 @@ import se.mockachino.exceptions.UsageError;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
-import java.util.List;
 
 public class ProxyUtil {
 	private static final boolean CGLIB_FOR_INTERFACES = false;

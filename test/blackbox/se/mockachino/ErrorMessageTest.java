@@ -7,7 +7,10 @@ import se.mockachino.order.OrderingContext;
 import java.util.List;
 
 import static org.junit.Assert.fail;
-import static se.mockachino.Mockachino.*;
+import static se.mockachino.Mockachino.anyInt;
+import static se.mockachino.Mockachino.mock;
+import static se.mockachino.Mockachino.newOrdering;
+import static se.mockachino.Mockachino.verifyAtLeast;
 
 public class ErrorMessageTest {
 	@Test

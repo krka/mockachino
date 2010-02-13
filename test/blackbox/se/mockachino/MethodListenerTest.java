@@ -1,8 +1,6 @@
 package se.mockachino;
 
 import org.junit.Test;
-import se.mockachino.MethodCall;
-import se.mockachino.Mockachino;
 import se.mockachino.listener.MethodCallListener;
 
 import java.util.ArrayList;

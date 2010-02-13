@@ -1,7 +1,15 @@
 package se.mockachino.matchers;
 
 import se.mockachino.Primitives;
-import se.mockachino.matchers.matcher.*;
+import se.mockachino.matchers.matcher.AndMatcher;
+import se.mockachino.matchers.matcher.AnyMatcher;
+import se.mockachino.matchers.matcher.ClassMatcher;
+import se.mockachino.matchers.matcher.EqualityMatcher;
+import se.mockachino.matchers.matcher.IdentityMatcher;
+import se.mockachino.matchers.matcher.Matcher;
+import se.mockachino.matchers.matcher.NotMatcher;
+import se.mockachino.matchers.matcher.OrMatcher;
+import se.mockachino.matchers.matcher.RegexpMatcher;
 import se.mockachino.util.Formatting;
 
 public class MatchersBase {

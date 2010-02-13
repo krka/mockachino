@@ -1,7 +1,6 @@
 package se.mockachino.proxy;
 
 import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.Proxy;
 import se.mockachino.Mock;
 
 import java.lang.reflect.InvocationHandler;

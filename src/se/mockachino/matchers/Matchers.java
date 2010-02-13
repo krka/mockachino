@@ -1,6 +1,6 @@
 package se.mockachino.matchers;
 
-import se.mockachino.matchers.matcher.*;
+import se.mockachino.matchers.matcher.Matcher;
 
 /**
  * Matchers is a utility class, containing a lot of useful default matchers.

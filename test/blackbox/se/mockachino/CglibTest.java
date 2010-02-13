@@ -1,7 +1,6 @@
 package se.mockachino;
 
 import org.junit.Test;
-import se.mockachino.Mockachino;
 
 import java.util.ArrayList;
 

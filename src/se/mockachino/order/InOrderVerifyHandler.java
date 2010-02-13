@@ -1,13 +1,10 @@
 package se.mockachino.order;
 
 import se.mockachino.MethodCall;
-import se.mockachino.MockData;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.verifier.MatchingHandler;
 import se.mockachino.verifier.Reporter;
-
-import java.util.List;
 
 public class InOrderVerifyHandler extends MatchingHandler {
 	private final Iterable<MethodCall> calls;

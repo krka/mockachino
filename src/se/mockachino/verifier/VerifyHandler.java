@@ -1,12 +1,9 @@
 package se.mockachino.verifier;
 
 import se.mockachino.MethodCall;
-import se.mockachino.MockData;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.MethodMatcher;
-import se.mockachino.order.MockPoint;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class VerifyHandler<T> extends MatchingHandler {
