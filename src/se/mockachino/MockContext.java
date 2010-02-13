@@ -439,6 +439,14 @@ public class MockContext {
 		return new BetweenVerifyContext(this, start, end);
 	}
 
+	public BetweenVerifyContext after(MockPoint start) {
+		return between(start, BIG_CRUNCH);
+	}
+
+	public BetweenVerifyContext before(MockPoint end) {
+		return between(BIG_BANG, end);
+	}
+
 	private void assertMockPoint(MockPoint start, String name) {
 		if (start == null) {
 			throw new UsageError(name + " can not be null");

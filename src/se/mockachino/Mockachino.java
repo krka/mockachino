@@ -321,4 +321,13 @@ public class Mockachino extends Matchers {
 	public static BetweenVerifyContext between(MockPoint start, MockPoint end) {
 		return DEFAULT_CONTEXT.between(start, end);
 	}
+
+	public static BetweenVerifyContext after(MockPoint start) {
+		return DEFAULT_CONTEXT.after(start);
+	}
+
+	public static BetweenVerifyContext before(MockPoint end) {
+		return DEFAULT_CONTEXT.before(end);
+	}
+
 }
