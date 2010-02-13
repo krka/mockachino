@@ -55,7 +55,7 @@ public class MockPointTest {
 			between(first, last).verifyAtLeast(1).on(mock).add("A");
 			fail("Should fail");
 		} catch (UsageError e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -108,4 +108,20 @@ public class MockPointTest {
 		Mockachino.between(first, last).verifyNever().on(mock).add("C");
 	}
 
+
+	@Test
+	public void testAtMost() {
+		List mock = mock(List.class);
+		mock.add(100);
+		mock.add(200);
+		mock.add(100);
+
+		// Get the points
+		OrderingContext ordering = newOrdering();
+		MockPoint p1 = ordering.atLastCall();
+		ordering.verifyAtLeast(1).on(mock).add(200);
+		MockPoint p2 = ordering.beforeLastCall();
+
+		between(p1, p2).verifyAtMost(1).on(mock).add(100);
+	}
 }
