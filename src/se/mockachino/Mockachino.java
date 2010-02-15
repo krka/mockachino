@@ -1,7 +1,6 @@
 package se.mockachino;
 
 import se.mockachino.listener.ListenerAdder;
-import se.mockachino.listener.MethodCallListener;
 import se.mockachino.matchers.Matchers;
 import se.mockachino.order.BetweenVerifyContext;
 import se.mockachino.order.MockPoint;
@@ -29,7 +28,7 @@ import java.lang.reflect.InvocationHandler;
  * see {@link se.mockachino.matchers.Matchers} for useful matcher shortcuts.
  */
 public class Mockachino extends Matchers {
-	private static final MockContext DEFAULT_CONTEXT = new MockContext();
+	public static final MockContext DEFAULT_CONTEXT = new MockContext();
 
 	/**
 	 * Creates a new mock with a default handler
@@ -44,7 +43,7 @@ public class Mockachino extends Matchers {
 	 * Creates a new mock with a custom handler.
 	 * @param clazz the class of the returned object
 	 * @param handler the handler that is called for each mock method invocation
-	 * @returna mock object of the same class
+	 * @return a mock object of the same class
 	 */
 	public static <T> T mock(Class<T> clazz, InvocationHandler handler) {
 		return DEFAULT_CONTEXT.mock(clazz, handler);
@@ -222,7 +221,7 @@ public class Mockachino extends Matchers {
 	 * @param answer the answer to use
 	 * @return a stubber
 	 */
-	public static StubAnswer stubAnswer(Answer answer) {
+	public static StubAnswer stubAnswer(CallHandler answer) {
 		return DEFAULT_CONTEXT.stubAnswer(answer);
 	}
 
@@ -238,7 +237,7 @@ public class Mockachino extends Matchers {
 	 * @param listener the listener
 	 * @return a listener adder
 	 */
-	public static ListenerAdder listenWith(MethodCallListener listener) {
+	public static ListenerAdder listenWith(CallHandler listener) {
 		return DEFAULT_CONTEXT.listenWith(listener);
 	}
 

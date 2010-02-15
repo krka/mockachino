@@ -5,6 +5,8 @@ import se.mockachino.MockContext;
 import se.mockachino.MockData;
 import se.mockachino.order.MockPoint;
 
+import java.lang.reflect.InvocationHandler;
+
 public class VerifyRangeStart {
 	private final MockContext mockContext;
 	private final int min;
@@ -32,6 +34,7 @@ public class VerifyRangeStart {
 	public <T> T on(T mock) {
 		MockData data = mockContext.getData(mock);
 		Iterable<MethodCall> calls = data.getCalls(start, end);
-		return mockContext.createProxy(mock, new VerifyHandler(mock, calls, min, max));
+		VerifyHandler verifyHandler = new VerifyHandler(mock, calls, min, max);
+		return mockContext.createProxy(mock, verifyHandler);
 	}
 }

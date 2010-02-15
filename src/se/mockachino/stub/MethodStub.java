@@ -17,7 +17,8 @@ public class MethodStub implements MethodExpectation {
 		return matcher.matches(call);
 	}
 
-	public Object getValue(MethodCall call) {
+	@Override
+	public Object invoke(Object mock, MethodCall call) throws Throwable {
 		return returnValue;
 	}
 }

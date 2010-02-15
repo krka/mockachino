@@ -2,13 +2,13 @@ package se.mockachino;
 
 import org.junit.Test;
 import se.mockachino.exceptions.UsageError;
-import se.mockachino.listener.MethodCallListener;
 import se.mockachino.matchers.Matchers;
 import se.mockachino.order.OrderingContext;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -222,9 +222,9 @@ public class MockachinoTest {
 	@Test
 	public void testAnswer() {
 		List mock = Mockachino.mock(List.class);
-		Mockachino.stubAnswer(new Answer() {
+		Mockachino.stubAnswer(new CallHandler() {
 			@Override
-			public Object getValue(MethodCall call) {
+			public Object invoke(Object self, MethodCall call) {
 				Object obj = call.getArguments()[0];
 				return obj.toString() + obj;
 			}
@@ -250,7 +250,7 @@ public class MockachinoTest {
 			Throwable notAMock = new Throwable();
 			Mockachino.verifyExactly(1).on(notAMock).printStackTrace();
 			fail("Should fail");
-		} catch (Exception e) {
+		} catch (UsageError e) {
 			e.printStackTrace();
 		}
 	}
@@ -258,20 +258,19 @@ public class MockachinoTest {
 	@Test
 	public void testBadListener() {
 		List mock = Mockachino.mock(List.class);
-		Mockachino.listenWith(new MethodCallListener() {
+
+		final AtomicBoolean wasCalled = new AtomicBoolean();
+		Mockachino.listenWith(new CallHandler() {
 			@Override
-			public void listen(Object obj, MethodCall call) {
-				Integer i = (Integer) obj;
-				System.out.println("i:" + i);
+			public Object invoke(Object obj, MethodCall call) {
+				wasCalled.set(true);
+				throw new RuntimeException("Never shown");
 			}
 		}).on(mock).add(any(Object.class));
 
-		try {
-			mock.add("Hello world");
-			fail("Should fail");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		assertFalse(wasCalled.get());
+		mock.add("Hello world");
+		assertTrue(wasCalled.get());
 	}
 
 	@Test(expected = UsageError.class)

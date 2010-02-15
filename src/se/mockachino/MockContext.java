@@ -1,9 +1,9 @@
 package se.mockachino;
 
 import se.mockachino.exceptions.UsageError;
+import se.mockachino.invocationhandler.DeepMockHandler;
 import se.mockachino.invocationhandler.DefaultInvocationHandler;
 import se.mockachino.listener.ListenerAdder;
-import se.mockachino.listener.MethodCallListener;
 import se.mockachino.matchers.MatcherThreadHandler;
 import se.mockachino.mock.MockHandler;
 import se.mockachino.order.BetweenVerifyContext;
@@ -19,8 +19,6 @@ import java.lang.reflect.InvocationHandler;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MockContext {
-	private static final InvocationHandler DEFAULT_INVOCATION_HANDLER = new DefaultInvocationHandler();
-
 	public final MockPoint BIG_BANG = new MockPoint(this, 0);
 	public final MockPoint BIG_CRUNCH = new MockPoint(this, Integer.MAX_VALUE);
 
@@ -273,7 +271,7 @@ public class MockContext {
 	 * @param answer the answer to use
 	 * @return a stubber
 	 */
-	public StubAnswer stubAnswer(Answer answer) {
+	public StubAnswer stubAnswer(CallHandler answer) {
 		if (answer== null) {
 			throw new UsageError("answer can not be null");
 		}
@@ -293,7 +291,7 @@ public class MockContext {
 	 * @param listener the listener
 	 * @return a listener adder
 	 */
-	public ListenerAdder listenWith(MethodCallListener listener) {
+	public ListenerAdder listenWith(CallHandler listener) {
 		if (listener == null) {
 			throw new UsageError("Listener can not be null");
 		}
@@ -313,11 +311,11 @@ public class MockContext {
 			throw new UsageError("Did not expect null value");
 		}
 		try {
-			Mock<T> mock2 = (Mock) mock;
-			if (mock2.mockachino_getContext() != this) {
+			ProxyMetadata<T> metadata = (ProxyMetadata) mock;
+			if (metadata.mockachino_getContext() != this) {
 				throw new UsageError("argument " + mock + " belongs to a different mock context");
 			}
-			MockData<T> data = mock2.mockachino_getMockData();
+			MockData<T> data = metadata.mockachino_getMockData();
 			if (data == null) {
 				throw new UsageError("argument " + mock + " is not a mock object");
 			}
@@ -457,4 +455,10 @@ public class MockContext {
 
 		}
 	}
+
+	public boolean canMock(Class clazz) {
+		return ProxyUtil.canMock(clazz);
+	}
+
+	public final DefaultInvocationHandler DEFAULT_INVOCATION_HANDLER = new DefaultInvocationHandler();
 }

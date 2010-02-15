@@ -1,15 +1,15 @@
 package se.mockachino.stub;
 
-import se.mockachino.Answer;
+import se.mockachino.CallHandler;
 import se.mockachino.MethodCall;
 import se.mockachino.expectations.MethodExpectation;
 import se.mockachino.matchers.MethodMatcher;
 
 public class AnswerStub implements MethodExpectation {
-	private final Answer answer;
+	private final CallHandler answer;
 	private final MethodMatcher matcher;
 
-	public AnswerStub(Answer answer, MethodMatcher matcher) {
+	public AnswerStub(CallHandler answer, MethodMatcher matcher) {
 		this.answer = answer;
 		this.matcher = matcher;
 	}
@@ -20,8 +20,7 @@ public class AnswerStub implements MethodExpectation {
 	}
 
 	@Override
-	public Object getValue(MethodCall call) throws Throwable {
-		return answer.getValue(call);
-
+	public Object invoke(Object mock, MethodCall call) throws Throwable {
+		return answer.invoke(mock, call);
 	}
 }

@@ -7,14 +7,23 @@ import se.mockachino.util.Formatting;
 import se.mockachino.util.MockachinoMethod;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MethodMatcher {
 	private final MockachinoMethod method;
-	private final ArrayList<Matcher> argumentMatchers;
+	private final List<Matcher> argumentMatchers;
 
 	public MethodMatcher(MockachinoMethod method, Object[] arguments) {
+		this(method, convert(arguments));
+	}
+
+	public MethodMatcher(MockachinoMethod method, List<Matcher> argumentMatchers) {
 		this.method = method;
-		argumentMatchers = new ArrayList<Matcher>();
+		this.argumentMatchers = argumentMatchers;
+	}
+
+	private static List<Matcher> convert(Object[] arguments) {
+		List<Matcher> argumentMatchers = new ArrayList<Matcher>();
 		if (arguments != null) {
 			if (MatcherThreadHandler.isClean()) {
 				for (Object argument : arguments) {
@@ -26,6 +35,16 @@ public class MethodMatcher {
 				}
 			}
 		}
+		return argumentMatchers;
+	}
+
+	public static MethodMatcher matchAll(MockachinoMethod method) {
+		MatcherThreadHandler.assertEmpty();
+		List<Matcher> matchers = new ArrayList<Matcher>();
+		for (Class aClass : method.getParameters()) {
+			matchers.add(MatchersBase.mAny(aClass));
+		}
+		return new MethodMatcher(method, matchers);
 	}
 
 	public boolean matches(MethodCall methodCall) {
@@ -58,7 +77,7 @@ public class MethodMatcher {
 		return method;
 	}
 
-	public ArrayList<Matcher> getArgumentMatchers() {
+	public List<Matcher> getArgumentMatchers() {
 		return argumentMatchers;
 	}
 }

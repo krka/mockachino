@@ -317,8 +317,32 @@
 	<target name="javadoc" description="Generate javadoc">
 		<mkdir dir="${baseDir}/build/javadoc" />
 		<javadoc destdir="${baseDir}/build/javadoc">
-			<sourcepath location="${baseDir}/src" >
-			</sourcepath>
+			<!--sourcepath location="${baseDir}/src" >
+			</sourcepath-->
+			<fileset dir="${baseDir}/src">
+				<include name="**/Mockachino.java" />
+				<include name="**/MockContext.java" />
+				
+				<include name="**/MatchersBase.java" />
+				<include name="**/Matchers.java" />
+				<include name="**/Matcher.java" />
+
+				<include name="**/MethodCall.java" />
+				<include name="**/CallHandler.java" />
+
+				<include name="**/MockPoint.java" />
+				<include name="**/OrderingContext.java" />
+				
+				<!-- fluent objects -->
+				<include name="**/ListenerAdder.java" />
+				<include name="**/StubAnswer.java" />
+				<include name="**/StubReturn.java" />
+				<include name="**/StubThrow.java" />
+				<include name="**/VerifyRangeStart.java" />
+				<include name="**/InOrderVerify.java" />
+				<include name="**/BetweenVerifyContext.java" />
+
+			</fileset>
 		</javadoc>
 	</target>
 

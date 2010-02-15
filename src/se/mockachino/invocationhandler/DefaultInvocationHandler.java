@@ -1,5 +1,7 @@
 package se.mockachino.invocationhandler;
 
+import se.mockachino.MockContext;
+import se.mockachino.MockData;
 import se.mockachino.Primitives;
 import se.mockachino.util.MockachinoMethod;
 

@@ -24,25 +24,25 @@ public class MatchersBase {
 		return new NotMatcher<T>(matcher);
 	}
 
-	public static <T> AndMatcher<T> mAnd(Matcher<T>... matchers) {
+	public static <T> Matcher<T> mAnd(Matcher<T>... matchers) {
 		return new AndMatcher(matchers);
 	}
 
-	public static <T> OrMatcher<T> mOr(Matcher<T>... matchers) {
+	public static <T> Matcher<T> mOr(Matcher<T>... matchers) {
 		return new OrMatcher<T>(matchers);
 	}
 
 	// String matchers
-	public static RegexpMatcher mRegexp(String s) {
+	public static Matcher<String> mRegexp(String s) {
 		return new RegexpMatcher(s);
 	}
 
 	// Any matchers
-	public static <T> AnyMatcher<T> mAny(Class<T> clazz) {
+	public static <T> Matcher<T> mAny(Class<T> clazz) {
 		return new AnyMatcher<T>(clazz);
 	}
 
-	public static <T> ClassMatcher<T> mType(Class<T> clazz, Class<?>... classes) {
+	public static <T> Matcher<T> mType(Class<T> clazz, Class<?>... classes) {
 		return new ClassMatcher<T>(clazz, classes);
 	}
 
@@ -54,39 +54,39 @@ public class MatchersBase {
 		return mEq(value);
 	}
 
-	public static <T> IdentityMatcher<T> mSame(T value) {
+	public static <T> Matcher<T> mSame(T value) {
 		return new IdentityMatcher<T>(value);
 	}
 
-	public static ClassMatcher<Integer> mAnyInt() {
+	public static Matcher<Integer> mAnyInt() {
 		return ClassMatcher.anyInt();
 	}
 
-	public static ClassMatcher<Long> mAnyLong() {
+	public static Matcher<Long> mAnyLong() {
 		return ClassMatcher.anyLong();
 	}
 
-	public static ClassMatcher<Double> mAnyDouble() {
+	public static Matcher<Double> mAnyDouble() {
 		return ClassMatcher.anyDouble();
 	}
 
-	public static ClassMatcher<Float> mAnyFloat() {
+	public static Matcher<Float> mAnyFloat() {
 		return ClassMatcher.anyFloat();
 	}
 
-	public static ClassMatcher<Short> mAnyShort() {
+	public static Matcher<Short> mAnyShort() {
 		return ClassMatcher.anyShort();
 	}
 
-	public static ClassMatcher<Byte> mAnyByte() {
+	public static Matcher<Byte> mAnyByte() {
 		return ClassMatcher.anyByte();
 	}
 
-	public static ClassMatcher<Boolean> mAnyBoolean() {
+	public static Matcher<Boolean> mAnyBoolean() {
 		return ClassMatcher.anyBoolean();
 	}
 
-	public static ClassMatcher<Character> mAnyChar() {
+	public static Matcher<Character> mAnyChar() {
 		return ClassMatcher.anyChar();
 	}
 

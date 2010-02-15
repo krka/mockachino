@@ -1,6 +1,6 @@
 package se.mockachino;
 
-public interface Mock<T> {
+public interface ProxyMetadata<T> {
 	MockData<T> mockachino_getMockData();
 	MockContext mockachino_getContext();
 }

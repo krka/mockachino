@@ -18,7 +18,7 @@ public class MethodThrow implements MethodExpectation {
 	}
 
 	@Override
-	public Object getValue(MethodCall call) throws Throwable {
+	public Object invoke(Object mock, MethodCall call) throws Throwable {
 		throw e;
 	}
 }

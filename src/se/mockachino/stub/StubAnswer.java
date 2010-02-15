@@ -1,14 +1,14 @@
 package se.mockachino.stub;
 
-import se.mockachino.Answer;
+import se.mockachino.CallHandler;
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
 
 public class StubAnswer {
 	private final MockContext mockContext;
-	private final Answer answer;
+	private final CallHandler answer;
 
-	public StubAnswer(MockContext mockContext, Answer answer) {
+	public StubAnswer(MockContext mockContext, CallHandler answer) {
 		this.mockContext = mockContext;
 		this.answer = answer;
 	}

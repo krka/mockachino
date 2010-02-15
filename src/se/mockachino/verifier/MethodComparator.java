@@ -8,10 +8,11 @@ import se.mockachino.util.MockachinoMethod;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class MethodComparator implements Comparator<MethodCall> {
 	private final MockachinoMethod method;
-	private final ArrayList<Matcher> argumentMatchers;
+	private final List<Matcher> argumentMatchers;
 
 	public MethodComparator(MethodMatcher matcher) {
 		method = matcher.getMethod();

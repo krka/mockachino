@@ -11,11 +11,11 @@ import static se.mockachino.matchers.MatchersBase.mOr;
 public class AndOrMatcherTest {
 	@Test
 	public void testSimple() {
-		OrMatcher<Object> orMatcher = mOr();
-		assertEquals("false", orMatcher.asString());
+		Matcher<Object> orMatcher = mOr();
+		assertEquals("false", orMatcher.toString());
 
-		AndMatcher<Object> andMatcher = mAnd();
-		assertEquals("true", andMatcher.asString());
+		Matcher<Object> andMatcher = mAnd();
+		assertEquals("true", andMatcher.toString());
 
 	}
 

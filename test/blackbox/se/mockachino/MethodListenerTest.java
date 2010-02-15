@@ -1,7 +1,6 @@
 package se.mockachino;
 
 import org.junit.Test;
-import se.mockachino.listener.MethodCallListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +13,11 @@ public class MethodListenerTest {
 		List mock = Mockachino.mock(List.class);
 
 		final List<String> list = new ArrayList<String>();
-		MethodCallListener listener = new MethodCallListener() {
+		CallHandler listener = new CallHandler() {
 			@Override
-			public void listen(Object proxy, MethodCall call) {
+			public Object invoke(Object obj, MethodCall call) {
 				list.add(call.toString());
+				return null;
 			}
 		};
 		Mockachino.listenWith(listener).on(mock).get(123);
