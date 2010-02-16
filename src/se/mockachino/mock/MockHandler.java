@@ -1,5 +1,6 @@
 package se.mockachino.mock;
 
+import se.mockachino.CallHandler;
 import se.mockachino.MethodCall;
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
@@ -18,13 +19,13 @@ public class MockHandler<T> extends AbstractInvocationHandler {
 	private static final MockachinoMethod GET_MOCKDATA = MockachinoMethod.find(ProxyMetadata.class, "mockachino_getMockData");
 
 	private final MockContext context;
-	private final T impl;
+	private final CallHandler fallback;
 	private final MockData<T> mockData;
 
-	public MockHandler(MockContext context, T impl, String kind, String type, String id, MockData<T> mockData) {
+	public MockHandler(MockContext context, CallHandler fallback, String kind, String type, String id, MockData<T> mockData) {
 		super(kind + ":" + type + ":" + id);
 		this.context = context;
-		this.impl = impl;
+		this.fallback = fallback;
 		this.mockData = mockData;
 	}
 
@@ -55,6 +56,6 @@ public class MockHandler<T> extends AbstractInvocationHandler {
 		if (expectation != null) {
 			return expectation.invoke(o, methodCall);
 		}
-		return method.invoke(impl, objects);
+		return fallback.invoke(o, methodCall);
 	}
 }

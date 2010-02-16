@@ -1,4 +1,11 @@
 ----------------------
+- Version 0.2.0
+----------------------
+* Added support for stubbing / verifying: equals, hashCode, toString
+* Implemented a default answer for deep mocks
+* Added MockPoint and between-operator.
+
+----------------------
 - Version 0.1.0
 ----------------------
 First release.

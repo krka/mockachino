@@ -10,6 +10,7 @@ import se.mockachino.order.BetweenVerifyContext;
 import se.mockachino.order.MockPoint;
 import se.mockachino.order.OrderingContext;
 import se.mockachino.proxy.ProxyUtil;
+import se.mockachino.spy.SpyHandler;
 import se.mockachino.stub.StubAnswer;
 import se.mockachino.stub.StubReturn;
 import se.mockachino.stub.StubThrow;
@@ -19,6 +20,9 @@ import java.lang.reflect.InvocationHandler;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MockContext {
+	public static final CallHandler DEFAULT_VALUES = new DefaultInvocationHandler();
+	public final CallHandler DEEP_MOCK = new DeepMockHandler(this, DEFAULT_VALUES);
+
 	public final MockPoint BIG_BANG = new MockPoint(this, 0);
 	public final MockPoint BIG_CRUNCH = new MockPoint(this, Integer.MAX_VALUE);
 
@@ -31,20 +35,19 @@ public class MockContext {
 	 * @return a mock object of the same class
 	 */
 	public <T> T mock(Class<T> clazz) {
-		assertClass(clazz);
-		return mock(clazz, DEFAULT_INVOCATION_HANDLER);
+		return mock(clazz, DEFAULT_VALUES);
 	}
 
 	/**
 	 * Creates a new mock with a custom handler.
 	 * @param clazz the class of the returned object
-	 * @param handler the handler that is called for each mock method invocation
+	 * @param fallback the fallback that is called for each unstubbed mock method invocation
 	 * @return a mock object of the same class
 	 */
-	public <T> T mock(Class<T> clazz, InvocationHandler handler) {
+	public <T> T mock(Class<T> clazz, CallHandler fallback) {
 		assertClass(clazz);
-		assertHandler(handler);
-		return spy(clazz, ProxyUtil.newProxy(clazz, handler), "Mock");
+		assertFallback(fallback);
+		return newMock(clazz, fallback, "Mock");
 	}
 
 	/**
@@ -57,7 +60,7 @@ public class MockContext {
 	public <T> T spy(Class<T> clazz, T impl) {
 		assertClass(clazz);
 		assertImpl(impl);
-		return spy(clazz, impl, "Spy");
+		return newMock(clazz, new SpyHandler(impl), "Spy");
 	}
 
 	/**
@@ -71,9 +74,14 @@ public class MockContext {
 		return spy((Class<T>) impl.getClass(), impl);
 	}
 
-	private <T> T spy(Class<T> clazz, T impl, String kind) {
+	private <T> T newMock(Class<T> clazz, CallHandler fallback, String kind) {
 		assertClass(clazz);
-		T mock = ProxyUtil.newProxy(clazz, new MockHandler(this, impl, kind, clazz.getSimpleName(), nextMockId(), new MockData(clazz)));
+		assertFallback(fallback);
+		MockHandler mockHandler = new MockHandler(
+				this, fallback, kind,
+				clazz.getSimpleName(), nextMockId(),
+				new MockData(clazz));
+		T mock = ProxyUtil.newProxy(clazz, mockHandler);
 		resetStubs(mock);
 		return mock;
 	}
@@ -90,11 +98,12 @@ public class MockContext {
 		}
 	}
 
-	private <T> void assertHandler(InvocationHandler handler) {
-		if (handler == null) {
-			throw new UsageError("handler can not be null");
+	private void assertFallback(CallHandler fallback) {
+		if (fallback == null) {
+			throw new UsageError("fallback can not be null");
 		}
 	}
+
 
 	private String nextMockId() {
 		return Integer.toString(nextMockId.incrementAndGet());
@@ -460,5 +469,4 @@ public class MockContext {
 		return ProxyUtil.canMock(clazz);
 	}
 
-	public final DefaultInvocationHandler DEFAULT_INVOCATION_HANDLER = new DefaultInvocationHandler();
 }

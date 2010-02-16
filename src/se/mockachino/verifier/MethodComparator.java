@@ -96,7 +96,7 @@ public class MethodComparator implements Comparator<MethodCall> {
 			long arg2Hash = args2[i].hashCode();
 			long val = arg1Hash - arg2Hash;
 			if (val != 0) {
-				return (int) Long.signum(val);
+				return Long.signum(val);
 			}
 		}
 		int len1 = o1.getStackTrace().length;

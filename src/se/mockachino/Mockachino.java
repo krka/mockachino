@@ -10,8 +10,6 @@ import se.mockachino.stub.StubReturn;
 import se.mockachino.stub.StubThrow;
 import se.mockachino.verifier.VerifyRangeStart;
 
-import java.lang.reflect.InvocationHandler;
-
 /**
  * This is the main entry point of all your mocking needs.
  * All operations delegates to a singleton {@link se.mockachino.MockContext}.
@@ -29,6 +27,8 @@ import java.lang.reflect.InvocationHandler;
  */
 public class Mockachino extends Matchers {
 	public static final MockContext DEFAULT_CONTEXT = new MockContext();
+	public static final CallHandler DEFAULT_VALUES = MockContext.DEFAULT_VALUES;
+	public static final CallHandler DEEP_MOCK_HANDLER = DEFAULT_CONTEXT.DEEP_MOCK;
 
 	/**
 	 * Creates a new mock with a default handler
@@ -42,11 +42,11 @@ public class Mockachino extends Matchers {
 	/**
 	 * Creates a new mock with a custom handler.
 	 * @param clazz the class of the returned object
-	 * @param handler the handler that is called for each mock method invocation
+	 * @param fallback the fallback that is called for each unstubbed mock method invocation
 	 * @return a mock object of the same class
 	 */
-	public static <T> T mock(Class<T> clazz, InvocationHandler handler) {
-		return DEFAULT_CONTEXT.mock(clazz, handler);
+	public static <T> T mock(Class<T> clazz, CallHandler fallback) {
+		return DEFAULT_CONTEXT.mock(clazz, fallback);
 	}
 
 	/**
