@@ -33,7 +33,6 @@ public class VerifyHandler<T> extends MatchingHandler {
 		if (errorMessage != null) {
 			boolean wantsMisses = minCalls > 0;
 			error(errorMessage, matcher, wantsMisses ? 3 : 0);
-
 		}
 	}
 

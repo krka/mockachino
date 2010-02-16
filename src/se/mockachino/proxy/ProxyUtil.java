@@ -9,8 +9,6 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 
 public class ProxyUtil {
-	private static final boolean CGLIB_FOR_INTERFACES = false;
-
 	private static final boolean USE_CGLIB = canUseCgLib();
 	private static boolean canUseCgLib() {
 		try {
@@ -21,10 +19,8 @@ public class ProxyUtil {
 		}
 	}
 
-	private static final boolean useJavaReflect = !(USE_CGLIB && CGLIB_FOR_INTERFACES);
-
 	public static <T> T newProxy(Class<T> clazz, InvocationHandler handler) {
-		if (useJavaReflect && clazz.isInterface()) {
+		if (clazz.isInterface()) {
 			return (T) Proxy.newProxyInstance(ProxyUtil.class.getClassLoader(), new Class<?>[]{clazz, ProxyMetadata.class}, handler);
 		}
 		if (!USE_CGLIB) {
@@ -42,7 +38,7 @@ public class ProxyUtil {
 	}
 
 	public static boolean canMock(Class clazz) {
-		if (useJavaReflect && clazz.isInterface()) {
+		if (clazz.isInterface()) {
 			return true;
 		}
 		int modifiers = clazz.getModifiers();

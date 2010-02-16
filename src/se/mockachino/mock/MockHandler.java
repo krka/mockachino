@@ -15,18 +15,22 @@ import se.mockachino.util.MockachinoMethod;
 import java.util.List;
 
 public class MockHandler<T> extends AbstractInvocationHandler {
+	private static final StackTraceElement[] EMPTY_STACKTRACE = new StackTraceElement[]{};
+
 	private static final MockachinoMethod GET_CONTEXT = MockachinoMethod.find(ProxyMetadata.class, "mockachino_getContext");
 	private static final MockachinoMethod GET_MOCKDATA = MockachinoMethod.find(ProxyMetadata.class, "mockachino_getMockData");
 
 	private final MockContext context;
 	private final CallHandler fallback;
 	private final MockData<T> mockData;
+	private final boolean quick;
 
-	public MockHandler(MockContext context, CallHandler fallback, String kind, String type, String id, MockData<T> mockData) {
+	public MockHandler(MockContext context, CallHandler fallback, String kind, String type, String id, MockData<T> mockData, boolean quick) {
 		super(kind + ":" + type + ":" + id);
 		this.context = context;
 		this.fallback = fallback;
 		this.mockData = mockData;
+		this.quick = quick;
 	}
 
 	private MockContext getContext() {
@@ -38,13 +42,13 @@ public class MockHandler<T> extends AbstractInvocationHandler {
 	}
 
 	public Object doInvoke(Object o, MockachinoMethod method, Object[] objects) throws Throwable {
-		MethodCall methodCall = mockData.addCall(context, method, objects, StacktraceCleaner.cleanError(new Throwable()).getStackTrace());
 		if (method.equals(GET_CONTEXT)) {
 			return getContext();
 		}
 		if (method.equals(GET_MOCKDATA)) {
 			return getMockData();
 		}
+		MethodCall methodCall = mockData.addCall(context, method, objects, getStackTrace());
 
 		List<MethodListener> listeners = mockData.getListeners(method);
 		for (MethodListener listener : listeners) {
@@ -57,5 +61,12 @@ public class MockHandler<T> extends AbstractInvocationHandler {
 			return expectation.invoke(o, methodCall);
 		}
 		return fallback.invoke(o, methodCall);
+	}
+
+	private StackTraceElement[] getStackTrace() {
+		if (quick) {
+			return EMPTY_STACKTRACE;
+		}
+		return StacktraceCleaner.cleanError(new Throwable()).getStackTrace();
 	}
 }

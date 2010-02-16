@@ -38,6 +38,10 @@ public class MockContext {
 		return mock(clazz, DEFAULT_VALUES);
 	}
 
+	public <T> T mock(Class<T> clazz, boolean quick) {
+		return mock(clazz, DEFAULT_VALUES, quick);
+	}
+
 	/**
 	 * Creates a new mock with a custom handler.
 	 * @param clazz the class of the returned object
@@ -45,9 +49,13 @@ public class MockContext {
 	 * @return a mock object of the same class
 	 */
 	public <T> T mock(Class<T> clazz, CallHandler fallback) {
+		return mock(clazz, fallback, false);
+	}
+
+	public <T> T mock(Class<T> clazz, CallHandler fallback, boolean quick) {
 		assertClass(clazz);
 		assertFallback(fallback);
-		return newMock(clazz, fallback, "Mock");
+		return newMock(clazz, fallback, "Mock", quick);
 	}
 
 	/**
@@ -57,10 +65,14 @@ public class MockContext {
 	 * @param impl the object to spy on.
 	 * @return the mock object
 	 */
-	public <T> T spy(Class<T> clazz, T impl) {
+	public <T> T spy(Class<T> clazz, T impl, boolean quick) {
 		assertClass(clazz);
 		assertImpl(impl);
-		return newMock(clazz, new SpyHandler(impl), "Spy");
+		return newMock(clazz, new SpyHandler(impl), "Spy", quick);
+	}
+
+	public <T> T spy(Class<T> clazz, T impl) {
+		return spy(clazz, impl, false);
 	}
 
 	/**
@@ -70,17 +82,21 @@ public class MockContext {
 	 * @return a mock object of the same class as impl
 	 */
 	public <T> T spy(T impl) {
-		assertImpl(impl);
-		return spy((Class<T>) impl.getClass(), impl);
+		return spy(impl, false);
 	}
 
-	private <T> T newMock(Class<T> clazz, CallHandler fallback, String kind) {
+	public <T> T spy(T impl, boolean quick) {
+		assertImpl(impl);
+		return spy((Class<T>) impl.getClass(), impl, quick);
+	}
+
+	private <T> T newMock(Class<T> clazz, CallHandler fallback, String kind, boolean quick) {
 		assertClass(clazz);
 		assertFallback(fallback);
 		MockHandler mockHandler = new MockHandler(
 				this, fallback, kind,
 				clazz.getSimpleName(), nextMockId(),
-				new MockData(clazz));
+				new MockData(clazz), quick);
 		T mock = ProxyUtil.newProxy(clazz, mockHandler);
 		resetStubs(mock);
 		return mock;

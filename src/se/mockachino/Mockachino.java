@@ -39,6 +39,10 @@ public class Mockachino extends Matchers {
 		return DEFAULT_CONTEXT.mock(clazz);
 	}
 
+	public static <T> T mock(Class<T> clazz, boolean quick) {
+		return DEFAULT_CONTEXT.mock(clazz, quick);
+	}
+
 	/**
 	 * Creates a new mock with a custom handler.
 	 * @param clazz the class of the returned object
@@ -47,6 +51,10 @@ public class Mockachino extends Matchers {
 	 */
 	public static <T> T mock(Class<T> clazz, CallHandler fallback) {
 		return DEFAULT_CONTEXT.mock(clazz, fallback);
+	}
+
+	public static <T> T mock(Class<T> clazz, CallHandler fallback, boolean quick) {
+		return DEFAULT_CONTEXT.mock(clazz, fallback, quick);
 	}
 
 	/**
@@ -60,6 +68,10 @@ public class Mockachino extends Matchers {
 		return DEFAULT_CONTEXT.spy(clazz, impl);
 	}
 
+	public static <T> T spy(Class<T> clazz, T impl, boolean quick) {
+		return DEFAULT_CONTEXT.spy(clazz, impl, quick);
+	}
+
 	/**
 	 * Creates a mock that spies on a specific object.
 	 * Unless overridden by stubbing, spied on object will be called for all invocations
@@ -68,6 +80,10 @@ public class Mockachino extends Matchers {
 	 */
 	public static <T> T spy(T impl) {
 		return DEFAULT_CONTEXT.spy(impl);
+	}
+
+	public static <T> T spy(T impl, boolean quick) {
+		return DEFAULT_CONTEXT.spy(impl, quick);
 	}
 
 	/**
