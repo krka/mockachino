@@ -4,7 +4,7 @@
 * Added support for stubbing / verifying: equals, hashCode, toString
 * Implemented a default answer for deep mocks
 * Added MockPoint and between-operator.
-
+* Implemented quick mocks (does not store stacktrace)
 ----------------------
 - Version 0.1.0
 ----------------------
