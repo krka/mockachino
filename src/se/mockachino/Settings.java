@@ -1,5 +1,8 @@
 package se.mockachino;
 
+import java.util.Map;
+import java.util.Set;
+
 public class Settings {
 	public static MockSettings newSettings() {
 		return new MockSettings();
@@ -25,4 +28,7 @@ public class Settings {
 		return new MockSettings().name(name);
 	}
 
+	public static MockSettings add(Class<?>... interfaces) {
+		return new MockSettings().add(interfaces);
+	}
 }

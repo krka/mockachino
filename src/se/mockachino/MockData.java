@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class MockData<T> {
 	private static final CallHandler DEFAULT_EQUALS = new CallHandler() {
@@ -38,13 +39,15 @@ public class MockData<T> {
 
 	public final static MethodCall NULL_METHOD = new MethodCall(MockachinoMethod.NULL, new Object[]{}, 0, new StackTraceElement[]{});
 	private final Class<T> iface;
+	private final Set<Class<?>> extraInterfaces;
 	private final List<MethodCall> calls;
 	private final List<MethodCall> readOnlyCalls;
 	private final Map<MockachinoMethod, List<MethodObserver>> observers;
 	private final Map<MockachinoMethod, MethodStubs> stubs;
 
-	public MockData(Class<T> iface) {
+	public MockData(Class<T> iface, Set<Class<?>> extraInterfaces) {
 		this.iface = iface;
+		this.extraInterfaces = extraInterfaces;
 		calls = new SafeIteratorList<MethodCall>(new ArrayList<MethodCall>(), NULL_METHOD);
 		readOnlyCalls = Collections.unmodifiableList(calls);
 		observers = new HashMap<MockachinoMethod,List<MethodObserver>>();
@@ -55,6 +58,11 @@ public class MockData<T> {
 		}
 		for (Method reflectMethod : Object.class.getMethods()) {
 			addExpectation(reflectMethod);
+		}
+		for (Class<?> extraInterface : extraInterfaces) {
+			for (Method reflectMethod : extraInterface.getMethods()) {
+				addExpectation(reflectMethod);
+			}
 		}
 		setupEqualsAndHashcode();
 	}
@@ -118,5 +126,9 @@ public class MockData<T> {
 		for (List<MethodObserver> methodObservers : observers.values()) {
 			methodObservers.clear();
 		}
+	}
+
+	public Set<Class<?>> getExtraInterfaces() {
+		return extraInterfaces;		
 	}
 }

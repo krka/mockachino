@@ -17,6 +17,7 @@ import se.mockachino.stub.StubThrow;
 import se.mockachino.verifier.VerifyRangeStart;
 
 import java.lang.reflect.InvocationHandler;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MockContext {
@@ -43,7 +44,7 @@ public class MockContext {
 	public <T> T mock(Class<T> clazz, MockSettings settings) {
 		checkNull("clazz", clazz);
 		checkNull("settings", settings);
-		return mock(clazz, settings.getFallback(), settings.isQuick(), settings.getName());
+		return mock(clazz, settings.getFallback(), settings.isQuick(), settings.getName(), settings.getExtraInterfaces());
 	}
 
 	public <T> T spy(T impl) {
@@ -57,15 +58,15 @@ public class MockContext {
 		return mock((Class<T>)impl.getClass(), settings.spyOn(impl));
 	}
 
-	private <T> T mock(Class<T> clazz, CallHandler fallback, boolean quick, String name) {
+	private <T> T mock(Class<T> clazz, CallHandler fallback, boolean quick, String name, Set<Class<?>> extraInterfaces) {
 		checkNull("clazz", clazz);
 		checkNull("fallback", fallback);
 		if (name == null) {
 			name = getDefaultName(clazz, fallback);
 		}
 		MockHandler mockHandler = new MockHandler(
-				this, fallback, new MockData(clazz), quick, name);
-		T mock = ProxyUtil.newProxy(clazz, mockHandler);
+				this, fallback, new MockData(clazz, extraInterfaces), quick, name);
+		T mock = ProxyUtil.newProxy(clazz, mockHandler, extraInterfaces);
 		return mock;
 	}
 
@@ -205,7 +206,7 @@ public class MockContext {
 		MatcherThreadHandler.assertEmpty();
 		MockData data = getData(mock);
 		Class<T> iface = data.getInterface();
-		return ProxyUtil.newProxy(iface, handler);
+		return ProxyUtil.newProxy(iface, handler, (Set<Class<?>>) data.getExtraInterfaces());
 	}
 
 	/**

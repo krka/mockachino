@@ -3,10 +3,14 @@ package se.mockachino;
 import se.mockachino.exceptions.UsageError;
 import se.mockachino.spy.SpyHandler;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MockSettings {
 	private boolean quick;
 	private CallHandler fallback = MockContext.DEFAULT_VALUES;
 	private String name;
+	private Set<Class<?>> interfaces = new HashSet<Class<?>>();
 
 	public MockSettings spyOn(Object impl) {
 		if (impl == null) {
@@ -42,6 +46,13 @@ public class MockSettings {
 		return this;
 	}
 
+	public MockSettings add(Class<?>... interfaces) {
+		for (Class<?> anInterface : interfaces) {
+			this.interfaces.add(anInterface);
+		}
+		return this;
+	}
+
 	public CallHandler getFallback() {
 		return fallback;
 	}
@@ -54,8 +65,7 @@ public class MockSettings {
 		return name;
 	}
 
-
-	public static MockSettings newSettings() {
-		return new MockSettings();
+	public Set<Class<?>> getExtraInterfaces() {
+		return interfaces;
 	}
 }

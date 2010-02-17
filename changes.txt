@@ -6,6 +6,7 @@
 * Added MockPoint and between-operator.
 * Implemented quick mocks (does not store stacktrace)
 * Added mock settings
+* Added support for mocking multiple interfaces on the same mock
 ----------------------
 - Version 0.1.0
 ----------------------
