@@ -5,6 +5,7 @@
 * Implemented a default answer for deep mocks
 * Added MockPoint and between-operator.
 * Implemented quick mocks (does not store stacktrace)
+* Added mock settings
 ----------------------
 - Version 0.1.0
 ----------------------
