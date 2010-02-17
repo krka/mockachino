@@ -35,91 +35,58 @@ public class MockContext {
 	 * @return a mock object of the same class
 	 */
 	public <T> T mock(Class<T> clazz) {
-		return mock(clazz, DEFAULT_VALUES);
+		checkNull("clazz", clazz);
+		MockSettings mockSettings = Settings.newSettings();
+		return mock(clazz, mockSettings);
 	}
 
-	public <T> T mock(Class<T> clazz, boolean quick) {
-		return mock(clazz, DEFAULT_VALUES, quick);
+	public <T> T mock(Class<T> clazz, MockSettings settings) {
+		checkNull("clazz", clazz);
+		checkNull("settings", settings);
+		return mock(clazz, settings.getFallback(), settings.isQuick(), settings.getName());
 	}
 
-	/**
-	 * Creates a new mock with a custom handler.
-	 * @param clazz the class of the returned object
-	 * @param fallback the fallback that is called for each unstubbed mock method invocation
-	 * @return a mock object of the same class
-	 */
-	public <T> T mock(Class<T> clazz, CallHandler fallback) {
-		return mock(clazz, fallback, false);
-	}
-
-	public <T> T mock(Class<T> clazz, CallHandler fallback, boolean quick) {
-		assertClass(clazz);
-		assertFallback(fallback);
-		return newMock(clazz, fallback, "Mock", quick);
-	}
-
-	/**
-	 * Creates a mock that spies on a specific object.
-	 * Unless overridden by stubbing, spied on object will be called for all invocations
-	 * @param clazz the class to spy with, must be a superclass of impl
-	 * @param impl the object to spy on.
-	 * @return the mock object
-	 */
-	public <T> T spy(Class<T> clazz, T impl, boolean quick) {
-		assertClass(clazz);
-		assertImpl(impl);
-		return newMock(clazz, new SpyHandler(impl), "Spy", quick);
-	}
-
-	public <T> T spy(Class<T> clazz, T impl) {
-		return spy(clazz, impl, false);
-	}
-
-	/**
-	 * Creates a mock that spies on a specific object.
-	 * Unless overridden by stubbing, spied on object will be called for all invocations
-	 * @param impl the object to spy on
-	 * @return a mock object of the same class as impl
-	 */
 	public <T> T spy(T impl) {
-		return spy(impl, false);
+		checkNull("impl", impl);
+		return mock((Class<T>)impl.getClass(), Settings.spyOn(impl));
 	}
 
-	public <T> T spy(T impl, boolean quick) {
-		assertImpl(impl);
-		return spy((Class<T>) impl.getClass(), impl, quick);
+	public <T> T spy(T impl, MockSettings settings) {
+		checkNull("impl", impl);
+		checkNull("settings", settings);
+		return mock((Class<T>)impl.getClass(), settings.spyOn(impl));
 	}
 
-	private <T> T newMock(Class<T> clazz, CallHandler fallback, String kind, boolean quick) {
-		assertClass(clazz);
-		assertFallback(fallback);
+	private <T> T mock(Class<T> clazz, CallHandler fallback, boolean quick, String name) {
+		checkNull("clazz", clazz);
+		checkNull("fallback", fallback);
+		if (name == null) {
+			name = getDefaultName(clazz, fallback);
+		}
 		MockHandler mockHandler = new MockHandler(
-				this, fallback, kind,
-				clazz.getSimpleName(), nextMockId(),
-				new MockData(clazz), quick);
+				this, fallback, new MockData(clazz), quick, name);
 		T mock = ProxyUtil.newProxy(clazz, mockHandler);
-		resetStubs(mock);
+		MockData<Object> data = getData((Object) mock);
+		data.resetStubs();
+		stubReturn(System.identityHashCode(mock)).on((Object) mock).hashCode();
+		stubReturn(true).on((Object) mock).equals(Mockachino.same((Object) mock));
 		return mock;
 	}
 
-	private <T> void assertClass(Class<T> clazz) {
-		if (clazz == null) {
-			throw new UsageError("class can not be null");
+	private <T> String getDefaultName(Class<T> clazz, CallHandler fallback) {
+		String kind = "Mock";
+		if (fallback instanceof SpyHandler) {
+			kind = "Spy";
 		}
+		return kind + ":" + clazz.getSimpleName() + ":" + nextMockId();
 	}
 
-	private <T> void assertImpl(T impl) {
-		if (impl == null) {
-			throw new UsageError("impl can not be null");
+	private void checkNull(String name, Object obj) {
+		if (obj == null) {
+			throw new UsageError(name + " can not be null");
 		}
-	}
 
-	private void assertFallback(CallHandler fallback) {
-		if (fallback == null) {
-			throw new UsageError("fallback can not be null");
-		}
 	}
-
 
 	private String nextMockId() {
 		return Integer.toString(nextMockId.incrementAndGet());
@@ -371,85 +338,47 @@ public class MockContext {
 	}
 
 	/**
-	 * Resets calls, stubs and listeners for a mock
-	 * @param mock
-	 */
-	public void reset(Object mock) {
-		resetCalls(mock);
-		resetStubs(mock);
-		resetListeners(mock);
-	}
-
-	/**
 	 * Resets calls, stubs and listeners for mocks
 	 * @param mocks
 	 */
-	public void reset(Object mock, Object... mocks) {
-		reset(mock);
-		for (Object mock2 : mocks) {
-			reset(mock2);
-		}
-	}
-
-	/**
-	 * Resets list of listeners for a mock
-	 * @param mock
-	 */
-	public void resetListeners(Object mock) {
-		MockData<Object> data = getData(mock);
-		data.resetListeners();
+	public void reset(Object... mocks) {
+		resetCalls(mocks);
+		resetListeners(mocks);
+		resetStubs(mocks);
 	}
 
 	/**
 	 * Resets list of listeners for mocks
 	 * @param mocks
 	 */
-	public void resetListeners(Object mock, Object... mocks) {
-		resetListeners(mock);
-		for (Object mock2 : mocks) {
-			resetListeners(mock2);
+	public void resetListeners(Object... mocks) {
+		for (Object mock : mocks) {
+			MockData<Object> data = getData(mock);
+			data.resetListeners();
 		}
-	}
-
-	/**
-	 * Resets list of calls for a mock
-	 * @param mock
-	 */
-	public void resetCalls(Object mock) {
-		MockData<Object> data = getData(mock);
-		data.resetCalls();
 	}
 
 	/**
 	 * Resets list of calls for mocks
 	 * @param mocks
 	 */
-	public void resetCalls(Object mock, Object[] mocks) {
-		resetCalls(mock);
-		for (Object mock2 : mocks) {
-			resetCalls(mock2);
+	public void resetCalls(Object... mocks) {
+		for (Object mock : mocks) {
+			MockData<Object> data = getData(mock);
+			data.resetCalls();
 		}
-	}
-
-	/**
-	 * Resets list of stubs for a mock
-	 * @param mock
-	 */
-	public void resetStubs(Object mock) {
-		MockData<Object> data = getData(mock);
-		data.resetStubs();
-		stubReturn(System.identityHashCode(mock)).on(mock).hashCode();
-		stubReturn(true).on(mock).equals(Mockachino.same(mock));
 	}
 
 	/**
 	 * Resets list of stubs for mocks
 	 * @param mocks
 	 */
-	public void resetStubs(Object mock, Object[] mocks) {
-		resetStubs(mock);
-		for (Object mock2 : mocks) {
-			resetStubs(mock2);
+	public void resetStubs(Object... mocks) {
+		for (Object mock : mocks) {
+			MockData<Object> data = getData(mock);
+			data.resetStubs();
+			stubReturn(System.identityHashCode(mock)).on(mock).hashCode();
+			stubReturn(true).on(mock).equals(Mockachino.same(mock));
 		}
 	}
 
@@ -480,9 +409,4 @@ public class MockContext {
 
 		}
 	}
-
-	public boolean canMock(Class clazz) {
-		return ProxyUtil.canMock(clazz);
-	}
-
 }

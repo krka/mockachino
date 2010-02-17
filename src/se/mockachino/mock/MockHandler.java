@@ -25,8 +25,8 @@ public class MockHandler<T> extends AbstractInvocationHandler {
 	private final MockData<T> mockData;
 	private final boolean quick;
 
-	public MockHandler(MockContext context, CallHandler fallback, String kind, String type, String id, MockData<T> mockData, boolean quick) {
-		super(kind + ":" + type + ":" + id);
+	public MockHandler(MockContext context, CallHandler fallback, MockData<T> mockData, boolean quick, String name) {
+		super(name);
 		this.context = context;
 		this.fallback = fallback;
 		this.mockData = mockData;

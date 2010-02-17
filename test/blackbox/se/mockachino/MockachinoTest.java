@@ -16,6 +16,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static se.mockachino.Settings.spyOn;
 import static se.mockachino.matchers.Matchers.any;
 import static se.mockachino.matchers.Matchers.anyInt;
 import static se.mockachino.matchers.Matchers.eq;
@@ -41,7 +42,7 @@ public class MockachinoTest {
 		assertEquals(200, mock.indexOf("World"));
 		assertEquals(300, mock.indexOf("Test"));
 
-		Mockachino.spy(List.class, new ArrayList());
+		Mockachino.mock(List.class, spyOn(new ArrayList()));
 
 		foo(mock);
 
@@ -56,7 +57,7 @@ public class MockachinoTest {
 
 	@Test
 	public void testSpy() {
-		List mock = Mockachino.spy(List.class, new ArrayList());
+		List mock = Mockachino.mock(List.class, spyOn(new ArrayList()));
 
 		mock.add("Hello");
 		mock.add("World");
@@ -84,7 +85,7 @@ public class MockachinoTest {
 	@Test
 	public void testSpy2() {
 		List list = new LinkedList();
-		List spy = Mockachino.spy(List.class, list);
+		List spy = Mockachino.mock(List.class, spyOn(list));
 
 		Mockachino.stubReturn("foo").on(spy).get(0);
 
@@ -118,7 +119,7 @@ public class MockachinoTest {
 	@Test
 	public void testSpyString() {
 		String s = "Hello world";
-		CharSequence mock = Mockachino.spy(CharSequence.class, s);
+		CharSequence mock = Mockachino.mock(CharSequence.class, spyOn(s));
 
 		Mockachino.stubReturn("Jello").on(mock).subSequence(0, 5);
 
@@ -132,7 +133,7 @@ public class MockachinoTest {
 	@Test
 	public void testSpyMock() {
 		List mock = Mockachino.mock(List.class);
-		List spy = Mockachino.spy(List.class, mock);
+		List spy = Mockachino.mock(List.class, spyOn(mock));
 
 		Mockachino.stubReturn("Hello").on(mock).get(123);
 		Mockachino.stubReturn("World").on(spy).get(123);
@@ -303,7 +304,7 @@ public class MockachinoTest {
 
 	@Test(expected = UsageError.class)
 	public void testBadUsage6() {
-		Mockachino.spy(List.class, null);
+		Mockachino.spy(List.class, spyOn(null));
 	}
 
 	@Test(expected = UsageError.class)

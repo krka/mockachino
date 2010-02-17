@@ -11,20 +11,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static se.mockachino.Mockachino.any;
-import static se.mockachino.Mockachino.anyInt;
-import static se.mockachino.Mockachino.eq;
-import static se.mockachino.Mockachino.mType;
-import static se.mockachino.Mockachino.match;
-import static se.mockachino.Mockachino.mock;
-import static se.mockachino.Mockachino.newOrdering;
-import static se.mockachino.Mockachino.not;
-import static se.mockachino.Mockachino.spy;
-import static se.mockachino.Mockachino.stubReturn;
-import static se.mockachino.Mockachino.verifyAtLeast;
-import static se.mockachino.Mockachino.verifyExactly;
-import static se.mockachino.Mockachino.verifyNever;
-import static se.mockachino.Mockachino.verifyOnce;
+import static se.mockachino.Mockachino.*;
 
 public class ExamplesTest {
 
@@ -149,7 +136,7 @@ public class ExamplesTest {
 		myList.add("Real object");
 
 		// Create spy on object
-		List spy = spy(List.class, myList);
+		List spy = mock(List.class, Settings.spyOn(myList));
 
 		// Show that calls to the spy go to the real object
 		assertEquals(1, spy.size());

@@ -347,11 +347,28 @@
 	</target>
 
 	<target name="package" depends="compile" description="Package jars">
-		<jar destfile="${baseDir}/build/mockachino-${suffix}.jar">
+		<!-- classes, source -->
+		<jar destfile="${baseDir}/build/mockachino-light-${suffix}.jar">
 			<fileset dir="${baseDir}/build/classes"/>
+			<fileset dir="${baseDir}/src">
+				<exclude name="**/.svn" />
+			</fileset>
 		</jar>
-		<zip destfile="${baseDir}/build/mockachino-src-${suffix}.zip">
+		
+		<!-- classes, source, dependencies -->
+		<jar destfile="${baseDir}/build/mockachino-full-${suffix}.jar">
+			<fileset dir="${baseDir}/build/classes"/>
+			<fileset dir="${baseDir}/src">
+				<exclude name="**/.svn" />
+			</fileset>
+			<zipfileset src="${baseDir}/lib/cglib-2.2.jar" />
+			<zipfileset src="${baseDir}/lib/asm-all-3.2.jar" />
+		</jar>
+		
+		<!-- full project -->
+		<zip destfile="${baseDir}/build/mockachino-dev-${suffix}.zip">
 			<fileset dir="${baseDir}">
+				<exclude name="coverage.ec" />
 				<exclude name=".idea/**" />
 				<exclude name="build/**" />
 				<exclude name="out/**" />

@@ -6,10 +6,11 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/blackbox" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/test/concurrency" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/test/examples" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/test/performance" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/test/unit" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/test/examples" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/doc" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

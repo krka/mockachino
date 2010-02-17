@@ -1,7 +1,6 @@
 package se.mockachino.stub;
 
 import se.mockachino.CallHandler;
-import se.mockachino.MockContext;
 import se.mockachino.MockData;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.verifier.MatchingHandler;

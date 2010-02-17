@@ -5,6 +5,7 @@ import se.mockachino.matchers.Matchers;
 import se.mockachino.order.BetweenVerifyContext;
 import se.mockachino.order.MockPoint;
 import se.mockachino.order.OrderingContext;
+import se.mockachino.proxy.ProxyUtil;
 import se.mockachino.stub.StubAnswer;
 import se.mockachino.stub.StubReturn;
 import se.mockachino.stub.StubThrow;
@@ -30,61 +31,22 @@ public class Mockachino extends Matchers {
 	public static final CallHandler DEFAULT_VALUES = MockContext.DEFAULT_VALUES;
 	public static final CallHandler DEEP_MOCK_HANDLER = DEFAULT_CONTEXT.DEEP_MOCK;
 
-	/**
-	 * Creates a new mock with a default handler
-	 * @param clazz the interface or class to mock
-	 * @return a mock object of the same class
-	 */
 	public static <T> T mock(Class<T> clazz) {
 		return DEFAULT_CONTEXT.mock(clazz);
 	}
 
-	public static <T> T mock(Class<T> clazz, boolean quick) {
-		return DEFAULT_CONTEXT.mock(clazz, quick);
+	public static <T> T mock(Class<T> clazz, MockSettings settings) {
+		return DEFAULT_CONTEXT.mock(clazz, settings);
 	}
 
-	/**
-	 * Creates a new mock with a custom handler.
-	 * @param clazz the class of the returned object
-	 * @param fallback the fallback that is called for each unstubbed mock method invocation
-	 * @return a mock object of the same class
-	 */
-	public static <T> T mock(Class<T> clazz, CallHandler fallback) {
-		return DEFAULT_CONTEXT.mock(clazz, fallback);
-	}
-
-	public static <T> T mock(Class<T> clazz, CallHandler fallback, boolean quick) {
-		return DEFAULT_CONTEXT.mock(clazz, fallback, quick);
-	}
-
-	/**
-	 * Creates a mock that spies on a specific object.
-	 * Unless overridden by stubbing, spied on object will be called for all invocations
-	 * @param clazz the class to spy with, must be a superclass of impl
-	 * @param impl the object to spy on.
-	 * @return the mock object
-	 */
-	public static <T> T spy(Class<T> clazz, T impl) {
-		return DEFAULT_CONTEXT.spy(clazz, impl);
-	}
-
-	public static <T> T spy(Class<T> clazz, T impl, boolean quick) {
-		return DEFAULT_CONTEXT.spy(clazz, impl, quick);
-	}
-
-	/**
-	 * Creates a mock that spies on a specific object.
-	 * Unless overridden by stubbing, spied on object will be called for all invocations
-	 * @param impl the object to spy on
-	 * @return a mock object of the same class as impl
-	 */
 	public static <T> T spy(T impl) {
 		return DEFAULT_CONTEXT.spy(impl);
 	}
 
-	public static <T> T spy(T impl, boolean quick) {
-		return DEFAULT_CONTEXT.spy(impl, quick);
+	public static <T> T spy(T impl, MockSettings settings) {
+		return DEFAULT_CONTEXT.spy(impl, settings);
 	}
+
 
 	/**
 	 * Creates a new ordering context which is used to verify method calls in order.
@@ -269,70 +231,38 @@ public class Mockachino extends Matchers {
 	}
 
 	/**
-	 * Resets calls, stubs and listeners for a mock
-	 * @param mock
-	 */
-	public static void reset(Object mock) {
-		DEFAULT_CONTEXT.reset(mock);
-	}
-
-	/**
 	 * Resets calls, stubs and listeners for mocks
 	 * @param mocks
 	 */
-	public static void reset(Object mock, Object... mocks) {
-		DEFAULT_CONTEXT.reset(mock, mocks);
-	}
-
-	/**
-	 * Resets list of calls for a mock
-	 * @param mock
-	 */
-	public static void resetCalls(Object mock) {
-		DEFAULT_CONTEXT.resetCalls(mock);
+	public static void reset(Object... mocks) {
+		DEFAULT_CONTEXT.reset(mocks);
 	}
 
 	/**
 	 * Resets list of calls for mocks
 	 * @param mocks
 	 */
-	public static void resetCalls(Object mock, Object... mocks) {
-		DEFAULT_CONTEXT.resetCalls(mock, mocks);
-	}
-
-	/**
-	 * Resets list of stubs for a mock
-	 * @param mock
-	 */
-	public static void resetStubs(Object mock) {
-		DEFAULT_CONTEXT.resetStubs(mock);
+	public static void resetCalls(Object... mocks) {
+		DEFAULT_CONTEXT.resetCalls(mocks);
 	}
 
 	/**
 	 * Resets list of stubs for mocks
 	 * @param mocks
 	 */
-	public static void resetStubs(Object mock, Object... mocks) {
-		DEFAULT_CONTEXT.resetStubs(mock, mocks);
-	}
-
-	/**
-	 * Resets list of listeners for a mock
-	 * @param mock
-	 */
-	public static void resetListeners(Object mock) {
-		DEFAULT_CONTEXT.resetListeners(mock);
+	public static void resetStubs(Object... mocks) {
+		DEFAULT_CONTEXT.resetStubs(mocks);
 	}
 
 	/**
 	 * Resets list of listeners for mocks
 	 * @param mocks
 	 */
-	public static void resetListeners(Object mock, Object... mocks) {
-		DEFAULT_CONTEXT.resetListeners(mock, mocks);
+	public static void resetListeners(Object... mocks) {
+		DEFAULT_CONTEXT.resetListeners(mocks);
 	}
 
-	public MockPoint getCurrentPoint() {
+	public static MockPoint getCurrentPoint() {
 		return DEFAULT_CONTEXT.getCurrentPoint();
 	}
 
@@ -348,5 +278,8 @@ public class Mockachino extends Matchers {
 	public static BetweenVerifyContext before(MockPoint end) {
 		return DEFAULT_CONTEXT.before(end);
 	}
-
+	
+	public static boolean canMock(Class clazz) {
+		return ProxyUtil.canMock(clazz);
+	}
 }
