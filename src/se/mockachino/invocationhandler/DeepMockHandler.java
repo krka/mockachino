@@ -1,6 +1,10 @@
 package se.mockachino.invocationhandler;
 
-import se.mockachino.*;
+import se.mockachino.CallHandler;
+import se.mockachino.MethodCall;
+import se.mockachino.MockContext;
+import se.mockachino.Mockachino;
+import se.mockachino.Settings;
 import se.mockachino.util.MockachinoMethod;
 
 public class DeepMockHandler implements CallHandler {

@@ -334,7 +334,7 @@
 				<include name="**/OrderingContext.java" />
 				
 				<!-- fluent objects -->
-				<include name="**/ListenerAdder.java" />
+				<include name="**/ObserverAdder.java" />
 				<include name="**/StubAnswer.java" />
 				<include name="**/StubReturn.java" />
 				<include name="**/StubThrow.java" />

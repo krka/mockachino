@@ -66,7 +66,7 @@ public class MethodCallGrouper {
 		for (MethodCall call : calls) {
 			list.add(call);
 		}
-		Collections.sort(list, new MethodComparator(matcher));
+		Collections.sort(list, new MethodComparator(matcher.getMethod(), matcher.getArgumentMatchers()));
 		return list;
 	}
 }

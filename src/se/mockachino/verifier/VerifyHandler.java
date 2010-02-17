@@ -1,10 +1,9 @@
 package se.mockachino.verifier;
 
 import se.mockachino.MethodCall;
-import se.mockachino.MockContext;
-import se.mockachino.MockData;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.MethodMatcher;
+import se.mockachino.util.MockachinoMethod;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class VerifyHandler<T> extends MatchingHandler {
 	}
 
 	@Override
-	public void match(Object o, MethodMatcher matcher) {
+	public void match(Object o, MockachinoMethod method, MethodMatcher matcher) {
 		int counter = 0;
 		for (MethodCall call : calls) {
 			if (matcher.matches(call)) {

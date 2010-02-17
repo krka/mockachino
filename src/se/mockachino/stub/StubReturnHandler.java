@@ -1,10 +1,9 @@
 package se.mockachino.stub;
 
-import se.mockachino.MockContext;
 import se.mockachino.MockData;
 import se.mockachino.Primitives;
 import se.mockachino.exceptions.UsageError;
-import se.mockachino.expectations.MethodExpectations;
+import se.mockachino.expectations.MethodStubs;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.util.MockachinoMethod;
 import se.mockachino.verifier.MatchingHandler;
@@ -19,8 +18,7 @@ public class StubReturnHandler<T> extends MatchingHandler {
 		this.data = data;
 	}
 
-	public void match(Object o, MethodMatcher matcher) {
-		MockachinoMethod method = matcher.getMethod();
+	public void match(Object o, MockachinoMethod method, MethodMatcher matcher) {
 		Class<?> returnType = method.getReturnType();
 		if (returnType == void.class) {
 			if (returnValue != null) {
@@ -44,8 +42,8 @@ public class StubReturnHandler<T> extends MatchingHandler {
 			}
 		}
 
-		MethodExpectations methodExpectations = data.getExpectations(method);
-		methodExpectations.add(new MethodStub(returnValue, matcher));
+		MethodStubs methodStubs = data.getExpectations(method);
+		methodStubs.add(new ReturnValueStub(returnValue, matcher));
 	}
 
 	private void error(Class<?> returnType) {

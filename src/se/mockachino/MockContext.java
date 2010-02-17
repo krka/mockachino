@@ -3,9 +3,9 @@ package se.mockachino;
 import se.mockachino.exceptions.UsageError;
 import se.mockachino.invocationhandler.DeepMockHandler;
 import se.mockachino.invocationhandler.DefaultInvocationHandler;
-import se.mockachino.listener.ListenerAdder;
 import se.mockachino.matchers.MatcherThreadHandler;
 import se.mockachino.mock.MockHandler;
+import se.mockachino.observer.ObserverAdder;
 import se.mockachino.order.BetweenVerifyContext;
 import se.mockachino.order.MockPoint;
 import se.mockachino.order.OrderingContext;
@@ -66,10 +66,6 @@ public class MockContext {
 		MockHandler mockHandler = new MockHandler(
 				this, fallback, new MockData(clazz), quick, name);
 		T mock = ProxyUtil.newProxy(clazz, mockHandler);
-		MockData<Object> data = getData((Object) mock);
-		data.resetStubs();
-		stubReturn(System.identityHashCode(mock)).on((Object) mock).hashCode();
-		stubReturn(true).on((Object) mock).equals(Mockachino.same((Object) mock));
 		return mock;
 	}
 
@@ -271,24 +267,10 @@ public class MockContext {
 		return new StubAnswer(this, answer);
 	}
 
-	/**
-	 * Add a listener on a specific method. Every time the method is called on the mock,
-	 * this listener will get a callback.
-	 *
-	 * Typical usage:
-	 * <pre>
-	 * Mockachino.listenWith(myListener).on(mock).method();
-	 * </pre>
-
-	 * @param listener the listener
-	 * @return a listener adder
-	 */
-	public ListenerAdder listenWith(CallHandler listener) {
-		if (listener == null) {
-			throw new UsageError("Listener can not be null");
-		}
+	public ObserverAdder observeWith(CallHandler observer) {
+		checkNull("observer", observer);
 		MatcherThreadHandler.assertEmpty();
-		return new ListenerAdder(this, listener);
+		return new ObserverAdder(this, observer);
 	}
 
 	/**
@@ -335,51 +317,6 @@ public class MockContext {
 	 */
 	public int incrementSequence() {
 		return nextSequenceNumber.incrementAndGet();
-	}
-
-	/**
-	 * Resets calls, stubs and listeners for mocks
-	 * @param mocks
-	 */
-	public void reset(Object... mocks) {
-		resetCalls(mocks);
-		resetListeners(mocks);
-		resetStubs(mocks);
-	}
-
-	/**
-	 * Resets list of listeners for mocks
-	 * @param mocks
-	 */
-	public void resetListeners(Object... mocks) {
-		for (Object mock : mocks) {
-			MockData<Object> data = getData(mock);
-			data.resetListeners();
-		}
-	}
-
-	/**
-	 * Resets list of calls for mocks
-	 * @param mocks
-	 */
-	public void resetCalls(Object... mocks) {
-		for (Object mock : mocks) {
-			MockData<Object> data = getData(mock);
-			data.resetCalls();
-		}
-	}
-
-	/**
-	 * Resets list of stubs for mocks
-	 * @param mocks
-	 */
-	public void resetStubs(Object... mocks) {
-		for (Object mock : mocks) {
-			MockData<Object> data = getData(mock);
-			data.resetStubs();
-			stubReturn(System.identityHashCode(mock)).on(mock).hashCode();
-			stubReturn(true).on(mock).equals(Mockachino.same(mock));
-		}
 	}
 
 	public MockPoint getCurrentPoint() {

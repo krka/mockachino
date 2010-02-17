@@ -1,7 +1,7 @@
 package se.mockachino;
 
-import se.mockachino.listener.ListenerAdder;
 import se.mockachino.matchers.Matchers;
+import se.mockachino.observer.ObserverAdder;
 import se.mockachino.order.BetweenVerifyContext;
 import se.mockachino.order.MockPoint;
 import se.mockachino.order.OrderingContext;
@@ -203,20 +203,8 @@ public class Mockachino extends Matchers {
 		return DEFAULT_CONTEXT.stubAnswer(answer);
 	}
 
-	/**
-	 * Add a listener on a specific method. Every time the method is called on the mock,
-	 * this listener will get a callback.
-	 *
-	 * Typical usage:
-	 * <pre>
-	 * Mockachino.listenWith(myListener).on(mock).method();
-	 * </pre>
-
-	 * @param listener the listener
-	 * @return a listener adder
-	 */
-	public static ListenerAdder listenWith(CallHandler listener) {
-		return DEFAULT_CONTEXT.listenWith(listener);
+	public static ObserverAdder observeWith(CallHandler observer) {
+		return DEFAULT_CONTEXT.observeWith(observer);
 	}
 
 	/**
@@ -230,36 +218,8 @@ public class Mockachino extends Matchers {
 		return DEFAULT_CONTEXT.getCalls(mock);
 	}
 
-	/**
-	 * Resets calls, stubs and listeners for mocks
-	 * @param mocks
-	 */
-	public static void reset(Object... mocks) {
-		DEFAULT_CONTEXT.reset(mocks);
-	}
-
-	/**
-	 * Resets list of calls for mocks
-	 * @param mocks
-	 */
-	public static void resetCalls(Object... mocks) {
-		DEFAULT_CONTEXT.resetCalls(mocks);
-	}
-
-	/**
-	 * Resets list of stubs for mocks
-	 * @param mocks
-	 */
-	public static void resetStubs(Object... mocks) {
-		DEFAULT_CONTEXT.resetStubs(mocks);
-	}
-
-	/**
-	 * Resets list of listeners for mocks
-	 * @param mocks
-	 */
-	public static void resetListeners(Object... mocks) {
-		DEFAULT_CONTEXT.resetListeners(mocks);
+	public static <T> MockData<T> getData(T mock) {
+		return DEFAULT_CONTEXT.getData(mock);
 	}
 
 	public static MockPoint getCurrentPoint() {

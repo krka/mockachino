@@ -2,8 +2,9 @@ package se.mockachino.stub;
 
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
-import se.mockachino.expectations.MethodExpectations;
+import se.mockachino.expectations.MethodStubs;
 import se.mockachino.matchers.MethodMatcher;
+import se.mockachino.matchers.MethodMatcherImpl;
 import se.mockachino.util.MockachinoMethod;
 
 public class StubReturn {
@@ -20,9 +21,13 @@ public class StubReturn {
 		return mockContext.createProxy(mock, new StubReturnHandler(returnValue, mock, data));
 	}
 
-	public void onMethodWithAnyArgument(Object mock, MockachinoMethod method) {
+	public void onMethod(Object mock, MockachinoMethod method, MethodMatcher matcher) {
 		MockData data = mockContext.getData(mock);
-		MethodExpectations methodExpectations = data.getExpectations(method);
-		methodExpectations.add(new MethodStub(returnValue, MethodMatcher.matchAll(method)));
+		MethodStubs methodStubs = data.getExpectations(method);
+		methodStubs.add(new ReturnValueStub(returnValue, matcher));
+	}
+
+	public void onMethodWithAnyArgument(Object mock, MockachinoMethod method) {
+		onMethod(mock, method, MethodMatcherImpl.matchAll(method));
 	}
 }

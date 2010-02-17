@@ -1,20 +1,18 @@
 package se.mockachino.stub;
 
-import se.mockachino.CallHandler;
 import se.mockachino.MethodCall;
-import se.mockachino.expectations.MethodStub;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.matchers.matcher.Matcher;
 import se.mockachino.util.MockachinoMethod;
 
 import java.util.List;
 
-public class AnswerStub implements MethodStub {
-	private final CallHandler answer;
+public class ExceptionStub implements se.mockachino.expectations.MethodStub {
+	private final Throwable e;
 	private final MethodMatcher matcher;
 
-	public AnswerStub(CallHandler answer, MethodMatcher matcher) {
-		this.answer = answer;
+	public ExceptionStub(Throwable e, MethodMatcher matcher) {
+		this.e = e;
 		this.matcher = matcher;
 	}
 
@@ -35,6 +33,6 @@ public class AnswerStub implements MethodStub {
 
 	@Override
 	public Object invoke(Object mock, MethodCall call) throws Throwable {
-		return answer.invoke(mock, call);
+		throw e;
 	}
 }

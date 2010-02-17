@@ -6,10 +6,10 @@ import se.mockachino.MockContext;
 import se.mockachino.MockData;
 import se.mockachino.ProxyMetadata;
 import se.mockachino.cleaner.StacktraceCleaner;
-import se.mockachino.expectations.MethodExpectation;
-import se.mockachino.expectations.MethodExpectations;
+import se.mockachino.expectations.MethodStubs;
+import se.mockachino.expectations.MethodStub;
 import se.mockachino.invocationhandler.AbstractInvocationHandler;
-import se.mockachino.listener.MethodListener;
+import se.mockachino.observer.MethodObserver;
 import se.mockachino.util.MockachinoMethod;
 
 import java.util.List;
@@ -50,15 +50,15 @@ public class MockHandler<T> extends AbstractInvocationHandler {
 		}
 		MethodCall methodCall = mockData.addCall(context, method, objects, getStackTrace());
 
-		List<MethodListener> listeners = mockData.getListeners(method);
-		for (MethodListener listener : listeners) {
-			listener.invoke(methodCall);
+		List<MethodObserver> observers = mockData.getObservers(method);
+		for (MethodObserver observer : observers) {
+			observer.invoke(methodCall);
 		}
 
-		MethodExpectations methodExpectations = mockData.getExpectations(method);
-		MethodExpectation expectation = methodExpectations.findMatch(methodCall);
-		if (expectation != null) {
-			return expectation.invoke(o, methodCall);
+		MethodStubs methodStubs = mockData.getExpectations(method);
+		MethodStub stub = methodStubs.findMatch(methodCall);
+		if (stub != null) {
+			return stub.invoke(o, methodCall);
 		}
 		return fallback.invoke(o, methodCall);
 	}

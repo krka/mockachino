@@ -1,10 +1,9 @@
 package se.mockachino.verifier;
 
-import se.mockachino.MockContext;
-import se.mockachino.MockData;
 import se.mockachino.Primitives;
 import se.mockachino.invocationhandler.AbstractInvocationHandler;
 import se.mockachino.matchers.MethodMatcher;
+import se.mockachino.matchers.MethodMatcherImpl;
 import se.mockachino.util.MockachinoMethod;
 
 public abstract class MatchingHandler extends AbstractInvocationHandler {
@@ -13,11 +12,11 @@ public abstract class MatchingHandler extends AbstractInvocationHandler {
 	}
 
 	public final Object doInvoke(Object o, MockachinoMethod method, Object[] objects) throws Throwable {
-		MethodMatcher matcher = new MethodMatcher(method, objects);
-		match(o, matcher);
+		MethodMatcher matcher = new MethodMatcherImpl(method, objects);
+		match(o, method, matcher);
 
 		return Primitives.forType(method.getReturnType());
 	}
 
-	protected abstract void match(Object o, MethodMatcher matcher);
+	protected abstract void match(Object o, MockachinoMethod method, MethodMatcher matcher);
 }

@@ -20,7 +20,7 @@ public class MethodListenerTest {
 				return null;
 			}
 		};
-		Mockachino.listenWith(listener).on(mock).get(123);
+		Mockachino.observeWith(listener).on(mock).get(123);
 		
 		mock.get(123);
 		mock.get(124);

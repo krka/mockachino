@@ -3,8 +3,13 @@ package se.mockachino;
 import org.junit.Test;
 import se.mockachino.order.OrderingContext;
 
-import static org.junit.Assert.*;
-import static se.mockachino.Mockachino.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static se.mockachino.Mockachino.DEEP_MOCK_HANDLER;
+import static se.mockachino.Mockachino.mock;
+import static se.mockachino.Mockachino.newOrdering;
+import static se.mockachino.Mockachino.verifyExactly;
 
 public class DeepMockTest {
 

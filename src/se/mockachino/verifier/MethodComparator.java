@@ -2,11 +2,9 @@ package se.mockachino.verifier;
 
 import se.mockachino.MethodCall;
 import se.mockachino.Primitives;
-import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.matchers.matcher.Matcher;
 import se.mockachino.util.MockachinoMethod;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -14,9 +12,9 @@ public class MethodComparator implements Comparator<MethodCall> {
 	private final MockachinoMethod method;
 	private final List<Matcher> argumentMatchers;
 
-	public MethodComparator(MethodMatcher matcher) {
-		method = matcher.getMethod();
-		argumentMatchers = matcher.getArgumentMatchers();
+	public MethodComparator(MockachinoMethod method, List<Matcher> argumentMatchers) {
+		this.method = method;
+		this.argumentMatchers = argumentMatchers;
 	}
 
 	@Override

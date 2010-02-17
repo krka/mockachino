@@ -261,7 +261,7 @@ public class MockachinoTest {
 		List mock = Mockachino.mock(List.class);
 
 		final AtomicBoolean wasCalled = new AtomicBoolean();
-		Mockachino.listenWith(new CallHandler() {
+		Mockachino.observeWith(new CallHandler() {
 			@Override
 			public Object invoke(Object obj, MethodCall call) {
 				wasCalled.set(true);
@@ -277,7 +277,7 @@ public class MockachinoTest {
 	@Test(expected = UsageError.class)
 	public void testBadUsage1() {
 		List mock = Mockachino.mock(List.class);
-		Mockachino.listenWith(null).on(mock);
+		Mockachino.observeWith(null).on(mock);
 	}
 
 	@Test(expected = UsageError.class)
@@ -314,7 +314,7 @@ public class MockachinoTest {
 
 	@Test(expected = UsageError.class)
 	public void testBadUsage8() {
-		Mockachino.reset("Hello world");
+		Mockachino.getCalls("Hello world");
 	}
 
 	@Test
@@ -325,7 +325,7 @@ public class MockachinoTest {
 		mock.add("World");
 
 		Mockachino.verifyExactly(2).on(mock).add(any(Object.class));
-		Mockachino.reset(mock);
+		Mockachino.getData(mock).resetCalls();
 		Mockachino.verifyExactly(0).on(mock).add(any(Object.class));
 	}
 
@@ -337,7 +337,8 @@ public class MockachinoTest {
 
 		assertEquals("Mock:List:1", mock1.toString());
 		assertEquals("Mock:List:2", mock2.toString());
-
+		assertTrue(mock1.hashCode() != 0);
+		assertTrue(mock2.hashCode() != 0);
 		assertNotSame(mock1.hashCode(), mock2.hashCode());
 		assertTrue(mock1.equals(mock1));
 		assertFalse(mock1.equals(mock2));

@@ -1,8 +1,8 @@
 package se.mockachino.stub;
 
-import se.mockachino.MockContext;
 import se.mockachino.MockData;
 import se.mockachino.matchers.MethodMatcher;
+import se.mockachino.util.MockachinoMethod;
 import se.mockachino.verifier.MatchingHandler;
 
 public class StubThrowHandler<T> extends MatchingHandler {
@@ -16,7 +16,8 @@ public class StubThrowHandler<T> extends MatchingHandler {
 		this.data = data;
 	}
 
-	public void match(Object o, MethodMatcher matcher) {
-		data.getExpectations(matcher.getMethod()).add(new MethodThrow(e, matcher));
+	@Override
+	public void match(Object o, MockachinoMethod method, MethodMatcher matcher) {
+		data.getExpectations(method).add(new ExceptionStub(e, matcher));
 	}
 }
