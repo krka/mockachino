@@ -299,17 +299,6 @@ public class MockContext {
 	}
 
 	/**
-	 * Get a list of all calls made for a mock.
-	 * This may be useful for debugging.
-	 *
-	 * @param mock
-	 * @return the list of calls.
-	 */
-	public Iterable<MethodCall> getCalls(Object mock) {
-		return getData(mock).getCalls();
-	}
-
-	/**
 	 * Increments the sequence of method calls.
 	 * This is not relevant for end users.
 	 * @return the next sequence number.

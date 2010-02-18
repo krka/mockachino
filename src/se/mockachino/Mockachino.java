@@ -205,17 +205,6 @@ public class Mockachino extends Matchers {
 		return DEFAULT_CONTEXT.observeWith(observer);
 	}
 
-	/**
-	 * Get a list of all calls made for a mock.
-	 * This may be useful for debugging.
-	 *
-	 * @param mock
-	 * @return the list of calls.
-	 */
-	public static Iterable<MethodCall> getCalls(Object mock) {
-		return DEFAULT_CONTEXT.getCalls(mock);
-	}
-
 	public static <T> MockData<T> getData(T mock) {
 		return DEFAULT_CONTEXT.getData(mock);
 	}

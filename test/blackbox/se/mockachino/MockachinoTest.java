@@ -314,7 +314,7 @@ public class MockachinoTest {
 
 	@Test(expected = UsageError.class)
 	public void testBadUsage8() {
-		Mockachino.getCalls("Hello world");
+		Mockachino.getData("Hello world");
 	}
 
 	@Test
