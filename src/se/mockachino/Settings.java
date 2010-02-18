@@ -1,8 +1,5 @@
 package se.mockachino;
 
-import java.util.Map;
-import java.util.Set;
-
 public class Settings {
 	public static MockSettings newSettings() {
 		return new MockSettings();
