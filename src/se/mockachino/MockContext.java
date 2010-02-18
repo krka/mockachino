@@ -66,6 +66,7 @@ public class MockContext {
 		if (name == null) {
 			name = getDefaultName(clazz, fallback);
 		}
+		MatcherThreadHandler.assertEmpty();
 		MockHandler mockHandler = new MockHandler(
 				this, fallback, new MockData(clazz, extraInterfaces), quick, name);
 		T mock = ProxyUtil.newProxy(clazz, mockHandler, extraInterfaces);
@@ -261,9 +262,7 @@ public class MockContext {
 	 * @return a stubber
 	 */
 	public Stubber stubAnswer(CallHandler answer) {
-		if (answer== null) {
-			throw new UsageError("answer can not be null");
-		}
+		checkNull("answer", answer);
 		MatcherThreadHandler.assertEmpty();
 		return new Stubber(this, answer, AcceptAllVerifier.INSTANCE);
 	}
@@ -283,6 +282,7 @@ public class MockContext {
 	 */
 	public <T> MockData<T> getData(T mock) {
 		checkNull("mock", mock);
+		MatcherThreadHandler.assertEmpty();
 		try {
 			ProxyMetadata<T> metadata = (ProxyMetadata) mock;
 			if (metadata.mockachino_getContext() != this) {
@@ -304,16 +304,19 @@ public class MockContext {
 	 * @return the next sequence number.
 	 */
 	public int incrementSequence() {
+		MatcherThreadHandler.assertEmpty();
 		return nextSequenceNumber.incrementAndGet();
 	}
 
 	public MockPoint getCurrentPoint() {
+		MatcherThreadHandler.assertEmpty();
 		return new MockPoint(this, nextSequenceNumber.get());
 	}
 
 	public BetweenVerifyContext between(MockPoint start, MockPoint end) {
 		assertMockPoint(start, "start");
 		assertMockPoint(end, "end");
+		MatcherThreadHandler.assertEmpty();
 		return new BetweenVerifyContext(this, start, end);
 	}
 
@@ -325,11 +328,9 @@ public class MockContext {
 		return between(BIG_BANG, end);
 	}
 
-	private void assertMockPoint(MockPoint start, String name) {
-		if (start == null) {
-			throw new UsageError(name + " can not be null");
-		}
-		if (start.getMockContext() != this) {
+	private void assertMockPoint(MockPoint point, String name) {
+		checkNull(name, point);
+		if (point.getMockContext() != this) {
 			throw new UsageError(name + " came from the wrong mock context");
 
 		}

@@ -7,6 +7,7 @@
 * Implemented quick mocks (does not store stacktrace)
 * Added mock settings
 * Added support for mocking multiple interfaces on the same mock
+* eq-matcher now supports comparing arrays by value (including nested arrays)
 ----------------------
 - Version 0.1.0
 ----------------------

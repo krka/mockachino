@@ -6,10 +6,10 @@ import se.mockachino.MockContext;
 import se.mockachino.MockData;
 import se.mockachino.ProxyMetadata;
 import se.mockachino.cleaner.StacktraceCleaner;
-import se.mockachino.stub.MethodStubs;
-import se.mockachino.stub.MethodStub;
 import se.mockachino.invocationhandler.AbstractInvocationHandler;
 import se.mockachino.observer.MethodObserver;
+import se.mockachino.stub.MethodStub;
+import se.mockachino.stub.MethodStubs;
 import se.mockachino.util.MockachinoMethod;
 
 import java.util.List;

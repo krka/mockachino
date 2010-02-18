@@ -10,8 +10,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static se.mockachino.Mockachino.mock;
 import static se.mockachino.Mockachino.stubReturn;
-import static se.mockachino.Mockachino.type;
 import static se.mockachino.Mockachino.verifyExactly;
+import static se.mockachino.matchers.Matchers.same;
+import static se.mockachino.matchers.Matchers.type;
 
 public class EqualsHashcodeTest {
 	@Test
@@ -74,7 +75,7 @@ public class EqualsHashcodeTest {
 		MockData<Object> data = context.getData((Object) mock);
 		data.resetStubs();
 		context.stubReturn(System.identityHashCode(mock)).on((Object) mock).hashCode();
-		context.stubReturn(true).on((Object) mock).equals(Mockachino.same((Object) mock));
+		context.stubReturn(true).on((Object) mock).equals(same((Object) mock));
 		assertEquals("Mock:List:1", mock.toString());
 	}
 

@@ -3,6 +3,7 @@ package se.mockachino.order;
 import se.mockachino.MethodCall;
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
+import se.mockachino.matchers.MatcherThreadHandler;
 
 public class OrderingContext {
 	private final MockContext context;
@@ -42,6 +43,7 @@ public class OrderingContext {
 	 * @return a verifier
 	 */
 	public InOrderVerify verifyAtLeast(int min) {
+		MatcherThreadHandler.assertEmpty();
 		return new InOrderVerify(this, context, min, start, end);
 	}
 
@@ -54,6 +56,7 @@ public class OrderingContext {
 	}
 
 	private MockPoint getPoint(int offset) {
+		MatcherThreadHandler.assertEmpty();
 		int base = currentCall.getCallNumber();
 		return new MockPoint(context, base + offset);
 	}

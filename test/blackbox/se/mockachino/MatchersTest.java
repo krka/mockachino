@@ -1,6 +1,7 @@
 package se.mockachino;
 
 import org.junit.Test;
+import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.matcher.Matcher;
 
 import java.io.DataOutput;
@@ -9,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static se.mockachino.matchers.Matchers.and;
 import static se.mockachino.matchers.Matchers.any;
 import static se.mockachino.matchers.Matchers.anyBoolean;
@@ -136,4 +138,34 @@ public class MatchersTest {
 		Mockachino.stubReturn("Foo").on(mock).get(match(myMatcher));
 		assertEquals("Foo", mock.get(1));
 	}
+
+	@Test
+	public void testArrayEquals() {
+		List<String[]> mock = Mockachino.mock(List.class);
+
+		mock.add(new String[]{"Hello", "World"});
+		Mockachino.verifyExactly(1).on(mock).add(new String[]{"Hello", "World"});
+	}
+
+	@Test
+	public void testArrayEqualsFail() {
+		List<String[]> mock = Mockachino.mock(List.class);
+
+		mock.add(new String[]{"Hello", "World"});
+		Mockachino.verifyExactly(0).on(mock).add(new String[]{"Hello", "World2"});
+	}
+
+	@Test
+	public void testComplexEquals() {
+		List<String[][]> mock = Mockachino.mock(List.class);
+
+		mock.add(new String[][]{new String[]{"Hello"}, new String[]{"World"}});
+		try {
+			Mockachino.verifyExactly(2).on(mock).add(new String[][]{new String[]{"Hello"}, new String[]{"World"}});
+			fail("Should fail");
+		} catch (VerificationError e) {
+			e.printStackTrace();
+		}
+	}
+
 }

@@ -1,6 +1,5 @@
 package se.mockachino;
 
-import se.mockachino.matchers.Matchers;
 import se.mockachino.observer.ObserverAdder;
 import se.mockachino.order.BetweenVerifyContext;
 import se.mockachino.order.MockPoint;
@@ -24,7 +23,7 @@ import se.mockachino.verifier.VerifyRangeStart;
  * and
  * see {@link se.mockachino.matchers.Matchers} for useful matcher shortcuts.
  */
-public class Mockachino extends Matchers {
+public class Mockachino {
 	public static final MockContext DEFAULT_CONTEXT = new MockContext();
 	public static final CallHandler DEFAULT_VALUES = MockContext.DEFAULT_VALUES;
 	public static final CallHandler DEEP_MOCK_HANDLER = DEFAULT_CONTEXT.DEEP_MOCK;

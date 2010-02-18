@@ -1,7 +1,11 @@
 package se.mockachino.util;
 
+import se.mockachino.Primitives;
 import se.mockachino.matchers.matcher.Matcher;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class Formatting {
@@ -30,6 +34,18 @@ public class Formatting {
 		}
 		if (arg instanceof String) {
 			return "\"" + arg + "\"";
+		}
+		if (arg.getClass().isArray()) {
+			arg = Primitives.toList(arg);
+		}
+		if (arg instanceof List) {
+			return "[" + join(", ", (List) arg) + "]";
+		}
+		if (arg instanceof Set) {
+			return "{" + join(", ", (Set) arg) + "}";
+		}
+		if (arg instanceof Map) {
+			return "(" + join(", ", (Map) ((Map) arg).entrySet()) + ")";
 		}
 		return arg.toString();
 	}

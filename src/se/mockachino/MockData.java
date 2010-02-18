@@ -11,7 +11,12 @@ import se.mockachino.util.MockachinoMethod;
 import se.mockachino.util.SafeIteratorList;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class MockData<T> {
 	private static final CallHandler DEFAULT_EQUALS = new CallHandler() {
