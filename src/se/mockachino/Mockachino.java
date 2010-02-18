@@ -6,9 +6,7 @@ import se.mockachino.order.BetweenVerifyContext;
 import se.mockachino.order.MockPoint;
 import se.mockachino.order.OrderingContext;
 import se.mockachino.proxy.ProxyUtil;
-import se.mockachino.stub.StubAnswer;
-import se.mockachino.stub.StubReturn;
-import se.mockachino.stub.StubThrow;
+import se.mockachino.stub.Stubber;
 import se.mockachino.verifier.VerifyRangeStart;
 
 /**
@@ -164,7 +162,7 @@ public class Mockachino extends Matchers {
 	 * @param e the exception to throw
 	 * @return a stubber
 	 */
-	public static StubThrow stubThrow(Throwable e) {
+	public static Stubber stubThrow(Throwable e) {
 		return DEFAULT_CONTEXT.stubThrow(e);
 	}
 
@@ -182,7 +180,7 @@ public class Mockachino extends Matchers {
 	 * @param returnValue the returnValue to return when the method is called.
 	 * @return a stubber
 	 */
-	public static StubReturn stubReturn(Object returnValue) {
+	public static Stubber stubReturn(Object returnValue) {
 		return DEFAULT_CONTEXT.stubReturn(returnValue);
 	}
 
@@ -199,7 +197,7 @@ public class Mockachino extends Matchers {
 	 * @param answer the answer to use
 	 * @return a stubber
 	 */
-	public static StubAnswer stubAnswer(CallHandler answer) {
+	public static Stubber stubAnswer(CallHandler answer) {
 		return DEFAULT_CONTEXT.stubAnswer(answer);
 	}
 

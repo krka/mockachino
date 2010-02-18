@@ -6,18 +6,21 @@ import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.util.MockachinoMethod;
 import se.mockachino.verifier.MatchingHandler;
 
-public class StubAnswerHandler extends MatchingHandler {
+public class StubHandler extends MatchingHandler {
 	private final CallHandler answer;
 	private final MockData data;
+	private final StubVerifier verifier;
 
-	public StubAnswerHandler(CallHandler answer, Object mock, MockData data) {
-		super("StubAnswerHandler", mock.toString());
+	public StubHandler(CallHandler answer, Object mock, MockData data, StubVerifier verifier) {
+		super("StubHandler", mock.toString());
 		this.answer = answer;
 		this.data = data;
+		this.verifier = verifier;
 	}
 
 	@Override
 	public void match(Object o, MockachinoMethod method, MethodMatcher matcher) {
-		data.getExpectations(method).add(new AnswerStub(answer, matcher));
+		verifier.verify(method);
+		data.getStubs(method).add(new MethodStub(answer, matcher));
 	}
 }

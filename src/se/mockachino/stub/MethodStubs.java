@@ -1,4 +1,4 @@
-package se.mockachino.expectations;
+package se.mockachino.stub;
 
 import se.mockachino.MethodCall;
 
@@ -16,7 +16,7 @@ public class MethodStubs {
 		int n = stubs.size();
 		for (int i = n - 1; i >= 0; i--) {
 			MethodStub stub = stubs.get(i);
-			if (stub.matches(call)) {
+			if (stub.getMatcher().matches(call)) {
 				return stub;
 			}
 		}

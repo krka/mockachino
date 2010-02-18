@@ -6,8 +6,8 @@ import se.mockachino.MockContext;
 import se.mockachino.MockData;
 import se.mockachino.ProxyMetadata;
 import se.mockachino.cleaner.StacktraceCleaner;
-import se.mockachino.expectations.MethodStubs;
-import se.mockachino.expectations.MethodStub;
+import se.mockachino.stub.MethodStubs;
+import se.mockachino.stub.MethodStub;
 import se.mockachino.invocationhandler.AbstractInvocationHandler;
 import se.mockachino.observer.MethodObserver;
 import se.mockachino.util.MockachinoMethod;
@@ -55,10 +55,10 @@ public class MockHandler<T> extends AbstractInvocationHandler {
 			observer.invoke(methodCall);
 		}
 
-		MethodStubs methodStubs = mockData.getExpectations(method);
+		MethodStubs methodStubs = mockData.getStubs(method);
 		MethodStub stub = methodStubs.findMatch(methodCall);
 		if (stub != null) {
-			return stub.invoke(o, methodCall);
+			return stub.getAnswer().invoke(o, methodCall);
 		}
 		return fallback.invoke(o, methodCall);
 	}

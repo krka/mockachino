@@ -11,9 +11,11 @@ import se.mockachino.order.MockPoint;
 import se.mockachino.order.OrderingContext;
 import se.mockachino.proxy.ProxyUtil;
 import se.mockachino.spy.SpyHandler;
-import se.mockachino.stub.StubAnswer;
-import se.mockachino.stub.StubReturn;
-import se.mockachino.stub.StubThrow;
+import se.mockachino.stub.AcceptAllVerifier;
+import se.mockachino.stub.Stubber;
+import se.mockachino.stub.exception.ThrowAnswer;
+import se.mockachino.stub.returnvalue.ReturnAnswer;
+import se.mockachino.stub.returnvalue.ReturnVerifier;
 import se.mockachino.verifier.VerifyRangeStart;
 
 import java.lang.reflect.InvocationHandler;
@@ -220,12 +222,10 @@ public class MockContext {
 	 * @param e the exception to throw
 	 * @return a stubber
 	 */
-	public StubThrow stubThrow(Throwable e) {
-		if (e == null) {
-			throw new UsageError("exception can not be null");
-		}
+	public Stubber stubThrow(Throwable e) {
+		checkNull("exception", e);
 		MatcherThreadHandler.assertEmpty();
-		return new StubThrow(this, e);
+		return new Stubber(this, new ThrowAnswer(e), AcceptAllVerifier.INSTANCE);
 	}
 
 	/**
@@ -242,9 +242,9 @@ public class MockContext {
 	 * @param returnValue the returnValue to return when the method is called.
 	 * @return a stubber
 	 */
-	public StubReturn stubReturn(Object returnValue) {
+	public Stubber stubReturn(Object returnValue) {
 		MatcherThreadHandler.assertEmpty();
-		return new StubReturn(this, returnValue);
+		return new Stubber(this, new ReturnAnswer(returnValue), new ReturnVerifier(returnValue));
 	}
 
 	/**
@@ -260,12 +260,12 @@ public class MockContext {
 	 * @param answer the answer to use
 	 * @return a stubber
 	 */
-	public StubAnswer stubAnswer(CallHandler answer) {
+	public Stubber stubAnswer(CallHandler answer) {
 		if (answer== null) {
 			throw new UsageError("answer can not be null");
 		}
 		MatcherThreadHandler.assertEmpty();
-		return new StubAnswer(this, answer);
+		return new Stubber(this, answer, AcceptAllVerifier.INSTANCE);
 	}
 
 	public ObserverAdder observeWith(CallHandler observer) {
@@ -282,9 +282,7 @@ public class MockContext {
 	 * @return the mock metadata
 	 */
 	public <T> MockData<T> getData(T mock) {
-		if (mock == null) {
-			throw new UsageError("Did not expect null value");
-		}
+		checkNull("mock", mock);
 		try {
 			ProxyMetadata<T> metadata = (ProxyMetadata) mock;
 			if (metadata.mockachino_getContext() != this) {

@@ -1,22 +1,17 @@
 package se.mockachino;
 
-import se.mockachino.expectations.MethodStubs;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.matchers.MethodMatcherImpl;
 import se.mockachino.observer.MethodObserver;
 import se.mockachino.order.MockPoint;
 import se.mockachino.order.MockPointIterable;
-import se.mockachino.stub.AnswerStub;
+import se.mockachino.stub.MethodStub;
+import se.mockachino.stub.MethodStubs;
 import se.mockachino.util.MockachinoMethod;
 import se.mockachino.util.SafeIteratorList;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class MockData<T> {
 	private static final CallHandler DEFAULT_EQUALS = new CallHandler() {
@@ -26,7 +21,7 @@ public class MockData<T> {
 		}
 	};
 	private static final MethodMatcher EQUALS_METHOD_MATCHER = MethodMatcherImpl.matchAll(MockachinoMethod.EQUALS);
-	private static final AnswerStub DEFAULT_EQUALS_STUB = new AnswerStub(DEFAULT_EQUALS, EQUALS_METHOD_MATCHER);
+	private static final MethodStub DEFAULT_EQUALS_STUB = new MethodStub(DEFAULT_EQUALS, EQUALS_METHOD_MATCHER);
 
 	private static final CallHandler DEFAULT_HASHCODE = new CallHandler() {
 		@Override
@@ -35,7 +30,7 @@ public class MockData<T> {
 		}
 	};
 	private static final MethodMatcher HASHCODE_METHOD_MATCHER = MethodMatcherImpl.matchAll(MockachinoMethod.HASHCODE);
-	private static final AnswerStub DEFAULT_HASHCODE_STUB = new AnswerStub(DEFAULT_HASHCODE, HASHCODE_METHOD_MATCHER);
+	private static final MethodStub DEFAULT_HASHCODE_STUB = new MethodStub(DEFAULT_HASHCODE, HASHCODE_METHOD_MATCHER);
 
 	public final static MethodCall NULL_METHOD = new MethodCall(MockachinoMethod.NULL, new Object[]{}, 0, new StackTraceElement[]{});
 	private final Class<T> iface;
@@ -54,20 +49,20 @@ public class MockData<T> {
 
 		stubs = new HashMap<MockachinoMethod, MethodStubs>();
 		for (Method reflectMethod : iface.getMethods()) {
-			addExpectation(reflectMethod);
+			addContainer(reflectMethod);
 		}
 		for (Method reflectMethod : Object.class.getMethods()) {
-			addExpectation(reflectMethod);
+			addContainer(reflectMethod);
 		}
 		for (Class<?> extraInterface : extraInterfaces) {
 			for (Method reflectMethod : extraInterface.getMethods()) {
-				addExpectation(reflectMethod);
+				addContainer(reflectMethod);
 			}
 		}
 		setupEqualsAndHashcode();
 	}
 
-	private void addExpectation(Method reflectMethod) {
+	private void addContainer(Method reflectMethod) {
 		MockachinoMethod method = new MockachinoMethod(reflectMethod);
 		stubs.put(method, new MethodStubs());
 		observers.put(method,
@@ -83,7 +78,7 @@ public class MockData<T> {
 		return new MockPointIterable(readOnlyCalls, start, end);
 	}
 
-	public MethodStubs getExpectations(MockachinoMethod method) {
+	public MethodStubs getStubs(MockachinoMethod method) {
 		return stubs.get(method);
 	}
 

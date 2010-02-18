@@ -1,30 +1,33 @@
 package se.mockachino.stub;
 
+import se.mockachino.CallHandler;
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
-import se.mockachino.expectations.MethodStubs;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.matchers.MethodMatcherImpl;
 import se.mockachino.util.MockachinoMethod;
 
-public class StubReturn {
+public class Stubber {
 	private final MockContext mockContext;
-	private final Object returnValue;
+	private final CallHandler answer;
+	private final StubVerifier verifier;
 
-	public StubReturn(MockContext mockContext, Object returnValue) {
+	public Stubber(MockContext mockContext, CallHandler answer, StubVerifier verifier) {
 		this.mockContext = mockContext;
-		this.returnValue = returnValue;
+		this.answer = answer;
+		this.verifier = verifier;
 	}
 
 	public <T> T on(T mock) {
 		MockData data = mockContext.getData(mock);
-		return mockContext.createProxy(mock, new StubReturnHandler(returnValue, mock, data));
+		return mockContext.createProxy(mock, new StubHandler(answer, mock, data, verifier));
 	}
+
 
 	public void onMethod(Object mock, MockachinoMethod method, MethodMatcher matcher) {
 		MockData data = mockContext.getData(mock);
-		MethodStubs methodStubs = data.getExpectations(method);
-		methodStubs.add(new ReturnValueStub(returnValue, matcher));
+		MethodStubs methodStubs = data.getStubs(method);
+		methodStubs.add(new MethodStub(answer, matcher));
 	}
 
 	public void onMethodWithAnyArgument(Object mock, MockachinoMethod method) {
