@@ -1,5 +1,7 @@
 package se.mockachino;
 
+import se.mockachino.util.PrimitiveList;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,18 +41,4 @@ public class Primitives {
 		return real;
 	}
 
-	public static Object toList(Object arg) {
-		if (arg == null) {
-			return null;
-		}
-		if (arg.getClass().isArray()) {
-			List ret = new ArrayList();
-			int n = Array.getLength(arg);
-			for (int i = 0; i < n; i++) {
-				ret.add(toList(Array.get(arg, i)));
-			}
-			return ret;
-		}
-		return arg;
-	}
 }

@@ -44,7 +44,9 @@ public class StacktraceCleaner {
 	}};
 	private static boolean isClean(StackTraceElement element) {
 		String s = element.getClassName();
-        if (element.getLineNumber() <= 0 || element.isNativeMethod() || s.equals("<generated>") || s.contains("$$")) {
+        if (element.getLineNumber() <= 0 ||
+				element.isNativeMethod() ||
+				s.startsWith("$")) {
             return false;
         }
 		if (s.endsWith("Test") || s.contains("Test$")) {

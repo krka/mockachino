@@ -6,6 +6,7 @@ import se.mockachino.matchers.matcher.Matcher;
 
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -153,6 +154,14 @@ public class MatchersTest {
 
 		mock.add(new String[]{"Hello", "World"});
 		Mockachino.verifyExactly(0).on(mock).add(new String[]{"Hello", "World2"});
+	}
+
+	@Test
+	public void testArrayEqualsFail2() {
+		List<Object> mock = Mockachino.mock(List.class);
+
+		mock.add(new String[]{"Hello", "World"});
+		Mockachino.verifyExactly(0).on(mock).add(Arrays.asList("Hello", "World"));
 	}
 
 	@Test

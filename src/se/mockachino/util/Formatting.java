@@ -1,6 +1,5 @@
 package se.mockachino.util;
 
-import se.mockachino.Primitives;
 import se.mockachino.matchers.matcher.Matcher;
 
 import java.util.List;
@@ -29,14 +28,12 @@ public class Formatting {
 	}
 
 	public static String argument(Object arg) {
+		arg = PrimitiveList.toList(arg);
 		if (arg == null) {
 			return "null";
 		}
 		if (arg instanceof String) {
 			return "\"" + arg + "\"";
-		}
-		if (arg.getClass().isArray()) {
-			arg = Primitives.toList(arg);
 		}
 		if (arg instanceof List) {
 			return "[" + join(", ", (List) arg) + "]";

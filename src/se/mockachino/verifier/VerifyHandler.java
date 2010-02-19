@@ -39,7 +39,7 @@ public class VerifyHandler<T> extends MatchingHandler {
 		MethodCallGrouper grouper = new MethodCallGrouper(matcher, calls);
 		grouper.getGroupedCalls();
 		String matchingMethods = getBestMatches(matcher, maxMisses, grouper);
-		throw new VerificationError(msg + matchingMethods);
+		throw new VerificationError(msg + matchingMethods + "\n... for the verification at:");
 	}
 
 	private String getBestMatches(MethodMatcher matcher, int maxMisses, MethodCallGrouper grouper) {
@@ -63,9 +63,12 @@ public class VerifyHandler<T> extends MatchingHandler {
 
 			report.append(call.toString() + count(call) + "\n" + getStacktrace(call));
 		}
+		/*
 		if (filteredCalls.size() < calls.size()) {
-			report.append("... there were " + (calls.size() - filteredCalls.size()) + " more interactions with the mock.\n");
+			report.append("... there were " + (calls.size() - filteredCalls.size()) + " more interactions with the mock, but they are not shown here.\n");
+
 		}
+		*/
 		return report.toString();
 	}
 
