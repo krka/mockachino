@@ -121,7 +121,7 @@ public class BetweenVerifyContext {
 	 *
 	 * Typical usage:
 	 * <pre>
-	 * OrderingContext context = Mockachino.verifyOrder();
+	 * OrderingContext context = Mockachino.newOrdering();
 	 * context.verifyAtLeast(3).on(mock).method();
 	 * </pre>
 	 *

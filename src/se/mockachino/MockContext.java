@@ -22,6 +22,13 @@ import java.lang.reflect.InvocationHandler;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * A mock context is a context for mocking, completely independent from any other context,
+ * including the default one.
+ *
+ * Create new contexts when you need truly independent tests.
+ *
+ */
 public class MockContext {
 	public static final CallHandler DEFAULT_VALUES = new DefaultInvocationHandler();
 	public final CallHandler DEEP_MOCK = new DeepMockHandler(this, DEFAULT_VALUES);
@@ -33,7 +40,8 @@ public class MockContext {
 	private final AtomicInteger nextMockId = new AtomicInteger();
 
 	/**
-	 * Creates a new mock with a default handler
+	 * Creates a new mock with a default handler and default settings.
+	 *
 	 * @param clazz the interface or class to mock
 	 * @return a mock object of the same class
 	 */
@@ -43,17 +51,39 @@ public class MockContext {
 		return mock(clazz, mockSettings);
 	}
 
+	/**
+	 * Creates a new mock with specified settings.
+	 *
+	 * @param clazz the interface or class to mock
+	 * @return a mock object of the same class
+	 */
 	public <T> T mock(Class<T> clazz, MockSettings settings) {
 		checkNull("clazz", clazz);
 		checkNull("settings", settings);
 		return mock(clazz, settings.getFallback(), settings.isQuick(), settings.getName(), settings.getExtraInterfaces());
 	}
 
+	/**
+	 * Creates a new mock with class impl.getClass() with the impl as a default handler.
+	 * Equivalent to mock(impl.getClass(), Settings.spyOn(impl));
+	 *
+	 * @param impl the object to spy on
+	 * @return a mock object of the same class as impl
+	 */
 	public <T> T spy(T impl) {
 		checkNull("impl", impl);
 		return mock((Class<T>)impl.getClass(), Settings.spyOn(impl));
 	}
 
+	/**
+	 * Creates a new mock with class impl.getClass() with the impl as a default handler,
+	 * and the specified settings.
+	 *
+	 * Equivalent to mock(impl.getClass(), settings.spyOn(impl));
+	 *
+	 * @param impl the object to spy on
+	 * @return a mock object of the same class as impl
+	 */
 	public <T> T spy(T impl, MockSettings settings) {
 		checkNull("impl", impl);
 		checkNull("settings", settings);
@@ -68,7 +98,7 @@ public class MockContext {
 		}
 		MatcherThreadHandler.assertEmpty();
 		MockHandler mockHandler = new MockHandler(
-				this, fallback, new MockData(clazz, extraInterfaces), quick, name);
+				this, fallback, new MockData(this, clazz, extraInterfaces), quick, name);
 		T mock = ProxyUtil.newProxy(clazz, mockHandler, extraInterfaces);
 		return mock;
 	}
@@ -98,7 +128,7 @@ public class MockContext {
 	 *
 	 * Typical usage:
 	 * <pre>
-	 * OrderingContext context = Mockachino.verifyOrder();
+	 * OrderingContext context = Mockachino.newOrdering();
 	 * context.verifyAtLeast(3).on(mock).method();
 	 * </pre>
 	 *
@@ -213,7 +243,7 @@ public class MockContext {
 	}
 
 	/**
-	 * Stubs a method call to throw an exception
+	 * Stubs a method call to throw an exception.
 	 *
 	 * Typical usage:
 	 * <pre>
@@ -230,7 +260,7 @@ public class MockContext {
 	}
 
 	/**
-	 * Stubs a method call to return a specific value
+	 * Stubs a method call to return a specific value.
 	 *
 	 * Typical usage:
 	 * <pre>
@@ -249,7 +279,7 @@ public class MockContext {
 	}
 
 	/**
-	 * Stubs a method call with a specific answer strategy
+	 * Stubs a method call with a specific answer strategy.
 	 *
 	 * Typical usage:
 	 * <pre>
@@ -267,6 +297,18 @@ public class MockContext {
 		return new Stubber(this, answer, AcceptAllVerifier.INSTANCE);
 	}
 
+	/**
+	 * Adds an observer to a specific method call.
+	 * The observer will get a callback every time the method is called and the arguments match.
+	 *
+	 * Typical usage:
+	 * <pre>
+	 * Mockachino.observeWith(observer).on(mock).method();
+	 * </pre>
+	 *
+	 * @param observer the observer to use
+	 * @return
+	 */
 	public ObserverAdder observeWith(CallHandler observer) {
 		checkNull("observer", observer);
 		MatcherThreadHandler.assertEmpty();
@@ -276,7 +318,8 @@ public class MockContext {
 	/**
 	 * Get the metadata for mock.
 	 *
-	 * Typically not needed by end users
+	 * This can be used both for resetting mocks, and inspecting calls on the mock.
+	 *
 	 * @param mock the mock object
 	 * @return the mock metadata
 	 */
@@ -308,11 +351,32 @@ public class MockContext {
 		return nextSequenceNumber.incrementAndGet();
 	}
 
+	/**
+	 * Gets the current point on time on the call history.
+	 * It can be useful to run between calls to the code under test,
+	 * to later verify that calls happened during
+	 * specific times.
+	 *
+	 * @return the mock point
+	 */
 	public MockPoint getCurrentPoint() {
 		MatcherThreadHandler.assertEmpty();
 		return new MockPoint(this, nextSequenceNumber.get());
 	}
 
+	/**
+	 * Verify that calls happened between (inclusive) two points in time.
+	 *
+	 * Typical usage:
+	 * <pre>
+	 * Mockachino.between(start, end).verifyAtLeast(1).on(mock).method();
+	 * </pre>
+	 *
+	 *
+	 * @param start
+	 * @param end
+	 * @return a verifying context
+	 */
 	public BetweenVerifyContext between(MockPoint start, MockPoint end) {
 		assertMockPoint(start, "start");
 		assertMockPoint(end, "end");
@@ -320,10 +384,34 @@ public class MockContext {
 		return new BetweenVerifyContext(this, start, end);
 	}
 
+	/**
+	 * Verify that calls happened at or after a point in time.
+	 *
+	 * Typical usage:
+	 * <pre>
+	 * Mockachino.after(start).verifyAtLeast(1).on(mock).method();
+	 * </pre>
+	 *
+	 *
+	 * @param start
+	 * @return a verifying context
+	 */
 	public BetweenVerifyContext after(MockPoint start) {
 		return between(start, BIG_CRUNCH);
 	}
 
+	/**
+	 * Verify that calls happened at or before a point in time.
+	 *
+	 * Typical usage:
+	 * <pre>
+	 * Mockachino.before(end).verifyAtLeast(1).on(mock).method();
+	 * </pre>
+	 *
+	 *
+	 * @param end
+	 * @return a verifying context
+	 */
 	public BetweenVerifyContext before(MockPoint end) {
 		return between(BIG_BANG, end);
 	}

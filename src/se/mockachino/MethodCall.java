@@ -6,6 +6,8 @@ import se.mockachino.util.MockachinoMethod;
 import java.util.Arrays;
 
 public class MethodCall {
+	public final static MethodCall NULL = new MethodCall(MockachinoMethod.NULL, new Object[]{}, 0, new StackTraceElement[]{});
+
 	private static final Object[] NO_ARGS = new Object[0];
 
 	private final MockachinoMethod method;

@@ -317,31 +317,42 @@
 	<target name="javadoc" description="Generate javadoc">
 		<mkdir dir="${baseDir}/build/javadoc" />
 		<javadoc destdir="${baseDir}/build/javadoc">
-			<!--sourcepath location="${baseDir}/src" >
-			</sourcepath-->
 			<fileset dir="${baseDir}/src">
 				<include name="**/Mockachino.java" />
 				<include name="**/MockContext.java" />
+				<include name="**/MockData.java" />
 				
 				<include name="**/MatchersBase.java" />
 				<include name="**/Matchers.java" />
 				<include name="**/Matcher.java" />
+				<include name="**/Settings.java" />
+				<include name="**/MockSettings.java" />
 
+				<include name="**/MockachinoMethod.java" />
 				<include name="**/MethodCall.java" />
 				<include name="**/CallHandler.java" />
 
 				<include name="**/MockPoint.java" />
 				<include name="**/OrderingContext.java" />
-				
+
+				<include name="**/UsageError.java" />
+				<include name="**/VerificationError.java" />
+
 				<!-- fluent objects -->
 				<include name="**/ObserverAdder.java" />
-				<include name="**/StubAnswer.java" />
-				<include name="**/StubReturn.java" />
-				<include name="**/StubThrow.java" />
+				<include name="**/Stubber.java" />
 				<include name="**/VerifyRangeStart.java" />
 				<include name="**/InOrderVerify.java" />
 				<include name="**/BetweenVerifyContext.java" />
 
+			</fileset>
+		</javadoc>
+	</target>
+
+	<target name="javadoc-full" description="Generate full javadoc">
+		<mkdir dir="${baseDir}/build/javadoc-full" />
+		<javadoc destdir="${baseDir}/build/javadoc-full">
+			<fileset dir="${baseDir}/src">
 			</fileset>
 		</javadoc>
 	</target>

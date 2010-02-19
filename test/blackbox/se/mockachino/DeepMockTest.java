@@ -6,7 +6,7 @@ import se.mockachino.order.OrderingContext;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static se.mockachino.Mockachino.DEEP_MOCK_HANDLER;
+import static se.mockachino.Mockachino.DEEP_MOCK;
 import static se.mockachino.Mockachino.mock;
 import static se.mockachino.Mockachino.newOrdering;
 import static se.mockachino.Mockachino.verifyExactly;
@@ -19,7 +19,7 @@ public class DeepMockTest {
 
 	@Test
 	public void testStubbing() {
-		Foo mock = mock(Foo.class, Settings.fallback(DEEP_MOCK_HANDLER));
+		Foo mock = mock(Foo.class, Settings.fallback(DEEP_MOCK));
 
 		System.out.println("mock: " + mock);
 		Foo mock2 = mock.getFoo(0);
@@ -45,7 +45,7 @@ public class DeepMockTest {
 
 	@Test
 	public void testVerify() {
-		Foo mock = mock(Foo.class, Settings.fallback(DEEP_MOCK_HANDLER));
+		Foo mock = mock(Foo.class, Settings.fallback(DEEP_MOCK));
 		mock.getFoo(1).getFoo(2).getFoo(3);
 
 		verifyExactly(1).on(mock).getFoo(1);
@@ -65,7 +65,7 @@ public class DeepMockTest {
 
 	@Test
 	public void testVerifyInOrder() {
-		Foo mock = mock(Foo.class, Settings.fallback(DEEP_MOCK_HANDLER));
+		Foo mock = mock(Foo.class, Settings.fallback(DEEP_MOCK));
 		mock.getFoo(1).getFoo(2).getFoo(3);
 
 		OrderingContext orderingContext = newOrdering();

@@ -2,14 +2,13 @@ package se.mockachino.order;
 
 import se.mockachino.MethodCall;
 import se.mockachino.MockContext;
-import se.mockachino.MockData;
 import se.mockachino.matchers.MatcherThreadHandler;
 
 public class OrderingContext {
 	private final MockContext context;
 	private final MockPoint start;
 	private final MockPoint end;
-	private MethodCall currentCall = MockData.NULL_METHOD;
+	private MethodCall currentCall = MethodCall.NULL;
 
 	public OrderingContext(MockContext context, MockPoint start, MockPoint end) {
 		this.context = context;

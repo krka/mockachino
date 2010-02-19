@@ -48,7 +48,7 @@ public class MockHandler<T> extends AbstractInvocationHandler {
 		if (method.equals(GET_MOCKDATA)) {
 			return getMockData();
 		}
-		MethodCall methodCall = mockData.addCall(context, method, objects, getStackTrace());
+		MethodCall methodCall = mockData.addCall(method, objects, getStackTrace());
 
 		List<MethodObserver> observers = mockData.getObservers(method);
 		for (MethodObserver observer : observers) {

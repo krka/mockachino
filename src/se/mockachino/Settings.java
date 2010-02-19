@@ -1,5 +1,10 @@
 package se.mockachino;
 
+/**
+ * Shortcut for creating mock settings.
+ *
+ * See {@link MockSettings} for details.
+ */
 public class Settings {
 	public static MockSettings newSettings() {
 		return new MockSettings();

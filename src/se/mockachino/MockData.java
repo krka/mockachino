@@ -37,7 +37,7 @@ public class MockData<T> {
 	private static final MethodMatcher HASHCODE_METHOD_MATCHER = MethodMatcherImpl.matchAll(MockachinoMethod.HASHCODE);
 	private static final MethodStub DEFAULT_HASHCODE_STUB = new MethodStub(DEFAULT_HASHCODE, HASHCODE_METHOD_MATCHER);
 
-	public final static MethodCall NULL_METHOD = new MethodCall(MockachinoMethod.NULL, new Object[]{}, 0, new StackTraceElement[]{});
+	private final MockContext context;
 	private final Class<T> iface;
 	private final Set<Class<?>> extraInterfaces;
 	private final List<MethodCall> calls;
@@ -45,10 +45,11 @@ public class MockData<T> {
 	private final Map<MockachinoMethod, List<MethodObserver>> observers;
 	private final Map<MockachinoMethod, MethodStubs> stubs;
 
-	public MockData(Class<T> iface, Set<Class<?>> extraInterfaces) {
+	public MockData(MockContext context, Class<T> iface, Set<Class<?>> extraInterfaces) {
+		this.context = context;
 		this.iface = iface;
 		this.extraInterfaces = extraInterfaces;
-		calls = new SafeIteratorList<MethodCall>(new ArrayList<MethodCall>(), NULL_METHOD);
+		calls = new SafeIteratorList<MethodCall>(new ArrayList<MethodCall>(), MethodCall.NULL);
 		readOnlyCalls = Collections.unmodifiableList(calls);
 		observers = new HashMap<MockachinoMethod,List<MethodObserver>>();
 
@@ -75,37 +76,74 @@ public class MockData<T> {
 						new ArrayList<MethodObserver>(), null));
 	}
 
+	/**
+	 * Gets a list of all the method calls made for the mock object
+	 * @return the list of calls
+	 */
 	public Iterable<MethodCall> getCalls() {
 		return readOnlyCalls;
 	}
 
+	/**
+	 * Gets a list of all the method calls made for the mock object
+	 * between (inclusive) two points in time.
+	 * @return the list of calls
+	 */
 	public Iterable<MethodCall> getCalls(MockPoint start, MockPoint end) {
 		return new MockPointIterable(readOnlyCalls, start, end);
 	}
 
+	/**
+	 * Get all stubs for the mock and the method
+	 * @param method
+	 * @return the stubs
+	 */
 	public MethodStubs getStubs(MockachinoMethod method) {
 		return stubs.get(method);
 	}
 
+	/**
+	 * Get all observers hooked to a specific method on the mock
+	 * @param method
+	 * @return all observers
+	 */
 	public List<MethodObserver> getObservers(MockachinoMethod method) {
 		return observers.get(method);
 	}
 
+	/**
+	 * Get the interface of the mock
+	 */
 	public Class<T> getInterface() {
 		return iface;
 	}
 
-	public synchronized MethodCall addCall(MockContext mockContext, MockachinoMethod method, Object[] objects, StackTraceElement[] stackTrace) {
-		int callNumber = mockContext.incrementSequence();
+	/**
+	 * Add a call on the mock.
+	 * This is typically only needed to be called by Mockachino internally.
+	 *
+	 * @param method
+	 * @param objects
+	 * @param stackTrace
+	 * @return the method call which was added
+	 */
+	public synchronized MethodCall addCall(MockachinoMethod method, Object[] objects, StackTraceElement[] stackTrace) {
+		int callNumber = context.incrementSequence();
 		MethodCall call = new MethodCall(method, objects, callNumber, stackTrace);
 		calls.add(call);
 		return call;
 	}
 
+	/**
+	 * Clear the list of calls
+	 */
 	public synchronized void resetCalls() {
 		calls.clear();
 	}
 
+	/**
+	 * Remove all stubbing on the mock
+	 */
 	public synchronized void resetStubs() {
 		for (MethodStubs methodStubs : stubs.values()) {
 			methodStubs.clear();
@@ -122,12 +160,20 @@ public class MockData<T> {
 	}
 
 
+	/**
+	 * Remove all observers from the mock
+	 */
 	public synchronized void resetObservers() {
 		for (List<MethodObserver> methodObservers : observers.values()) {
 			methodObservers.clear();
 		}
 	}
 
+	/**
+	 * Get the set of additionally implemented interfaces by the mock.
+	 * This may be an empty set if no other interfaces are defined.
+	 * @return
+	 */
 	public Set<Class<?>> getExtraInterfaces() {
 		return extraInterfaces;		
 	}
