@@ -42,8 +42,11 @@ public class StacktraceCleaner {
 		add("com.intellij.junit4.");
 		add("net.sf.cglib.");
 	}};
-	private static boolean isClean(StackTraceElement stackTraceElement) {
-		String s = stackTraceElement.getClassName();
+	private static boolean isClean(StackTraceElement element) {
+		String s = element.getClassName();
+        if (element.getLineNumber() <= 0 || element.isNativeMethod() || s.equals("<generated>") || s.contains("$$")) {
+            return false;
+        }
 		if (s.endsWith("Test") || s.contains("Test$")) {
 			return true;
 		}

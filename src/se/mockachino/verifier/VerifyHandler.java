@@ -64,7 +64,7 @@ public class VerifyHandler<T> extends MatchingHandler {
 			report.append(call.toString() + count(call) + "\n" + getStacktrace(call));
 		}
 		if (filteredCalls.size() < calls.size()) {
-			report.append("... skipping " + (calls.size() - filteredCalls.size()) + " calls\n");
+			report.append("... there were " + (calls.size() - filteredCalls.size()) + " more interactions with the mock.\n");
 		}
 		return report.toString();
 	}
