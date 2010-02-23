@@ -51,8 +51,8 @@ public class ProxyUtil {
 		}
 		try {
 			return CglibAsmTester.getCglibProxy(clazz, handler, extraInterfaces);
-		} catch (RuntimeException e) {
-			throw clean(e);
+		} catch (Exception e) {
+			throw clean(new RuntimeException(e));
 		}
 	}
 

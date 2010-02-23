@@ -1,3 +1,7 @@
+upcoming..
+
+* Mocking now works on classes that has atleast one non-private constructor that doesn't throw an exception
+
 ----------------------
 - Version 0.2.0
 ----------------------
