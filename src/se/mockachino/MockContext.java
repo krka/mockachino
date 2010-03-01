@@ -1,5 +1,7 @@
 package se.mockachino;
 
+import se.mockachino.annotations.Mock;
+import se.mockachino.annotations.Spy;
 import se.mockachino.exceptions.UsageError;
 import se.mockachino.invocationhandler.DeepMockHandler;
 import se.mockachino.invocationhandler.DefaultInvocationHandler;
@@ -18,6 +20,7 @@ import se.mockachino.stub.returnvalue.ReturnAnswer;
 import se.mockachino.stub.returnvalue.ReturnVerifier;
 import se.mockachino.verifier.VerifyRangeStart;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -423,4 +426,32 @@ public class MockContext {
 
 		}
 	}
+
+    public void setupMocks(Object obj) {
+        checkNull("obj", obj);
+        try {
+            setupFields(obj, obj.getClass());
+        } catch (IllegalAccessException e) {
+            throw new Error(e);
+        }
+    }
+
+    private void setupFields(Object obj, Class<?> clazz) throws IllegalAccessException {
+        if (clazz != null) {
+            setupFields(obj, clazz.getDeclaredFields());
+            setupFields(obj, clazz.getSuperclass());
+        }
+    }
+
+    private void setupFields(Object obj, Field[] fields) throws IllegalAccessException {
+        for (Field field : fields) {
+            field.setAccessible(true);
+            if (field.getAnnotation(Spy.class) != null) {
+                Object impl = field.get(obj);
+                field.set(obj, mock(field.getType(), Settings.spyOn(impl)));
+            } else if (field.getAnnotation(Mock.class) != null) {
+                field.set(obj, mock(field.getType()));
+            }
+        }
+    }
 }

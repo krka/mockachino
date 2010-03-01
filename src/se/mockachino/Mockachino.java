@@ -334,4 +334,8 @@ public class Mockachino {
 	public static boolean canMock(Class clazz) {
 		return ProxyUtil.canMock(clazz);
 	}
+
+    public static void setupMocks(Object obj) {
+        DEFAULT_CONTEXT.setupMocks(obj);
+    }
 }
