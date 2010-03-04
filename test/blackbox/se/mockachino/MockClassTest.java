@@ -33,6 +33,12 @@ public class MockClassTest {
         }
     }
 
+    private static class BrokenClass {
+        public BrokenClass() {
+            throw new Error("Broken");
+        }
+    }
+
     @Test
     public void testMockClassWithParams() {
         TestClass mock = mock(TestClass.class);
@@ -41,18 +47,20 @@ public class MockClassTest {
 
     @Test
     public void testMockPrivateClass() {
-        try {
-            SecretClass mock = mock(SecretClass.class);
-            fail("Should fail");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        SecretClass mock = mock(SecretClass.class);
+        assertTrue(mock.toString().startsWith("Mock:SecretClass:"));
     }
 
     @Test
     public void testException() {
         ExceptionClass mock = mock(ExceptionClass.class);
         assertTrue(mock.toString().startsWith("Mock:ExceptionClass:"));
+    }
+
+    @Test
+    public void testSimpleObjenesis() {
+        BrokenClass mock = mock(BrokenClass.class);
+        assertTrue(mock.toString().startsWith("Mock:BrokenClass:"));
     }
 
 }

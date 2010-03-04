@@ -374,6 +374,7 @@
 			</fileset>
 			<zipfileset src="${baseDir}/lib/cglib-2.2.jar" />
 			<zipfileset src="${baseDir}/lib/asm-all-3.2.jar" />
+			<zipfileset src="${baseDir}/lib/objenesis-1.2.jar" />
 		</jar>
 		
 		<!-- full project -->

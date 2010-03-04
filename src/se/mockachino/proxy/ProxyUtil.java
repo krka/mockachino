@@ -50,7 +50,7 @@ public class ProxyUtil {
 			throw new UsageError("Only interfaces can be mocked without cglib and asm installed");
 		}
 		try {
-			return CglibAsmTester.getCglibProxy(clazz, handler, extraInterfaces);
+			return CglibAsmUtil.getCglibProxy(clazz, handler, extraInterfaces);
 		} catch (Exception e) {
 			throw clean(new RuntimeException(e));
 		}
