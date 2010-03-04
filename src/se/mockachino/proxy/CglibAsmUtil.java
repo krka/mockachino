@@ -24,12 +24,6 @@ public class CglibAsmUtil {
         }
     }
 
-    private static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {
-        public int accept(Method method) {
-            return method.isBridge() ? 1 : 0;
-        }
-    };
-    
     static <T> T getCglibProxy(Class<T> clazz, final InvocationHandler handler, Set<Class<?>> extraInterfaces) throws Exception {
 		net.sf.cglib.proxy.InvocationHandler callback = new net.sf.cglib.proxy.InvocationHandler() {
 			@Override
@@ -62,7 +56,6 @@ public class CglibAsmUtil {
         if (HAS_OBJENESIS) {
             enhancer.setUseFactory(true);
             enhancer.setCallbackTypes(new Class[]{net.sf.cglib.proxy.InvocationHandler.class});
-            enhancer.setCallbackFilter(IGNORE_BRIDGE_METHODS);
             Factory factory = (Factory) ObjenesisUtil.newInstance(enhancer.createClass());
             factory.setCallbacks(new Callback[]{callback});
             return (T) factory;

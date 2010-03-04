@@ -62,5 +62,4 @@ public class MockClassTest {
         BrokenClass mock = mock(BrokenClass.class);
         assertTrue(mock.toString().startsWith("Mock:BrokenClass:"));
     }
-
 }
