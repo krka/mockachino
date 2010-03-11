@@ -29,15 +29,11 @@ public class ArgumentCatcherTest {
 		mock.subList(123, 456);
 		verifyOnce().on(mock).subList(match(catcher), match(catcher));
 
-		Iterator<Integer> iter = catcher.getValues();
+		List<Integer> values = catcher.getValues();
 
-		assertTrue(iter.hasNext());
-		assertEquals(Integer.valueOf(123), iter.next());
-
-		assertTrue(iter.hasNext());
-		assertEquals(Integer.valueOf(456), iter.next());
-
-		assertFalse(iter.hasNext());
+		assertEquals(2, values.size());
+		assertEquals(Integer.valueOf(123), values.get(0));
+		assertEquals(Integer.valueOf(456), values.get(1));
 
 		assertEquals(Integer.valueOf(456), catcher.getValue());
 

@@ -41,7 +41,7 @@ public class ArgumentCatcher<T> extends BasicMatcher<T> {
 		return values.get(values.size() - 1);
 	}
 
-	public Iterator<T> getValues() {
-		return values.iterator();
+	public List<T> getValues() {
+		return values;
 	}
 }

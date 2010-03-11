@@ -1,5 +1,9 @@
 upcoming..
 
+----------------------
+- Version 0.3.0
+----------------------
+
 * Mocking now works on classes that has atleast one non-private constructor that doesn't throw an exception
 * Added support for @Mock and @Spy annotations
 * Included optional support for Objenesis, which means support for mocking concrete classes without calling constructors
