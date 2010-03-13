@@ -5,6 +5,7 @@ import se.mockachino.MethodCall;
 import se.mockachino.MockContext;
 import se.mockachino.Mockachino;
 import se.mockachino.Settings;
+import se.mockachino.matchers.MethodMatcherImpl;
 import se.mockachino.util.MockachinoMethod;
 
 public class DeepMockHandler implements CallHandler {
@@ -22,7 +23,7 @@ public class DeepMockHandler implements CallHandler {
 		Class returnType = method.getReturnType();
 		if (Mockachino.canMock(returnType)) {
 			Object returnValue = context.mock(returnType, Settings.fallback(this));
-			context.stubReturn(returnValue).onMethodWithAnyArgument(obj, method);
+			context.stubReturn(returnValue).onMethod(obj, method, new MethodMatcherImpl(method, call.getArguments()));
 			return returnValue;
 		}
 		return delegate.invoke(obj, call);

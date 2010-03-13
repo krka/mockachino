@@ -52,15 +52,13 @@ public class DeepMockTest {
 		verifyExactly(0).on(mock).getFoo(2);
 		verifyExactly(0).on(mock).getFoo(3);
 
-		// Note that the argument in the first call is irrelevant for deep mocking
-		// However, they do add to the count of calls.
-		verifyExactly(0).on(mock.getFoo(-1)).getFoo(1);
-		verifyExactly(1).on(mock.getFoo(-1)).getFoo(2);
-		verifyExactly(0).on(mock.getFoo(-1)).getFoo(3);
+		verifyExactly(0).on(mock.getFoo(1)).getFoo(1);
+		verifyExactly(1).on(mock.getFoo(1)).getFoo(2);
+		verifyExactly(0).on(mock.getFoo(1)).getFoo(3);
 
-		verifyExactly(0).on(mock.getFoo(-1).getFoo(-1)).getFoo(1);
-		verifyExactly(0).on(mock.getFoo(-1).getFoo(-1)).getFoo(2);
-		verifyExactly(1).on(mock.getFoo(-1).getFoo(-1)).getFoo(3);
+		verifyExactly(0).on(mock.getFoo(1).getFoo(2)).getFoo(1);
+		verifyExactly(0).on(mock.getFoo(1).getFoo(2)).getFoo(2);
+		verifyExactly(1).on(mock.getFoo(1).getFoo(2)).getFoo(3);
 	}
 
 	@Test
@@ -70,7 +68,7 @@ public class DeepMockTest {
 
 		OrderingContext orderingContext = newOrdering();
 		orderingContext.verifyAtLeast(1).on(mock).getFoo(1);
-		orderingContext.verifyAtLeast(1).on(mock.getFoo(-1)).getFoo(2);
-		orderingContext.verifyAtLeast(1).on(mock.getFoo(-1).getFoo(-1)).getFoo(3);
+		orderingContext.verifyAtLeast(1).on(mock.getFoo(1)).getFoo(2);
+		orderingContext.verifyAtLeast(1).on(mock.getFoo(1).getFoo(2)).getFoo(3);
 	}
 }

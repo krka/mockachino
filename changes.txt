@@ -1,6 +1,11 @@
 upcoming..
 
 ----------------------
+- Version 0.3.1
+----------------------
+* Changed behaviour of deep mock handler to remember arguments
+
+----------------------
 - Version 0.3.0
 ----------------------
 
