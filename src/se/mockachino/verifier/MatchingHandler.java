@@ -1,5 +1,7 @@
 package se.mockachino.verifier;
 
+import se.mockachino.CallHandler;
+import se.mockachino.MethodCall;
 import se.mockachino.Primitives;
 import se.mockachino.invocationhandler.AbstractInvocationHandler;
 import se.mockachino.matchers.MethodMatcher;
@@ -7,15 +9,18 @@ import se.mockachino.matchers.MethodMatcherImpl;
 import se.mockachino.util.MockachinoMethod;
 
 public abstract class MatchingHandler extends AbstractInvocationHandler {
-	protected MatchingHandler(String kind, String id) {
+    private final CallHandler defaultAnswer;
+
+    protected MatchingHandler(String kind, String id, CallHandler defaultAnswer) {
 		super(kind + ":" + id);
-	}
+        this.defaultAnswer = defaultAnswer;
+    }
 
 	public final Object doInvoke(Object o, MockachinoMethod method, Object[] objects) throws Throwable {
 		MethodMatcher matcher = new MethodMatcherImpl(method, objects);
 		match(o, method, matcher);
 
-		return Primitives.forType(method.getReturnType());
+        return defaultAnswer.invoke(o, new MethodCall(method, objects, -1, null));
 	}
 
 	protected abstract void match(Object o, MockachinoMethod method, MethodMatcher matcher);

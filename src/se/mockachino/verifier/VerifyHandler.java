@@ -3,18 +3,21 @@ package se.mockachino.verifier;
 import se.mockachino.MethodCall;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.MethodMatcher;
+import se.mockachino.order.InOrderVerifyHandler;
 import se.mockachino.util.MockachinoMethod;
 
 import java.util.List;
 
 public class VerifyHandler<T> extends MatchingHandler {
-	private final Iterable<MethodCall> calls;
+    private static final BadUsageHandler BAD_USAGE_HANDLER = InOrderVerifyHandler.BAD_USAGE_HANDLER;
+    
+    private final Iterable<MethodCall> calls;
 	private final int minCalls;
 	private final int maxCalls;
 
 	public VerifyHandler(T mock, Iterable<MethodCall> calls,
 						 int minCalls, int maxCalls) {
-		super("VerifyHandler", mock.toString());
+		super("VerifyHandler", mock.toString(), BAD_USAGE_HANDLER);
 		this.calls = calls;
 		this.minCalls = minCalls;
 		this.maxCalls = maxCalls;

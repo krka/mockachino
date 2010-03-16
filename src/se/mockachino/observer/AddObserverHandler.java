@@ -2,6 +2,7 @@ package se.mockachino.observer;
 
 import se.mockachino.CallHandler;
 import se.mockachino.MockData;
+import se.mockachino.Mockachino;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.util.MockachinoMethod;
 import se.mockachino.verifier.MatchingHandler;
@@ -12,7 +13,7 @@ public class AddObserverHandler extends MatchingHandler {
 	private final CallHandler observer;
 
 	public AddObserverHandler(MockData mockData, Object mock, CallHandler observer) {
-		super("Observer", mock.toString());
+		super("Observer", mock.toString(), Mockachino.DEFAULT_VALUES);
 		this.mockData = mockData;
 		this.mock = mock;
 		this.observer = observer;
