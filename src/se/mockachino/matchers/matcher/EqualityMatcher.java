@@ -1,5 +1,6 @@
 package se.mockachino.matchers.matcher;
 
+import se.mockachino.Primitives;
 import se.mockachino.util.Formatting;
 import se.mockachino.util.PrimitiveList;
 
@@ -16,10 +17,17 @@ public class EqualityMatcher<T> extends BasicMatcher<T> {
 			return other == null;
 		}
 		other = (T) PrimitiveList.toList(other);
-		return value.equals(other);
+		return value.equals(other) || primitiveEquals(other);
 	}
 
-	@Override
+    private boolean primitiveEquals(T other) {
+        if (value instanceof Number && other instanceof Number) {
+            return ((Number) value).doubleValue() == ((Number) other).doubleValue();
+        }
+        return false;
+    }
+
+    @Override
 	public String asString() {
 		return Formatting.argument(value);
 	}

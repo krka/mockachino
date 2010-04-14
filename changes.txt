@@ -1,4 +1,4 @@
-upcoming..
+* Fixed bug where equals failed when using different number types.
 
 ----------------------
 - Version 0.3.1

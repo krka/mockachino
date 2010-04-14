@@ -2,6 +2,7 @@ package se.mockachino;
 
 import org.junit.Test;
 import se.mockachino.exceptions.VerificationError;
+import se.mockachino.matchers.Matchers;
 import se.mockachino.matchers.matcher.Matcher;
 
 import java.io.DataOutput;
@@ -176,5 +177,16 @@ public class MatchersTest {
 			e.printStackTrace();
 		}
 	}
+
+    private static interface MockInterface {
+        void foo(long a);
+    }
+
+    @Test
+    public void testMatcherConversion() {
+        MockInterface mock = Mockachino.mock(MockInterface.class);
+        mock.foo(123L);
+        Mockachino.verifyOnce().on(mock).foo(Matchers.eq(123));
+    }
 
 }
