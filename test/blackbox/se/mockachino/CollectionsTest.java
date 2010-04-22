@@ -2,10 +2,7 @@ package se.mockachino;
 
 import org.junit.Test;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -16,6 +13,7 @@ public class CollectionsTest {
         List<String> getList(int x);
         Set<String> getSet(int x);
         Map<String, String> getMap(int x);
+        TreeMap<String, String> getTreeMap(int x);
     }
 
     @Test
@@ -63,6 +61,14 @@ public class CollectionsTest {
 
         Map<String, String> collection2 = mock.getMap(1);
         assertEquals(2, collection2.size());
+    }
+
+    @Test
+    public void testTreeMap() {
+        Foo mock = Mockachino.mock(Foo.class);
+
+        assertNotNull(mock);
+        assertNull(mock.getTreeMap(1));
     }
 
 }
