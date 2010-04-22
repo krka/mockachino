@@ -1,3 +1,9 @@
+----------------------
+- Version 0.3.2
+----------------------
+* Added default behaviour of returning collection objects (Iterable, List, Set, Map) when possible.
+  For the same method parameters, the same object will be returned.
+* Moved all stub* methods to Mockachino from MockContext.
 * Fixed bug where equals failed when using different number types.
 
 ----------------------

@@ -1,7 +1,6 @@
 package se.mockachino.verifier;
 
 import se.mockachino.Primitives;
-import se.mockachino.invocationhandler.DefaultInvocationHandler;
 import se.mockachino.proxy.ProxyUtil;
 
 import java.util.HashMap;

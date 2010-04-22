@@ -1,11 +1,17 @@
 package se.mockachino;
 
+import se.mockachino.exceptions.UsageError;
+import se.mockachino.matchers.MatcherThreadHandler;
 import se.mockachino.observer.ObserverAdder;
 import se.mockachino.order.BetweenVerifyContext;
 import se.mockachino.order.MockPoint;
 import se.mockachino.order.OrderingContext;
 import se.mockachino.proxy.ProxyUtil;
+import se.mockachino.stub.AcceptAllVerifier;
 import se.mockachino.stub.Stubber;
+import se.mockachino.stub.exception.ThrowAnswer;
+import se.mockachino.stub.returnvalue.ReturnAnswer;
+import se.mockachino.stub.returnvalue.ReturnVerifier;
 import se.mockachino.verifier.VerifyRangeStart;
 
 /**
@@ -186,55 +192,62 @@ public class Mockachino {
 		return DEFAULT_CONTEXT.verifyAtMost(max);
 	}
 
-	/**
-	 * Stubs a method call to throw an exception.
-	 *
-	 * Typical usage:
-	 * <pre>
-	 * Mockachino.stubThrow(myException).on(mock).method();
-	 * </pre>
-	 *
-	 * @param e the exception to throw
-	 * @return a stubber
-	 */
-	public static Stubber stubThrow(Throwable e) {
-		return DEFAULT_CONTEXT.stubThrow(e);
-	}
+    /**
+     * Stubs a method call to throw an exception.
+     *
+     * Typical usage:
+     * <pre>
+     * Mockachino.stubThrow(myException).on(mock).method();
+     * </pre>
+     *
+     * @param e the exception to throw
+     * @return a stubber
+     */
+    public static Stubber stubThrow(Throwable e) {
+        MockContext.checkNull("exception", e);
+        MatcherThreadHandler.assertEmpty();
+        return new Stubber(new ThrowAnswer(e), AcceptAllVerifier.INSTANCE);
+    }
 
-	/**
-	 * Stubs a method call to return a specific value.
-	 *
-	 * Typical usage:
-	 * <pre>
-	 * Mockachino.stubReturn(value).on(mock).method();
-	 * </pre>
-	 *
-	 * Note that the type of the value must match the return type of the method call.
-	 * This is checked at runtime and will throw a UsageError if they don't match.
-	 *
-	 * @param returnValue the returnValue to return when the method is called.
-	 * @return a stubber
-	 */
-	public static Stubber stubReturn(Object returnValue) {
-		return DEFAULT_CONTEXT.stubReturn(returnValue);
-	}
+    /**
+     * Stubs a method call to return a specific value.
+     *
+     * Typical usage:
+     * <pre>
+     * Mockachino.stubReturn(value).on(mock).method();
+     * </pre>
+     *
+     * Note that the type of the value must match the return type of the method call.
+     * This is checked at runtime and will throw a UsageError if they don't match.
+     *
+     * @param returnValue the returnValue to return when the method is called.
+     * @return a stubber
+     */
+    public static Stubber stubReturn(Object returnValue) {
+        MatcherThreadHandler.assertEmpty();
+        return new Stubber(new ReturnAnswer(returnValue), new ReturnVerifier(returnValue));
+    }
 
-	/**
-	 * Stubs a method call with a specific answer strategy.
-	 *
-	 * Typical usage:
-	 * <pre>
-	 * Mockachino.stubAnswer(answer).on(mock).method();
-	 * </pre>
-	 *
-	 * All matching method calls will invoke the getValue()-method on the answer-object.
-	 *
-	 * @param answer the answer to use
-	 * @return a stubber
-	 */
-	public static Stubber stubAnswer(CallHandler answer) {
-		return DEFAULT_CONTEXT.stubAnswer(answer);
-	}
+    /**
+     * Stubs a method call with a specific answer strategy.
+     *
+     * Typical usage:
+     * <pre>
+     * Mockachino.stubAnswer(answer).on(mock).method();
+     * </pre>
+     *
+     * All matching method calls will invoke the getValue()-method on the answer-object.
+     *
+     * @param answer the answer to use
+     * @return a stubber
+     */
+    public static Stubber stubAnswer(CallHandler answer) {
+        MockContext.checkNull("answer", answer);
+        MatcherThreadHandler.assertEmpty();
+        return new Stubber(answer, AcceptAllVerifier.INSTANCE);
+    }
+
+
 
 	/**
 	 * Adds an observer to a specific method call.
@@ -250,18 +263,6 @@ public class Mockachino {
 	 */
 	public static ObserverAdder observeWith(CallHandler observer) {
 		return DEFAULT_CONTEXT.observeWith(observer);
-	}
-
-	/**
-	 * Get the metadata for mock.
-	 *
-	 * This can be used both for resetting mocks, and inspecting calls on the mock.
-	 *
-	 * @param mock the mock object
-	 * @return the mock metadata
-	 */
-	public static <T> MockData<T> getData(T mock) {
-		return DEFAULT_CONTEXT.getData(mock);
 	}
 
 	/**
@@ -337,5 +338,28 @@ public class Mockachino {
 
     public static void setupMocks(Object obj) {
         DEFAULT_CONTEXT.setupMocks(obj);
+    }
+
+    /**
+     * Get the metadata for mock.
+     *
+     * This can be used both for resetting mocks, and inspecting calls on the mock.
+     *
+     * @param mock the mock object
+     * @return the mock metadata
+     */
+    public static <T> MockData<T> getData(T mock) {
+        MockContext.checkNull("mock", mock);
+        MatcherThreadHandler.assertEmpty();
+        try {
+            ProxyMetadata<T> metadata = (ProxyMetadata) mock;
+            MockData<T> data = metadata.mockachino_getMockData();
+            if (data == null) {
+                throw new UsageError("argument " + mock + " is not a mock object");
+            }
+            return data;
+        } catch (ClassCastException e) {
+            throw new UsageError("argument " + mock + " is not a mock object");
+        }
     }
 }

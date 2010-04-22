@@ -3,6 +3,7 @@ package se.mockachino.order;
 import se.mockachino.MethodCall;
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
+import se.mockachino.Mockachino;
 import se.mockachino.proxy.ProxyUtil;
 
 public class InOrderVerify {
@@ -21,7 +22,7 @@ public class InOrderVerify {
 	}
 
 	public <T> T on(T mock) {
-		MockData<T> data = context.getData(mock);
+		MockData<T> data = Mockachino.getData(mock);
 		Class<T> clazz = data.getInterface();
 		Iterable<MethodCall> calls = data.getCalls(start, end);
 		return ProxyUtil.newProxy(clazz, new InOrderVerifyHandler(orderingContext, mock, calls, min));

@@ -3,8 +3,9 @@ package se.mockachino;
 import se.mockachino.annotations.Mock;
 import se.mockachino.annotations.Spy;
 import se.mockachino.exceptions.UsageError;
+import se.mockachino.invocationhandler.CollectionsHandler;
 import se.mockachino.invocationhandler.DeepMockHandler;
-import se.mockachino.invocationhandler.DefaultInvocationHandler;
+import se.mockachino.invocationhandler.PrimitiveInvocationHandler;
 import se.mockachino.matchers.MatcherThreadHandler;
 import se.mockachino.mock.MockHandler;
 import se.mockachino.observer.ObserverAdder;
@@ -13,11 +14,6 @@ import se.mockachino.order.MockPoint;
 import se.mockachino.order.OrderingContext;
 import se.mockachino.proxy.ProxyUtil;
 import se.mockachino.spy.SpyHandler;
-import se.mockachino.stub.AcceptAllVerifier;
-import se.mockachino.stub.Stubber;
-import se.mockachino.stub.exception.ThrowAnswer;
-import se.mockachino.stub.returnvalue.ReturnAnswer;
-import se.mockachino.stub.returnvalue.ReturnVerifier;
 import se.mockachino.verifier.VerifyRangeStart;
 
 import java.lang.reflect.Field;
@@ -33,7 +29,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  */
 public class MockContext {
-	public static final CallHandler DEFAULT_VALUES = new DefaultInvocationHandler();
+    public static final PrimitiveInvocationHandler PRIMITIVE_VALUES = new PrimitiveInvocationHandler();
+    public static final CallHandler DEFAULT_VALUES = new CollectionsHandler(PRIMITIVE_VALUES);
 	public final CallHandler DEEP_MOCK = new DeepMockHandler(this, DEFAULT_VALUES);
 
 	public final MockPoint BIG_BANG = new MockPoint(this, 0);
@@ -114,7 +111,7 @@ public class MockContext {
 		return kind + ":" + clazz.getSimpleName() + ":" + nextMockId();
 	}
 
-	private void checkNull(String name, Object obj) {
+	static void checkNull(String name, Object obj) {
 		if (obj == null) {
 			throw new UsageError(name + " can not be null");
 		}
@@ -238,66 +235,11 @@ public class MockContext {
 	 * Probably not interesting for regular users of Mockachino
 	 *
 	 */
-	public <T> T createProxy(T mock, InvocationHandler handler) {
+	public static <T> T createProxy(T mock, InvocationHandler handler) {
 		MatcherThreadHandler.assertEmpty();
-		MockData data = getData(mock);
+		MockData data = Mockachino.getData(mock);
 		Class<T> iface = data.getInterface();
 		return ProxyUtil.newProxy(iface, handler, (Set<Class<?>>) data.getExtraInterfaces());
-	}
-
-	/**
-	 * Stubs a method call to throw an exception.
-	 *
-	 * Typical usage:
-	 * <pre>
-	 * Mockachino.stubThrow(myException).on(mock).method();
-	 * </pre>
-	 *
-	 * @param e the exception to throw
-	 * @return a stubber
-	 */
-	public Stubber stubThrow(Throwable e) {
-		checkNull("exception", e);
-		MatcherThreadHandler.assertEmpty();
-		return new Stubber(this, new ThrowAnswer(e), AcceptAllVerifier.INSTANCE);
-	}
-
-	/**
-	 * Stubs a method call to return a specific value.
-	 *
-	 * Typical usage:
-	 * <pre>
-	 * Mockachino.stubReturn(value).on(mock).method();
-	 * </pre>
-	 *
-	 * Note that the type of the value must match the return type of the method call.
-	 * This is checked at runtime and will throw a UsageError if they don't match.
-	 *
-	 * @param returnValue the returnValue to return when the method is called.
-	 * @return a stubber
-	 */
-	public Stubber stubReturn(Object returnValue) {
-		MatcherThreadHandler.assertEmpty();
-		return new Stubber(this, new ReturnAnswer(returnValue), new ReturnVerifier(returnValue));
-	}
-
-	/**
-	 * Stubs a method call with a specific answer strategy.
-	 *
-	 * Typical usage:
-	 * <pre>
-	 * Mockachino.stubAnswer(answer).on(mock).method();
-	 * </pre>
-	 *
-	 * All matching method calls will invoke the getValue()-method on the answer-object.
-	 *
-	 * @param answer the answer to use
-	 * @return a stubber
-	 */
-	public Stubber stubAnswer(CallHandler answer) {
-		checkNull("answer", answer);
-		MatcherThreadHandler.assertEmpty();
-		return new Stubber(this, answer, AcceptAllVerifier.INSTANCE);
 	}
 
 	/**
@@ -318,33 +260,7 @@ public class MockContext {
 		return new ObserverAdder(this, observer);
 	}
 
-	/**
-	 * Get the metadata for mock.
-	 *
-	 * This can be used both for resetting mocks, and inspecting calls on the mock.
-	 *
-	 * @param mock the mock object
-	 * @return the mock metadata
-	 */
-	public <T> MockData<T> getData(T mock) {
-		checkNull("mock", mock);
-		MatcherThreadHandler.assertEmpty();
-		try {
-			ProxyMetadata<T> metadata = (ProxyMetadata) mock;
-			if (metadata.mockachino_getContext() != this) {
-				throw new UsageError("argument " + mock + " belongs to a different mock context");
-			}
-			MockData<T> data = metadata.mockachino_getMockData();
-			if (data == null) {
-				throw new UsageError("argument " + mock + " is not a mock object");
-			}
-			return data;
-		} catch (ClassCastException e) {
-			throw new UsageError("argument " + mock + " is not a mock object");
-		}
-	}
-
-	/**
+    /**
 	 * Increments the sequence of method calls.
 	 * This is not relevant for end users.
 	 * @return the next sequence number.

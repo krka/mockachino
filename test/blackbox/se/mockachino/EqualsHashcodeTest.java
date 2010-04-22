@@ -70,12 +70,12 @@ public class EqualsHashcodeTest {
 		List mock = context.mock(List.class);
 
 		assertEquals("Mock:List:1", mock.toString());
-		context.stubReturn("MyName").on(mock).toString();
+		Mockachino.stubReturn("MyName").on(mock).toString();
 		assertEquals("MyName", mock.toString());
-		MockData<Object> data = context.getData((Object) mock);
+		MockData<Object> data = Mockachino.getData((Object) mock);
 		data.resetStubs();
-		context.stubReturn(System.identityHashCode(mock)).on((Object) mock).hashCode();
-		context.stubReturn(true).on((Object) mock).equals(same((Object) mock));
+		Mockachino.stubReturn(System.identityHashCode(mock)).on((Object) mock).hashCode();
+		Mockachino.stubReturn(true).on((Object) mock).equals(same((Object) mock));
 		assertEquals("Mock:List:1", mock.toString());
 	}
 

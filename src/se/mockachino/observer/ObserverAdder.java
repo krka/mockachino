@@ -3,6 +3,7 @@ package se.mockachino.observer;
 import se.mockachino.CallHandler;
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
+import se.mockachino.Mockachino;
 
 public class ObserverAdder {
 	private final MockContext mockContext;
@@ -14,7 +15,7 @@ public class ObserverAdder {
 	}
 
 	public <T> T on(T mock) {
-		MockData data = mockContext.getData(mock);
+		MockData data = Mockachino.getData(mock);
 		AddObserverHandler observerHandler = new AddObserverHandler(data, mock, observer);
 		return mockContext.createProxy(mock, observerHandler);
 	}

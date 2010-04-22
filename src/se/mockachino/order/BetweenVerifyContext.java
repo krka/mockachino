@@ -3,6 +3,7 @@ package se.mockachino.order;
 import se.mockachino.MethodCall;
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
+import se.mockachino.Mockachino;
 import se.mockachino.matchers.MatcherThreadHandler;
 import se.mockachino.verifier.VerifyRangeStart;
 
@@ -19,7 +20,7 @@ public class BetweenVerifyContext {
 	}
 
 	public Iterable<MethodCall> getCalls(Object mock) {
-		MockData<Object> data = mockContext.getData(mock);
+		MockData<Object> data = Mockachino.getData(mock);
 		return data.getCalls(start, end);
 	}
 

@@ -23,7 +23,7 @@ public class DeepMockHandler implements CallHandler {
 		Class returnType = method.getReturnType();
 		if (Mockachino.canMock(returnType)) {
 			Object returnValue = context.mock(returnType, Settings.fallback(this));
-			context.stubReturn(returnValue).onMethod(obj, method, new MethodMatcherImpl(method, call.getArguments()));
+			Mockachino.stubReturn(returnValue).onMethod(obj, method, new MethodMatcherImpl(method, call.getArguments()));
 			return returnValue;
 		}
 		return delegate.invoke(obj, call);

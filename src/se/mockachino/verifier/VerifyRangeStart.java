@@ -3,6 +3,7 @@ package se.mockachino.verifier;
 import se.mockachino.MethodCall;
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
+import se.mockachino.Mockachino;
 import se.mockachino.order.MockPoint;
 
 public class VerifyRangeStart {
@@ -30,7 +31,7 @@ public class VerifyRangeStart {
 
 
 	public <T> T on(T mock) {
-		MockData data = mockContext.getData(mock);
+		MockData data = Mockachino.getData(mock);
 		Iterable<MethodCall> calls = data.getCalls(start, end);
 		VerifyHandler verifyHandler = new VerifyHandler(mock, calls, min, max);
 		return mockContext.createProxy(mock, verifyHandler);
