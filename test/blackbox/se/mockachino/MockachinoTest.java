@@ -6,8 +6,10 @@ import se.mockachino.matchers.Matchers;
 import se.mockachino.order.OrderingContext;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.Assert.assertEquals;
@@ -343,6 +345,24 @@ public class MockachinoTest {
 		assertTrue(mock1.equals(mock1));
 		assertFalse(mock1.equals(mock2));
 		assertFalse(mock1.equals(null));
+	}
+
+	static interface Mapinterface {
+		void doMap(Map<String, String> map);
+	}
+
+	@Test
+	public void testMap() {
+		Mapinterface mock = Mockachino.mock(Mapinterface.class);
+
+		HashMap<String, String> actualMap = new HashMap<String, String>();
+		//actualMap.put("Hello", "World");
+		mock.doMap(actualMap);
+
+
+		Map<String, String> expectedtMap = new HashMap<String, String>();
+
+		Mockachino.verifyExactly(1).on(mock).doMap(expectedtMap);
 	}
 }
 

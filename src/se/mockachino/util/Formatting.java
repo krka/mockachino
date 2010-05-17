@@ -42,7 +42,7 @@ public class Formatting {
 			return "{" + join(", ", (Set) arg) + "}";
 		}
 		if (arg instanceof Map) {
-			return "(" + join(", ", (Map) ((Map) arg).entrySet()) + ")";
+			return "(" + join(", ", (Set) ((Map) arg).entrySet()) + ")";
 		}
 		return arg.toString();
 	}
