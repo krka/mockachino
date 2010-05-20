@@ -4,8 +4,17 @@ import se.mockachino.util.Formatting;
 import se.mockachino.util.MockachinoMethod;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class MethodCall {
+	public static final Comparator<MethodCall> COMPARATOR = new Comparator<MethodCall>() {
+		@Override
+		public int compare(MethodCall a, MethodCall b) {
+			return a.callNumber - b.callNumber;
+		}
+	};
+
+
 	public final static MethodCall NULL = new MethodCall(MockachinoMethod.NULL, new Object[]{}, 0, new StackTraceElement[]{});
 
 	private static final Object[] NO_ARGS = new Object[0];

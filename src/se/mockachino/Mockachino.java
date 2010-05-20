@@ -12,6 +12,7 @@ import se.mockachino.stub.Stubber;
 import se.mockachino.stub.exception.ThrowAnswer;
 import se.mockachino.stub.returnvalue.ReturnAnswer;
 import se.mockachino.stub.returnvalue.ReturnVerifier;
+import se.mockachino.verifiers.SimpleVerifier;
 import se.mockachino.verifier.VerifyRangeStart;
 
 /**
@@ -362,4 +363,8 @@ public class Mockachino {
             throw new UsageError("argument " + mock + " is not a mock object");
         }
     }
+
+	public static SimpleVerifier newVerifier() {
+		return new SimpleVerifier();
+	}
 }
