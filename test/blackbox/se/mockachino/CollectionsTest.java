@@ -70,5 +70,4 @@ public class CollectionsTest {
         assertNotNull(mock);
         assertNull(mock.getTreeMap(1));
     }
-
 }

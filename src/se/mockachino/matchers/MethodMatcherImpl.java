@@ -14,7 +14,7 @@ public class MethodMatcherImpl implements MethodMatcher {
 	private final List<Matcher> argumentMatchers;
 
 	public MethodMatcherImpl(MockachinoMethod method, Object[] arguments) {
-		this(method, convert(arguments));
+		this(method, convert(arguments, method.getMethod().isVarArgs()));
 	}
 
 	public MethodMatcherImpl(MockachinoMethod method, List<Matcher> argumentMatchers) {
@@ -22,7 +22,7 @@ public class MethodMatcherImpl implements MethodMatcher {
 		this.argumentMatchers = argumentMatchers;
 	}
 
-	private static List<Matcher> convert(Object[] arguments) {
+	private static List<Matcher> convert(Object[] arguments, boolean varArgs) {
 		List<Matcher> argumentMatchers = new ArrayList<Matcher>();
 		if (arguments != null) {
 			if (MatcherThreadHandler.isClean()) {
@@ -31,7 +31,7 @@ public class MethodMatcherImpl implements MethodMatcher {
 				}
 			} else {
 				for (Object argument : arguments) {
-					argumentMatchers.add(MatcherThreadHandler.getMatcher(argument));
+					argumentMatchers.add(MatcherThreadHandler.getMatcher(argument, varArgs));
 				}
 			}
 		}

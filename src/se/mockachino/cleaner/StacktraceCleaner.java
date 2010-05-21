@@ -7,7 +7,7 @@ import java.util.List;
 public class StacktraceCleaner {
 
 	public static <T extends Throwable> T cleanError(T e) {
-		e.setStackTrace(convert(getCleanStacktrace(e)));
+		//e.setStackTrace(convert(getCleanStacktrace(e)));
 		return e;
 	}
 

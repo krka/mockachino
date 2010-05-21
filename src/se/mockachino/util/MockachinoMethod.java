@@ -42,7 +42,11 @@ public class MockachinoMethod {
 		return returnType;
 	}
 
-	@Override
+    public Method getMethod() {
+        return method;
+    }
+
+    @Override
 	public String toString() {
 		StringBuilder params = new StringBuilder();
 		boolean first = true;

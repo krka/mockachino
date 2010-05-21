@@ -27,6 +27,10 @@ public class Formatting {
 		return join(", ", iterable);
 	}
 
+    public static String list(Object[] args, boolean varArgs) {
+        return join(varArgs, ", ", args);
+    }
+
 	public static String argument(Object arg) {
 		arg = PrimitiveList.toList(arg);
 		if (arg == null) {
@@ -64,19 +68,26 @@ public class Formatting {
 		return builder.toString();
 	}
 
-	public static String join(String sep, Object... objects) {
+    public static String join(String sep, Object... objects) {
+        return join(false, sep, objects);
+    }
+
+	public static String join(boolean varArg, String sep, Object... objects) {
 		if (objects == null) {
 			return "";
 		}
 		StringBuilder builder = new StringBuilder();
-		boolean first = true;
-		for (Object object : objects) {
-			if (first) {
-				first = false;
-			} else {
-				builder.append(sep);
-			}
-			builder.append(argument(object));
+        int n = objects.length;
+        for (int i = 0; i < n; i++) {
+            if (i > 0) {
+                builder.append(sep);
+            }
+            Object obj = objects[i];
+            if (varArg && i == n - 1) {
+                builder.append(join(false, sep, (Object[]) obj));
+            } else {
+                builder.append(argument(obj));
+            }
 		}
 		return builder.toString();
 	}
@@ -107,5 +118,4 @@ public class Formatting {
 		}
 		return ret;
 	}
-
 }

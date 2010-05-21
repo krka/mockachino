@@ -4,16 +4,28 @@ import se.mockachino.exceptions.UsageError;
 import se.mockachino.matchers.matcher.EqualityMatcher;
 import se.mockachino.matchers.matcher.Matcher;
 
+import java.lang.reflect.Array;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class MatcherThreadHandler {
 	private static final Character ZERO_CHARACTER = Character.valueOf('\0');
 
-	public static Matcher getMatcher(Object value) {
+	public static Matcher getMatcher(Object value, boolean varArgs) {
 		if (value == null) {
 			return MatcherThreadHandler.getMatcher();
 		}
+
+        // Support for varargs
+        if (varArgs && value.getClass().isArray()) {
+            int n = Array.getLength(value);
+            Matcher[] matchers = new Matcher[n];
+            for (int i = 0; i < n; i++) {
+                matchers[i] = getMatcher(Array.get(value, i), false);
+            }
+            return new ArrayMatcher(matchers, value.getClass().getComponentType(), true);
+        }
+
 		if (value instanceof Number) {
 			if (((Number) value).longValue() == 0) {
 				return MatcherThreadHandler.getMatcher();
