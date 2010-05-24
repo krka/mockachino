@@ -1,4 +1,4 @@
-package se.mockachino.verifiers;
+package se.mockachino.alias;
 
 import se.mockachino.MethodCall;
 
@@ -7,18 +7,18 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class OrVerifier extends AbstractVerifier {
-	private final Verifier[] verifiers;
+public class UnionAlias extends AbstractAlias {
+	private final Alias[] aliases;
 
-	public OrVerifier(Verifier... verifiers) {
-		this.verifiers = verifiers;
+	public UnionAlias(Alias... aliases) {
+		this.aliases = aliases;
 	}
 
 	@Override
 	public List<MethodCall> getMatches() {
 		SortedSet<MethodCall> set = new TreeSet<MethodCall>(MethodCall.COMPARATOR);
-		for (Verifier verifier : verifiers) {
-			List<MethodCall> list = verifier.getMatches();
+		for (Alias alias : aliases) {
+			List<MethodCall> list = alias.getMatches();
 			for (MethodCall methodCall : list) {
 				set.add(methodCall);
 			}

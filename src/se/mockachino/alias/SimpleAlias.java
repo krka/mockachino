@@ -1,4 +1,4 @@
-package se.mockachino.verifiers;
+package se.mockachino.alias;
 
 import se.mockachino.MethodCall;
 import se.mockachino.MockData;
@@ -14,7 +14,7 @@ import se.mockachino.verifier.MatchingHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleVerifier extends AbstractVerifier {
+public class SimpleAlias extends AbstractAlias {
 	private static final BadUsageHandler BAD_USAGE_HANDLER = new BadUsageHandler(
 			new BadUsageBuilder(
 					"Incorrect usage. You can not chain calls when binding a verifier." +
@@ -28,13 +28,13 @@ public class SimpleVerifier extends AbstractVerifier {
 			multipleUsageError();
 		}
 		this.mock = mock;
-		MatchingHandler handler = new MatchingHandler("Verifier", mock.toString(), BAD_USAGE_HANDLER) {
+		MatchingHandler handler = new MatchingHandler("Alias", mock.toString(), BAD_USAGE_HANDLER) {
 			@Override
 			protected void match(Object o, MockachinoMethod method, MethodMatcher matcher) {
-				if (SimpleVerifier.this.methodMatcher != null) {
+				if (SimpleAlias.this.methodMatcher != null) {
 					multipleUsageError();
 				}
-				SimpleVerifier.this.methodMatcher = matcher;
+				SimpleAlias.this.methodMatcher = matcher;
 			}
 		};
 		MockData<T> data = Mockachino.getData(mock);
@@ -48,7 +48,7 @@ public class SimpleVerifier extends AbstractVerifier {
 	@Override
 	public List<MethodCall> getMatches() {
         if (methodMatcher == null) {
-            throw new UsageError("Verifier must be bound to a mock method");
+            throw new UsageError("Alias must be bound to a mock method");
         }
         List<MethodCall> res = new ArrayList<MethodCall>();
         MockData<Object> data = Mockachino.getData(mock);

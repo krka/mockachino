@@ -1,6 +1,10 @@
+----------------------
+- Version 0.4.0
+----------------------
 * Fixed bug with verifying maps
 * Added handling of vararg methods
 * Fixed bug with using mocks with protected methods
+* Added first implementation of Aliases
 
 ----------------------
 - Version 0.3.2

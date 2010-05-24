@@ -12,7 +12,7 @@ import se.mockachino.stub.Stubber;
 import se.mockachino.stub.exception.ThrowAnswer;
 import se.mockachino.stub.returnvalue.ReturnAnswer;
 import se.mockachino.stub.returnvalue.ReturnVerifier;
-import se.mockachino.verifiers.SimpleVerifier;
+import se.mockachino.alias.SimpleAlias;
 import se.mockachino.verifier.VerifyRangeStart;
 
 /**
@@ -364,7 +364,7 @@ public class Mockachino {
         }
     }
 
-	public static SimpleVerifier newVerifier() {
-		return new SimpleVerifier();
+	public static SimpleAlias newAlias() {
+		return new SimpleAlias();
 	}
 }

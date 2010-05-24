@@ -2,22 +2,22 @@ package se.mockachino;
 
 import org.junit.Test;
 import se.mockachino.matchers.Matchers;
-import se.mockachino.verifiers.SimpleVerifier;
-import se.mockachino.verifiers.Verifier;
+import se.mockachino.alias.Alias;
+import se.mockachino.alias.SimpleAlias;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class VerifierTest {
+public class AliasTest {
 	@Test
 	public void testEmpty() {
 		List mock = Mockachino.mock(List.class);
 
-		SimpleVerifier a = Mockachino.newVerifier();
+		SimpleAlias a = Mockachino.newAlias();
 		a.bind(mock).add("Hello");
 
-		assertEquals(0, a.getMatches().size());
+		assertEquals(0, a.count());
 	}
 
 	@Test
@@ -26,10 +26,10 @@ public class VerifierTest {
 
 		mock.add("Hello");
 		mock.add("Helly");
-		SimpleVerifier a = Mockachino.newVerifier();
+		SimpleAlias a = Mockachino.newAlias();
 		a.bind(mock).add(Matchers.regexp("Hell.*"));
 
-		assertEquals(2,  a.getMatches().size());
+		assertEquals(2,  a.count());
 	}
 
 	@Test
@@ -55,15 +55,14 @@ public class VerifierTest {
 
 
 	private int getCountHello(List mock) {
-		SimpleVerifier a = Mockachino.newVerifier();
+		SimpleAlias a = Mockachino.newAlias();
 		a.bind(mock).add("Hello");
 
-		SimpleVerifier b = Mockachino.newVerifier();
+		SimpleAlias b = Mockachino.newAlias();
 		b.bind(mock).remove("Hello");
 
-		Verifier orVerifier = a.or(b);
-		int count = orVerifier.getMatches().size();
-		return count;
+		Alias orAlias = a.union(b);
+		return orAlias.count();
 	}
 
 	@Test
@@ -72,49 +71,52 @@ public class VerifierTest {
 
 		mock.add("Hello");
 
-		SimpleVerifier a = Mockachino.newVerifier();
+		SimpleAlias a = Mockachino.newAlias();
 		a.bind(mock).add("Hello");
 
-		SimpleVerifier b = Mockachino.newVerifier();
+		SimpleAlias b = Mockachino.newAlias();
 		b.bind(mock).add("Hello");
 
-		Verifier orVerifier = a.or(b);
-		assertEquals(1, orVerifier.getMatches().size());
+		Alias orAlias = a.union(b);
+		assertEquals(1, orAlias.count());
 	}
 
 	@Test
-	public void testOr() {
+	public void testUnion() {
 		List mock = Mockachino.mock(List.class);
 
 		mock.add("Hello");
 		mock.remove("Hello");
 
-		SimpleVerifier a = Mockachino.newVerifier();
+		SimpleAlias a = Mockachino.newAlias();
 		a.bind(mock).add("Hello");
 
-		SimpleVerifier b = Mockachino.newVerifier();
+		SimpleAlias b = Mockachino.newAlias();
 		b.bind(mock).remove("Hello");
 
-		Verifier orVerifier = a.or(b);
-		assertEquals(2, orVerifier.getMatches().size());
+		Alias orAlias = a.union(b);
+		assertEquals(2, orAlias.count());
 	}
 
 	@Test
-	public void testAnd() {
+	public void testIntersection() {
 		List mock = Mockachino.mock(List.class);
 
 		mock.add("Hello");
 		mock.add("Jello");
 
-		SimpleVerifier a = Mockachino.newVerifier();
+		SimpleAlias a = Mockachino.newAlias();
 		a.bind(mock).add("Hello");
 
-		SimpleVerifier b = Mockachino.newVerifier();
+		SimpleAlias b = Mockachino.newAlias();
 		b.bind(mock).add(Matchers.any(String.class));
 
-		assertEquals(1, a.getMatches().size());
-		assertEquals(2, b.getMatches().size());
-		assertEquals(1, a.and(b).getMatches().size());
-	}
+		assertEquals(1, a.count());
+		assertEquals(2, b.count());
+		assertEquals(1, a.intersection(b).count());
 
+		a.verifyExactly(1);
+		b.verifyExactly(2);
+		a.intersection(b).verifyExactly(1);
+	}
 }
