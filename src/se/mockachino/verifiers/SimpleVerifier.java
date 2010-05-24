@@ -47,14 +47,17 @@ public class SimpleVerifier extends AbstractVerifier {
 
 	@Override
 	public List<MethodCall> getMatches() {
-		List<MethodCall> res = new ArrayList<MethodCall>();
-		MockData<Object> data = Mockachino.getData(mock);
-		for (MethodCall call : data.getCalls()) {
-			if (methodMatcher.matches(call)) {
-				res.add(call);
-			}
-		}
-		return res;
-	}
+        if (methodMatcher == null) {
+            throw new UsageError("Verifier must be bound to a mock method");
+        }
+        List<MethodCall> res = new ArrayList<MethodCall>();
+        MockData<Object> data = Mockachino.getData(mock);
+        for (MethodCall call : data.getCalls()) {
+            if (methodMatcher.matches(call)) {
+                res.add(call);
+            }
+        }
+        return res;
+    }
 
 }

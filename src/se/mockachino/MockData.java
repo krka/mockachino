@@ -54,22 +54,37 @@ public class MockData<T> {
 		observers = new HashMap<MockachinoMethod,List<MethodObserver>>();
 
 		stubs = new HashMap<MockachinoMethod, MethodStubs>();
-		for (Method reflectMethod : iface.getMethods()) {
-			addContainer(reflectMethod);
-		}
-		for (Method reflectMethod : Object.class.getMethods()) {
-			addContainer(reflectMethod);
-		}
+        addMethods(iface);
+        addMethods(Object.class);
 		for (Class<?> extraInterface : extraInterfaces) {
-			for (Method reflectMethod : extraInterface.getMethods()) {
-				addContainer(reflectMethod);
-			}
+            addMethods(extraInterface);
 		}
 		setupEqualsAndHashcode();
 	}
 
-	private void addContainer(Method reflectMethod) {
+    private void addMethods(Class<?> clazz) {
+        if (clazz == null) {
+            return;
+        }
+        for (Class<?> superClass: clazz.getInterfaces()){
+            addMethods(superClass);
+        }
+        addMethods(clazz.getSuperclass());
+        for (Method method : clazz.getDeclaredMethods()) {
+            try {
+                method.setAccessible(true);
+                addContainer(method);
+            } catch (SecurityException e) {
+                // Ignore this method
+            }
+        }
+    }
+
+    private void addContainer(Method reflectMethod) {
 		MockachinoMethod method = new MockachinoMethod(reflectMethod);
+        if (stubs.containsKey(method)) {
+            return;
+        }
 		stubs.put(method, new MethodStubs());
 		observers.put(method,
 				new SafeIteratorList<MethodObserver>(
