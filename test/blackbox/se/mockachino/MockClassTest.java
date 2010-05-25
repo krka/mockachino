@@ -3,11 +3,7 @@ package se.mockachino;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static se.mockachino.Mockachino.mock;
-import static se.mockachino.Mockachino.*;
-import static se.mockachino.matchers.Matchers.*;
-import static se.mockachino.Settings.*;
 
 public class MockClassTest {
     public static class TestClass {

@@ -11,12 +11,7 @@ import se.mockachino.util.MockachinoMethod;
 import se.mockachino.util.SafeIteratorList;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class MockData<T> {
 	private static final CallHandler DEFAULT_EQUALS = new CallHandler() {
@@ -40,17 +35,17 @@ public class MockData<T> {
 	private final MockContext context;
 	private final Class<T> iface;
 	private final Set<Class<?>> extraInterfaces;
-	private final List<MethodCall> calls;
-	private final List<MethodCall> readOnlyCalls;
+	private final List<Invocation> invocations;
+	private final List<Invocation> readOnlyCalls;
 	private final Map<MockachinoMethod, List<MethodObserver>> observers;
 	private final Map<MockachinoMethod, MethodStubs> stubs;
 
-	public MockData(MockContext context, Class<T> iface, Set<Class<?>> extraInterfaces) {
+    public MockData(MockContext context, Class<T> iface, Set<Class<?>> extraInterfaces) {
 		this.context = context;
 		this.iface = iface;
 		this.extraInterfaces = extraInterfaces;
-		calls = new SafeIteratorList<MethodCall>(new ArrayList<MethodCall>(), MethodCall.NULL);
-		readOnlyCalls = Collections.unmodifiableList(calls);
+		invocations = new SafeIteratorList<Invocation>(new ArrayList<Invocation>(), Invocation.NULL);
+		readOnlyCalls = Collections.unmodifiableList(invocations);
 		observers = new HashMap<MockachinoMethod,List<MethodObserver>>();
 
 		stubs = new HashMap<MockachinoMethod, MethodStubs>();
@@ -92,19 +87,19 @@ public class MockData<T> {
 	}
 
 	/**
-	 * Gets a list of all the method calls made for the mock object
-	 * @return the list of calls
+	 * Gets a list of all the method invocations made for the mock object
+	 * @return the list of invocations
 	 */
-	public Iterable<MethodCall> getCalls() {
+	public Iterable<Invocation> getInvocations() {
 		return readOnlyCalls;
 	}
 
 	/**
-	 * Gets a list of all the method calls made for the mock object
+	 * Gets a list of all the method invocations made for the mock object
 	 * between (inclusive) two points in time.
-	 * @return the list of calls
+	 * @return the list of invocations
 	 */
-	public Iterable<MethodCall> getCalls(MockPoint start, MockPoint end) {
+	public Iterable<Invocation> getCalls(MockPoint start, MockPoint end) {
 		return new MockPointIterable(readOnlyCalls, start, end);
 	}
 
@@ -138,22 +133,23 @@ public class MockData<T> {
 	 * This is typically only needed to be called by Mockachino internally.
 	 *
 	 * @param method
-	 * @param objects
+	 * @param args
 	 * @param stackTrace
 	 * @return the method call which was added
 	 */
-	public synchronized MethodCall addCall(MockachinoMethod method, Object[] objects, StackTraceElement[] stackTrace) {
+	public synchronized Invocation addCall(Object obj, MockachinoMethod method, Object[] args, StackTraceElement[] stackTrace) {
 		int callNumber = context.incrementSequence();
-		MethodCall call = new MethodCall(method, objects, callNumber, stackTrace);
-		calls.add(call);
-		return call;
+		MethodCall call = new MethodCall(method, args);
+        Invocation invocation = new Invocation(obj, call, callNumber, stackTrace);
+        invocations.add(invocation);
+		return invocation;
 	}
 
 	/**
-	 * Clear the list of calls
+	 * Clear the list of invocations
 	 */
 	public synchronized void resetCalls() {
-		calls.clear();
+		invocations.clear();
 	}
 
 	/**
@@ -192,4 +188,11 @@ public class MockData<T> {
 	public Set<Class<?>> getExtraInterfaces() {
 		return extraInterfaces;		
 	}
+
+    public synchronized void deleteLastInvocation() {
+        int index = invocations.size() - 1;
+        if (index >= 0) {
+            invocations.remove(index);
+        }
+    }
 }

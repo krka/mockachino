@@ -20,7 +20,7 @@ public class ArrayMatcher<T> extends BasicMatcher<T> {
     @Override
     protected String asString() {
         if (varArg) {
-            return Formatting.join(", ", array);
+            return Formatting.join(", ", (Object[]) array);
         }
         return Formatting.argument(array);
     }

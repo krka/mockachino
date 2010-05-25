@@ -9,10 +9,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import static org.junit.Assert.fail;
-import static se.mockachino.Mockachino.mock;
-import static se.mockachino.Mockachino.verifyAtLeast;
-import static se.mockachino.Mockachino.verifyNever;
-import static se.mockachino.Mockachino.verifyOnce;
+import static se.mockachino.Mockachino.*;
 import static se.mockachino.Settings.fallback;
 
 public class VerifyHandlerTest {

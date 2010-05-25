@@ -3,10 +3,7 @@ package se.mockachino.matchers.matcher;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static se.mockachino.matchers.MatchersBase.mAnd;
-import static se.mockachino.matchers.MatchersBase.mContains;
-import static se.mockachino.matchers.MatchersBase.mEq;
-import static se.mockachino.matchers.MatchersBase.mOr;
+import static se.mockachino.matchers.MatchersBase.*;
 
 public class AndOrMatcherTest {
 	@Test

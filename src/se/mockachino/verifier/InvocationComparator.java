@@ -1,5 +1,6 @@
 package se.mockachino.verifier;
 
+import se.mockachino.Invocation;
 import se.mockachino.MethodCall;
 import se.mockachino.Primitives;
 import se.mockachino.matchers.matcher.Matcher;
@@ -8,17 +9,19 @@ import se.mockachino.util.MockachinoMethod;
 import java.util.Comparator;
 import java.util.List;
 
-public class MethodComparator implements Comparator<MethodCall> {
+public class InvocationComparator implements Comparator<Invocation> {
 	private final MockachinoMethod method;
 	private final List<Matcher> argumentMatchers;
 
-	public MethodComparator(MockachinoMethod method, List<Matcher> argumentMatchers) {
+	public InvocationComparator(MockachinoMethod method, List<Matcher> argumentMatchers) {
 		this.method = method;
 		this.argumentMatchers = argumentMatchers;
 	}
 
-	@Override
-	public int compare(MethodCall o1, MethodCall o2) {
+    @Override
+	public int compare(Invocation c1, Invocation c2) {
+        MethodCall o1 = c1.getMethodCall();
+        MethodCall o2 = c2.getMethodCall();
 		// First compare on names
 		{
 			int value = comp(nameMatches(o1), nameMatches(o2));
@@ -81,11 +84,13 @@ public class MethodComparator implements Comparator<MethodCall> {
 		// Compare on argument hashcodes in order to put equal
 		// argument lists next to each other
 
-		return compareOrigin(o1, o2);
+		return compareOrigin(c1, c2);
 
 	}
 
-	private int compareOrigin(MethodCall o1, MethodCall o2) {
+	private int compareOrigin(Invocation c1, Invocation c2) {
+        MethodCall o1 = c1.getMethodCall();
+        MethodCall o2 = c2.getMethodCall();
 		int n = getNumArgs(o1);
 		Object[] args1 = o1.getArguments();
 		Object[] args2 = o2.getArguments();
@@ -97,8 +102,8 @@ public class MethodComparator implements Comparator<MethodCall> {
 				return Long.signum(val);
 			}
 		}
-		int len1 = o1.getStackTrace().length;
-		int len2 = o2.getStackTrace().length;
+		int len1 = c1.getStacktrace().length;
+		int len2 = c2.getStacktrace().length;
 		if (len1 == 0 && len2 == 0) {
 			return 0;
 		}
@@ -107,8 +112,8 @@ public class MethodComparator implements Comparator<MethodCall> {
 			return val;
 		}
 
-		StackTraceElement element1 = o1.getStackTrace()[0];
-		StackTraceElement element2 = o2.getStackTrace()[0];
+		StackTraceElement element1 = c1.getStacktrace()[0];
+		StackTraceElement element2 = c2.getStacktrace()[0];
 
 		val = element1.getClassName().compareTo(element2.getClassName());
 		if (val != 0) {

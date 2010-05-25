@@ -1,7 +1,9 @@
 package se.mockachino;
 
+import se.mockachino.alias.SimpleAlias;
 import se.mockachino.exceptions.UsageError;
 import se.mockachino.matchers.MatcherThreadHandler;
+import se.mockachino.mock.WhenStubber;
 import se.mockachino.observer.ObserverAdder;
 import se.mockachino.order.BetweenVerifyContext;
 import se.mockachino.order.MockPoint;
@@ -12,7 +14,6 @@ import se.mockachino.stub.Stubber;
 import se.mockachino.stub.exception.ThrowAnswer;
 import se.mockachino.stub.returnvalue.ReturnAnswer;
 import se.mockachino.stub.returnvalue.ReturnVerifier;
-import se.mockachino.alias.SimpleAlias;
 import se.mockachino.verifier.VerifyRangeStart;
 
 /**
@@ -351,20 +352,23 @@ public class Mockachino {
      */
     public static <T> MockData<T> getData(T mock) {
         MockContext.checkNull("mock", mock);
-        MatcherThreadHandler.assertEmpty();
         try {
             ProxyMetadata<T> metadata = (ProxyMetadata) mock;
             MockData<T> data = metadata.mockachino_getMockData();
             if (data == null) {
-                throw new UsageError("argument " + mock + " is not a mock object");
-            }
+            throw new UsageError("argument " + mock + " is not a mock object");
+        }
             return data;
         } catch (ClassCastException e) {
             throw new UsageError("argument " + mock + " is not a mock object");
         }
     }
 
-	public static SimpleAlias newAlias() {
+    public static SimpleAlias newAlias() {
 		return new SimpleAlias();
 	}
+
+    public static <T> WhenStubber<T> when(T mockInvocation) {
+        return new WhenStubber<T>();
+    }
 }

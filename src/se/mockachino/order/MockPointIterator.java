@@ -1,17 +1,17 @@
 package se.mockachino.order;
 
-import se.mockachino.MethodCall;
+import se.mockachino.Invocation;
 
 import java.util.Iterator;
 
-public class MockPointIterator implements Iterator<MethodCall> {
-	private final Iterator<MethodCall> iterator;
+public class MockPointIterator implements Iterator<Invocation> {
+	private final Iterator<Invocation> iterator;
 	private final MockPoint start;
 	private final MockPoint end;
 
-	private MethodCall next;
+	private Invocation next;
 
-	public MockPointIterator(Iterator<MethodCall> iterator, MockPoint start, MockPoint end) {
+	public MockPointIterator(Iterator<Invocation> iterator, MockPoint start, MockPoint end) {
 		this.iterator = iterator;
 		this.start = start;
 		this.end = end;
@@ -27,8 +27,8 @@ public class MockPointIterator implements Iterator<MethodCall> {
 	}
 
 	@Override
-	public MethodCall next() {
-		MethodCall obj = next;
+	public Invocation next() {
+		Invocation obj = next;
 		next = null;
 		if (obj == null) {
 			obj = fetchNext();
@@ -41,9 +41,9 @@ public class MockPointIterator implements Iterator<MethodCall> {
 		throw new UnsupportedOperationException("remove() is unsupported");
 	}
 
-	public MethodCall fetchNext() {
+	public Invocation fetchNext() {
 		while (iterator.hasNext()) {
-			MethodCall obj = iterator.next();
+			Invocation obj = iterator.next();
 			if (obj.getCallNumber() > end.getCallNumber()) {
 				return null;
 			}

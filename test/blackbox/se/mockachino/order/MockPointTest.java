@@ -9,9 +9,7 @@ import se.mockachino.exceptions.VerificationError;
 import java.util.List;
 
 import static org.junit.Assert.fail;
-import static se.mockachino.Mockachino.between;
-import static se.mockachino.Mockachino.mock;
-import static se.mockachino.Mockachino.newOrdering;
+import static se.mockachino.Mockachino.*;
 
 public class MockPointTest {
 	@Test

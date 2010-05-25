@@ -1,6 +1,6 @@
 package se.mockachino.alias;
 
-import se.mockachino.MethodCall;
+import se.mockachino.Invocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +15,14 @@ public class UnionAlias extends AbstractAlias {
 	}
 
 	@Override
-	public List<MethodCall> getMatches() {
-		SortedSet<MethodCall> set = new TreeSet<MethodCall>(MethodCall.COMPARATOR);
+	public List<Invocation> getMatches() {
+		SortedSet<Invocation> set = new TreeSet<Invocation>(Invocation.COMPARATOR);
 		for (Alias alias : aliases) {
-			List<MethodCall> list = alias.getMatches();
-			for (MethodCall methodCall : list) {
-				set.add(methodCall);
+			List<Invocation> list = alias.getMatches();
+			for (Invocation invocation : list) {
+				set.add(invocation);
 			}
 		}
-		return new ArrayList<MethodCall>(set);
+		return new ArrayList<Invocation>(set);
 	}
 }

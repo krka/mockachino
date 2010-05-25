@@ -266,7 +266,6 @@ public class MockContext {
 	 * @return the next sequence number.
 	 */
 	public int incrementSequence() {
-		MatcherThreadHandler.assertEmpty();
 		return nextSequenceNumber.incrementAndGet();
 	}
 

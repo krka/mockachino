@@ -1,7 +1,6 @@
 package se.mockachino.order;
 
-import se.mockachino.MethodCall;
-import se.mockachino.Mockachino;
+import se.mockachino.Invocation;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.util.MockachinoMethod;
@@ -17,11 +16,11 @@ public class InOrderVerifyHandler extends MatchingHandler {
                     "You probably used verify().on(mock).method1().method2(). " +
                     "Correct usage is verify().on(mock.method1()).method2()"));
 
-	private final Iterable<MethodCall> calls;
+	private final Iterable<Invocation> calls;
 	private final int min;
 	private final OrderingContext orderingContext;
 
-    public InOrderVerifyHandler(OrderingContext orderingContext, Object mock, Iterable<MethodCall> calls, int min) {
+    public InOrderVerifyHandler(OrderingContext orderingContext, Object mock, Iterable<Invocation> calls, int min) {
 		super("InOrderVerifyHandler", mock.toString(), BAD_USAGE_HANDLER);
 		this.orderingContext = orderingContext;
 		this.calls = calls;
@@ -34,12 +33,12 @@ public class InOrderVerifyHandler extends MatchingHandler {
 			return;
 		}
 
-		MethodCall lastCall = orderingContext.getCurrentCall();
+		Invocation lastCall = orderingContext.getCurrentInvocation();
 		int lastCallNumber = lastCall.getCallNumber();
 
 		int count = 0;
 
-		for (MethodCall call : calls) {
+		for (Invocation call : calls) {
 			int number = call.getCallNumber();
 
 			// Skip already visited calls
@@ -47,7 +46,7 @@ public class InOrderVerifyHandler extends MatchingHandler {
 				continue;
 			}
 
-			if (matcher.matches(call)) {
+			if (matcher.matches(call.getMethodCall())) {
 				count++;
 				if (count >= min) {
 					orderingContext.setCurrent(call);

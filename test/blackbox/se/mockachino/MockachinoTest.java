@@ -5,28 +5,12 @@ import se.mockachino.exceptions.UsageError;
 import se.mockachino.matchers.Matchers;
 import se.mockachino.order.OrderingContext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static se.mockachino.Settings.spyOn;
-import static se.mockachino.matchers.Matchers.any;
-import static se.mockachino.matchers.Matchers.anyInt;
-import static se.mockachino.matchers.Matchers.eq;
-import static se.mockachino.matchers.Matchers.notEq;
-import static se.mockachino.matchers.Matchers.notSame;
-import static se.mockachino.matchers.Matchers.regexp;
-import static se.mockachino.matchers.Matchers.same;
-import static se.mockachino.matchers.Matchers.type;
+import static se.mockachino.matchers.Matchers.*;
 
 public class MockachinoTest {
 	

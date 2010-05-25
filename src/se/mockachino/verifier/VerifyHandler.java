@@ -1,6 +1,6 @@
 package se.mockachino.verifier;
 
-import se.mockachino.MethodCall;
+import se.mockachino.Invocation;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.order.InOrderVerifyHandler;
@@ -11,11 +11,11 @@ import java.util.List;
 public class VerifyHandler<T> extends MatchingHandler {
     private static final BadUsageHandler BAD_USAGE_HANDLER = InOrderVerifyHandler.BAD_USAGE_HANDLER;
     
-    private final Iterable<MethodCall> calls;
+    private final Iterable<Invocation> calls;
 	private final int minCalls;
 	private final int maxCalls;
 
-	public VerifyHandler(T mock, Iterable<MethodCall> calls,
+	public VerifyHandler(T mock, Iterable<Invocation> calls,
 						 int minCalls, int maxCalls) {
 		super("VerifyHandler", mock.toString(), BAD_USAGE_HANDLER);
 		this.calls = calls;
@@ -26,8 +26,8 @@ public class VerifyHandler<T> extends MatchingHandler {
 	@Override
 	public void match(Object o, MockachinoMethod method, MethodMatcher matcher) {
 		int counter = 0;
-		for (MethodCall call : calls) {
-			if (matcher.matches(call)) {
+		for (Invocation call : calls) {
+			if (matcher.matches(call.getMethodCall())) {
 				counter++;
 			}
 		}
@@ -51,10 +51,10 @@ public class VerifyHandler<T> extends MatchingHandler {
 
 		boolean reachedHit = false;
 		boolean reachedMiss = false;
-		List<MethodCallCount> calls = grouper.getGroupedCalls();
-		List<MethodCallCount> filteredCalls = grouper.getFilteredCalls(calls, maxMisses);
-		for (MethodCallCount call : filteredCalls) {
-			boolean hit = matcher.matches(call);
+		List<InvocationCount> calls = grouper.getGroupedCalls();
+		List<InvocationCount> filteredCalls = grouper.getFilteredCalls(calls, maxMisses);
+		for (InvocationCount call : filteredCalls) {
+			boolean hit = matcher.matches(call.getMethodCall());
 			if (hit && !reachedHit) {
 				report.append("\nHits:\n");
 				reachedHit = true;
@@ -75,14 +75,14 @@ public class VerifyHandler<T> extends MatchingHandler {
 		return report.toString();
 	}
 
-	private String count(MethodCallCount call) {
+	private String count(InvocationCount call) {
 		if (call.getCount() <= 1) {
 			return "";
 		}
 		return "\t\t[invoked " + call.getCount() + " times]";
 	}
 
-	private String getStacktrace(MethodCall call) {
+	private String getStacktrace(Invocation call) {
 		String traceString = call.getStackTraceString(1);
 		if (traceString == null) {
 			return "";

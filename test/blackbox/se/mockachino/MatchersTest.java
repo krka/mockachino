@@ -13,23 +13,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static se.mockachino.matchers.Matchers.and;
-import static se.mockachino.matchers.Matchers.any;
-import static se.mockachino.matchers.Matchers.anyBoolean;
-import static se.mockachino.matchers.Matchers.anyByte;
-import static se.mockachino.matchers.Matchers.anyDouble;
-import static se.mockachino.matchers.Matchers.anyFloat;
-import static se.mockachino.matchers.Matchers.anyInt;
-import static se.mockachino.matchers.Matchers.anyLong;
-import static se.mockachino.matchers.Matchers.anyShort;
-import static se.mockachino.matchers.Matchers.eq;
-import static se.mockachino.matchers.Matchers.mEq;
-import static se.mockachino.matchers.Matchers.mType;
-import static se.mockachino.matchers.Matchers.match;
-import static se.mockachino.matchers.Matchers.matchEq;
-import static se.mockachino.matchers.Matchers.notEq;
-import static se.mockachino.matchers.Matchers.or;
-import static se.mockachino.matchers.Matchers.type;
+import static se.mockachino.matchers.Matchers.*;
 
 public class MatchersTest {
 	@Test

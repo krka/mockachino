@@ -1,6 +1,8 @@
 package se.mockachino.proxy;
 
-import net.sf.cglib.proxy.*;
+import net.sf.cglib.proxy.Callback;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.Factory;
 import se.mockachino.Primitives;
 import se.mockachino.ProxyMetadata;
 import se.mockachino.exceptions.UsageError;

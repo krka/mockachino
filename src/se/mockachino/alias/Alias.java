@@ -1,11 +1,11 @@
 package se.mockachino.alias;
 
-import se.mockachino.MethodCall;
+import se.mockachino.Invocation;
 
 import java.util.List;
 
 public interface Alias {
-	List<MethodCall> getMatches();
+	List<Invocation> getMatches();
 	int count();
 
 

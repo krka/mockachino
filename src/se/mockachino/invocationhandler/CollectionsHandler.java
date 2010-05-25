@@ -3,7 +3,6 @@ package se.mockachino.invocationhandler;
 import se.mockachino.CallHandler;
 import se.mockachino.MethodCall;
 import se.mockachino.Mockachino;
-import se.mockachino.Primitives;
 import se.mockachino.matchers.MethodMatcherImpl;
 import se.mockachino.util.MockachinoMethod;
 

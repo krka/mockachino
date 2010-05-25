@@ -1,6 +1,6 @@
 package se.mockachino.order;
 
-import se.mockachino.MethodCall;
+import se.mockachino.Invocation;
 import se.mockachino.MockContext;
 import se.mockachino.MockData;
 import se.mockachino.Mockachino;
@@ -19,7 +19,7 @@ public class BetweenVerifyContext {
 		this.end = end;
 	}
 
-	public Iterable<MethodCall> getCalls(Object mock) {
+	public Iterable<Invocation> getCalls(Object mock) {
 		MockData<Object> data = Mockachino.getData(mock);
 		return data.getCalls(start, end);
 	}

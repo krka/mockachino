@@ -3,7 +3,6 @@ package se.mockachino.matchers.matcher;
 import se.mockachino.util.SafeIteratorList;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ArgumentCatcher<T> extends BasicMatcher<T> {

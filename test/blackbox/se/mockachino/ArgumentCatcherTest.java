@@ -4,10 +4,9 @@ import org.junit.Test;
 import se.mockachino.matchers.matcher.ArgumentCatcher;
 import se.mockachino.matchers.matcher.ClassMatcher;
 
-import java.util.Iterator;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static se.mockachino.Mockachino.mock;
 import static se.mockachino.Mockachino.verifyOnce;
 import static se.mockachino.matchers.Matchers.match;

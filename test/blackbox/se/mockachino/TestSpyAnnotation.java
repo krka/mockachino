@@ -2,7 +2,6 @@ package se.mockachino;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.mockachino.annotations.Mock;
 import se.mockachino.annotations.Spy;
 import se.mockachino.matchers.Matchers;
 

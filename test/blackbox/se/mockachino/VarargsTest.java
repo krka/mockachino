@@ -1,19 +1,7 @@
 package se.mockachino;
 
 import org.junit.Test;
-import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.Matchers;
-import se.mockachino.matchers.matcher.Matcher;
-
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static se.mockachino.matchers.Matchers.*;
 
 public class VarargsTest {
     static interface Varargs {

@@ -2,7 +2,6 @@ package se.mockachino.verifier;
 
 import se.mockachino.CallHandler;
 import se.mockachino.MethodCall;
-import se.mockachino.Primitives;
 import se.mockachino.invocationhandler.AbstractInvocationHandler;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.matchers.MethodMatcherImpl;
@@ -20,7 +19,7 @@ public abstract class MatchingHandler extends AbstractInvocationHandler {
 		MethodMatcher matcher = new MethodMatcherImpl(method, objects);
 		match(o, method, matcher);
 
-        return defaultAnswer.invoke(o, new MethodCall(method, objects, -1, null));
+        return defaultAnswer.invoke(o, new MethodCall(method, objects));
 	}
 
 	protected abstract void match(Object o, MockachinoMethod method, MethodMatcher matcher);

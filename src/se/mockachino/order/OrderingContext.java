@@ -1,6 +1,6 @@
 package se.mockachino.order;
 
-import se.mockachino.MethodCall;
+import se.mockachino.Invocation;
 import se.mockachino.MockContext;
 import se.mockachino.matchers.MatcherThreadHandler;
 
@@ -8,7 +8,7 @@ public class OrderingContext {
 	private final MockContext context;
 	private final MockPoint start;
 	private final MockPoint end;
-	private MethodCall currentCall = MethodCall.NULL;
+	private Invocation currentInvocation = Invocation.NULL;
 
 	public OrderingContext(MockContext context, MockPoint start, MockPoint end) {
 		this.context = context;
@@ -46,17 +46,17 @@ public class OrderingContext {
 		return new InOrderVerify(this, context, min, start, end);
 	}
 
-	MethodCall getCurrentCall() {
-		return currentCall;
+	Invocation getCurrentInvocation() {
+		return currentInvocation;
 	}
 
-	void setCurrent(MethodCall call) {
-		this.currentCall = call;
+	void setCurrent(Invocation call) {
+		this.currentInvocation = call;
 	}
 
 	private MockPoint getPoint(int offset) {
 		MatcherThreadHandler.assertEmpty();
-		int base = currentCall.getCallNumber();
+		int base = currentInvocation.getCallNumber();
 		return new MockPoint(context, base + offset);
 	}
 

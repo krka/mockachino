@@ -1,10 +1,6 @@
 package se.mockachino.mock;
 
-import se.mockachino.CallHandler;
-import se.mockachino.MethodCall;
-import se.mockachino.MockContext;
-import se.mockachino.MockData;
-import se.mockachino.ProxyMetadata;
+import se.mockachino.*;
 import se.mockachino.cleaner.StacktraceCleaner;
 import se.mockachino.invocationhandler.AbstractInvocationHandler;
 import se.mockachino.observer.MethodObserver;
@@ -41,26 +37,32 @@ public class MockHandler<T> extends AbstractInvocationHandler {
 		return mockData;
 	}
 
-	public Object doInvoke(Object o, MockachinoMethod method, Object[] objects) throws Throwable {
+	public Object doInvoke(Object o, MockachinoMethod method, Object[] args) throws Throwable {
 		if (method.equals(GET_CONTEXT)) {
 			return getContext();
 		}
 		if (method.equals(GET_MOCKDATA)) {
 			return getMockData();
 		}
-		MethodCall methodCall = mockData.addCall(method, objects, getStackTrace());
+        Invocation invocation = mockData.addCall(o, method, args, getStackTrace());
+        MethodCall methodCall = invocation.getMethodCall();
+        try {
 
-		List<MethodObserver> observers = mockData.getObservers(method);
-		for (MethodObserver observer : observers) {
-			observer.invoke(methodCall);
-		}
+            List<MethodObserver> observers = mockData.getObservers(method);
+            for (MethodObserver observer : observers) {
+                observer.invoke(methodCall);
+            }
 
-		MethodStubs methodStubs = mockData.getStubs(method);
-		MethodStub stub = methodStubs.findMatch(methodCall);
-		if (stub != null) {
-			return stub.getAnswer().invoke(o, methodCall);
-		}
-		return fallback.invoke(o, methodCall);
+            MethodStubs methodStubs = mockData.getStubs(method);
+            MethodStub stub = methodStubs.findMatch(methodCall);
+            if (stub != null) {
+                return stub.getAnswer().invoke(o, methodCall);
+            }
+            return fallback.invoke(o, methodCall);
+        }
+        finally {
+            WhenStubber.lastInvocation.set(invocation);
+        }
 	}
 
 	private StackTraceElement[] getStackTrace() {

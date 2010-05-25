@@ -1,9 +1,9 @@
 package se.mockachino;
 
 import org.junit.Test;
-import se.mockachino.matchers.Matchers;
 import se.mockachino.alias.Alias;
 import se.mockachino.alias.SimpleAlias;
+import se.mockachino.matchers.Matchers;
 
 import java.util.List;
 

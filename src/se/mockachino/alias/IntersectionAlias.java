@@ -1,12 +1,8 @@
 package se.mockachino.alias;
 
-import se.mockachino.MethodCall;
+import se.mockachino.Invocation;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 public class IntersectionAlias extends AbstractAlias {
 	private final Alias[] aliases;
@@ -16,18 +12,18 @@ public class IntersectionAlias extends AbstractAlias {
 	}
 
 	@Override
-	public List<MethodCall> getMatches() {
+	public List<Invocation> getMatches() {
 		int n = aliases.length;
 		if (n == 0) {
 			return Collections.emptyList();
 		}
-		SortedSet<MethodCall> set = new TreeSet<MethodCall>(MethodCall.COMPARATOR);
+		SortedSet<Invocation> set = new TreeSet<Invocation>(Invocation.COMPARATOR);
 		set.addAll(aliases[0].getMatches());
 		for (int i = 1; i < n; i++) {
 			Alias alias = aliases[i];
-			List<MethodCall> list = alias.getMatches();
+			List<Invocation> list = alias.getMatches();
 			set.retainAll(list);
 		}
-		return new ArrayList<MethodCall>(set);
+		return new ArrayList<Invocation>(set);
 	}
 }

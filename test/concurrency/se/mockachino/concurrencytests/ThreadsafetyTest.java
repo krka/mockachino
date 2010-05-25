@@ -4,12 +4,7 @@ import org.junit.Test;
 import se.mockachino.order.OrderingContext;
 
 import static org.junit.Assert.assertEquals;
-import static se.mockachino.Mockachino.mock;
-import static se.mockachino.Mockachino.newOrdering;
-import static se.mockachino.Mockachino.stubReturn;
-import static se.mockachino.Mockachino.verifyExactly;
-import static se.mockachino.Mockachino.verifyNever;
-import static se.mockachino.Mockachino.verifyOnce;
+import static se.mockachino.Mockachino.*;
 import static se.mockachino.matchers.Matchers.anyInt;
 
 public class ThreadsafetyTest {

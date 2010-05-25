@@ -1,6 +1,6 @@
 package se.mockachino.alias;
 
-import se.mockachino.MethodCall;
+import se.mockachino.Invocation;
 import se.mockachino.MockData;
 import se.mockachino.Mockachino;
 import se.mockachino.exceptions.UsageError;
@@ -46,14 +46,14 @@ public class SimpleAlias extends AbstractAlias {
 	}
 
 	@Override
-	public List<MethodCall> getMatches() {
+	public List<Invocation> getMatches() {
         if (methodMatcher == null) {
             throw new UsageError("Alias must be bound to a mock method");
         }
-        List<MethodCall> res = new ArrayList<MethodCall>();
+        List<Invocation> res = new ArrayList<Invocation>();
         MockData<Object> data = Mockachino.getData(mock);
-        for (MethodCall call : data.getCalls()) {
-            if (methodMatcher.matches(call)) {
+        for (Invocation call : data.getInvocations()) {
+            if (methodMatcher.matches(call.getMethodCall())) {
                 res.add(call);
             }
         }

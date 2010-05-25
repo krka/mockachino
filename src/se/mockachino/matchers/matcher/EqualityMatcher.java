@@ -1,6 +1,5 @@
 package se.mockachino.matchers.matcher;
 
-import se.mockachino.Primitives;
 import se.mockachino.util.Formatting;
 import se.mockachino.util.PrimitiveList;
 
