@@ -13,31 +13,34 @@ public class ReturnVerifier implements StubVerifier {
 	}
 
 	public void verify(MockachinoMethod method) {
-		Class<?> returnType = method.getReturnType();
+		verifyReturnType((Class<?>) method.getReturnType(), returnValue);
+	}
+
+	protected static void verifyReturnType(Class<?> returnType, Object value) {
 		if (returnType == void.class) {
-			if (returnValue != null) {
+			if (value != null) {
 				throw new UsageError(("Void methods must return null"));
 			}
 		} else {
-			if (returnValue == null) {
+			if (value == null) {
 				if (returnType.isPrimitive()) {
 					throw new UsageError(("Expected a return value of type " + returnType.getSimpleName() + " but was null"));
 				}
 			} else {
 				if (returnType.isPrimitive()) {
-					if (returnValue.getClass() != Primitives.getRealClass(returnType)) {
-						error(returnType);
+					if (value.getClass() != Primitives.getRealClass(returnType)) {
+						error(returnType, value);
 					}
 				} else {
-					if (!returnType.isAssignableFrom(returnValue.getClass())) {
-						error(returnType);
+					if (!returnType.isAssignableFrom(value.getClass())) {
+						error(returnType, value);
 					}
 				}
 			}
 		}
 	}
 
-	private void error(Class<?> returnType) {
-		throw new UsageError(("Expected a return value of type " + returnType.getSimpleName() + " but was " + returnValue.getClass().getSimpleName()));
+	protected static void error(Class<?> returnType, Object value) {
+		throw new UsageError(("Expected a return value of type " + returnType.getSimpleName() + " but was " + value.getClass().getSimpleName()));
 	}
 }

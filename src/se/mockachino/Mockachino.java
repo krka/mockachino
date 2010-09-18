@@ -12,6 +12,8 @@ import se.mockachino.proxy.ProxyUtil;
 import se.mockachino.stub.AcceptAllVerifier;
 import se.mockachino.stub.Stubber;
 import se.mockachino.stub.exception.ThrowAnswer;
+import se.mockachino.stub.returnvalue.MultipleReturnAnswer;
+import se.mockachino.stub.returnvalue.MultipleReturnVerifier;
 import se.mockachino.stub.returnvalue.ReturnAnswer;
 import se.mockachino.stub.returnvalue.ReturnVerifier;
 import se.mockachino.verifier.VerifyRangeStart;
@@ -229,6 +231,14 @@ public class Mockachino {
         MatcherThreadHandler.assertEmpty();
         return new Stubber(new ReturnAnswer(returnValue), new ReturnVerifier(returnValue));
     }
+
+	public static Stubber stubReturn(Object... returnValues) {
+		MatcherThreadHandler.assertEmpty();
+		if (returnValues == null || returnValues.length < 1) {
+			returnValues = new Object[] { null };
+		}
+		return new Stubber(new MultipleReturnAnswer(returnValues), new MultipleReturnVerifier(returnValues));
+	}
 
     /**
      * Stubs a method call with a specific answer strategy.
