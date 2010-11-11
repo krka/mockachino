@@ -1,3 +1,9 @@
+----------------------
+- Version 0.5.0
+----------------------
+
+* Added support for deep mocking with generics.
+* Filtering out toString calls in invocations.
 * Added implementation of when(mock.foo(...)).thenReturn/Answer/Throw()
 
 ----------------------

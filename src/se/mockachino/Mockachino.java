@@ -1,5 +1,6 @@
 package se.mockachino;
 
+import com.google.inject.TypeLiteral;
 import se.mockachino.alias.SimpleAlias;
 import se.mockachino.exceptions.UsageError;
 import se.mockachino.matchers.MatcherThreadHandler;
@@ -56,6 +57,17 @@ public class Mockachino {
 		return DEFAULT_CONTEXT.mock(clazz);
 	}
 
+    /**
+     * Creates a new mock with a default handler and default settings.
+     *
+     * @param type the type literal of the interface or class to mock
+     * @return a mock object of the same class
+     */
+    public static <T> T mock(TypeLiteral<T> type) {
+        return DEFAULT_CONTEXT.mock(type);
+    }
+
+
 	/**
 	 * Creates a new mock with specified settings.
 	 *
@@ -65,6 +77,16 @@ public class Mockachino {
 	public static <T> T mock(Class<T> clazz, MockSettings settings) {
 		return DEFAULT_CONTEXT.mock(clazz, settings);
 	}
+
+    /**
+     * Creates a new mock with specified settings.
+     *
+     * @param type the type literal of the interface or class to mock
+     * @return a mock object of the same class
+     */
+    public static <T> T mock(TypeLiteral<T> type, MockSettings settings) {
+        return DEFAULT_CONTEXT.mock(type, settings);
+    }
 
 	/**
 	 * Creates a new mock with class impl.getClass() with the impl as a default handler.
@@ -381,4 +403,5 @@ public class Mockachino {
     public static <T> WhenStubber<T> when(T mockInvocation) {
         return new WhenStubber<T>();
     }
+
 }

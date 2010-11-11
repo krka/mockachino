@@ -1,5 +1,6 @@
 package se.mockachino;
 
+import com.google.inject.TypeLiteral;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.matchers.MethodMatcherImpl;
 import se.mockachino.observer.MethodObserver;
@@ -39,11 +40,13 @@ public class MockData<T> {
 	private final List<Invocation> readOnlyCalls;
 	private final Map<MockachinoMethod, List<MethodObserver>> observers;
 	private final Map<MockachinoMethod, MethodStubs> stubs;
+    private final TypeLiteral typeLiteral;
 
-    public MockData(MockContext context, Class<T> iface, Set<Class<?>> extraInterfaces) {
+    public MockData(MockContext context, Class<T> iface, TypeLiteral typeLiteral, Set<Class<?>> extraInterfaces) {
 		this.context = context;
 		this.iface = iface;
 		this.extraInterfaces = extraInterfaces;
+        this.typeLiteral = typeLiteral;
 		invocations = new SafeIteratorList<Invocation>(new ArrayList<Invocation>(), Invocation.NULL);
 		readOnlyCalls = Collections.unmodifiableList(invocations);
 		observers = new HashMap<MockachinoMethod,List<MethodObserver>>();
@@ -138,14 +141,16 @@ public class MockData<T> {
 	 * @return the method call which was added
 	 */
 	public synchronized Invocation addCall(Object obj, MockachinoMethod method, Object[] args, StackTraceElement[] stackTrace) {
-		int callNumber = context.incrementSequence();
-		MethodCall call = new MethodCall(method, args);
+        int callNumber = context.incrementSequence();
+        MethodCall call = new MethodCall(method, args);
         Invocation invocation = new Invocation(obj, call, callNumber, stackTrace);
-        invocations.add(invocation);
-		return invocation;
-	}
+        if (!method.isToStringCall()) {
+            invocations.add(invocation);
+        }
+        return invocation;
+    }
 
-	/**
+    /**
 	 * Clear the list of invocations
 	 */
 	public synchronized void resetCalls() {
@@ -194,5 +199,9 @@ public class MockData<T> {
         if (index >= 0) {
             invocations.remove(index);
         }
+    }
+
+    public TypeLiteral getTypeLiteral() {
+        return typeLiteral;
     }
 }

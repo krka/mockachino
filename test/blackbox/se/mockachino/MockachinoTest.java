@@ -285,7 +285,7 @@ public class MockachinoTest {
 
 	@Test(expected = UsageError.class)
 	public void testBadUsage5() {
-		Mockachino.mock(null);
+		Mockachino.mock((Class<Object>) null);
 	}
 
 	@Test(expected = UsageError.class)
@@ -344,9 +344,10 @@ public class MockachinoTest {
 		mock.doMap(actualMap);
 
 
-		Map<String, String> expectedtMap = new HashMap<String, String>();
+		Map<String, String> expectedMap = new HashMap<String, String>();
 
-		Mockachino.verifyExactly(1).on(mock).doMap(expectedtMap);
+		Mockachino.verifyExactly(1).on(mock).doMap(expectedMap);
 	}
+
 }
 

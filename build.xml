@@ -7,12 +7,21 @@
 	</path>
 	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
 
+
 	<dirname property="baseDir" file="${ant.file}"/>
 	<property name="reports.dir" value="${basedir}/build/testreport"/>
 	<property file="${baseDir}/version.properties" />
 	<property name="suffix" value="${version.major}.${version.minor}.${version.fix}" />
 
 	<property name="coverage.dir" value="${baseDir}/build/coverage" />
+
+	<path id="dependencies">
+		<fileset dir="${baseDir}/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+
 
 	<target name="all" depends="compile, test, package" description="Test and package"/>
 
@@ -27,9 +36,7 @@
 				destdir="${baseDir}/build/classes"
 				>
 			<classpath>
-				<fileset dir="${baseDir}/lib">
-					<include name="**/*.jar" />
-				</fileset>
+				<path refid="dependencies" />
 			</classpath>
 			<src path="src"></src>
 		</javac>
@@ -41,6 +48,9 @@
 				destdir="${baseDir}/build/test-unit"
 				>
 			<classpath path="${baseDir}/build/classes" />
+			<classpath>
+				<path refid="dependencies" />
+			</classpath>
 			<src path="test/unit"></src>
 		</javac>
 	</target>
@@ -50,6 +60,9 @@
 				destdir="${baseDir}/build/test-blackbox"
 				>
 			<classpath path="${baseDir}/build/classes" />
+			<classpath>
+				<path refid="dependencies" />
+			</classpath>
 			<src path="test/blackbox"></src>
 		</javac>
 	</target>
@@ -59,6 +72,9 @@
 				destdir="${baseDir}/build/test-examples"
 				>
 			<classpath path="${baseDir}/build/classes" />
+			<classpath>
+				<path refid="dependencies" />
+			</classpath>
 			<src path="test/examples"></src>
 		</javac>
 	</target>
@@ -68,6 +84,9 @@
 				destdir="${baseDir}/build/test-concurrency"
 				>
 			<classpath path="${baseDir}/build/classes" />
+			<classpath>
+				<path refid="dependencies" />
+			</classpath>
 			<src path="test/concurrency"></src>
 		</javac>
 	</target>
@@ -77,6 +96,9 @@
 				destdir="${baseDir}/build/test-performance"
 				>
 			<classpath path="${baseDir}/build/classes" />
+			<classpath>
+				<path refid="dependencies" />
+			</classpath>
 			<src path="test/performance"></src>
 		</javac>
 	</target>
@@ -115,9 +137,7 @@
 				<pathelement location="${baseDir}/build/test-unit"/>
 			</classpath>
 			<classpath>
-				<fileset dir="${baseDir}/lib">
-					<include name="**/*.jar" />
-				</fileset>
+				<path refid="dependencies" />
 				<path refid="emma.lib" />
 			</classpath>
 
@@ -157,9 +177,7 @@
 				<pathelement location="${baseDir}/build/test-blackbox"/>
 			</classpath>
 			<classpath>
-				<fileset dir="${baseDir}/lib">
-					<include name="**/*.jar" />
-				</fileset>
+				<path refid="dependencies" />
 				<path refid="emma.lib" />
 			</classpath>
 
@@ -199,9 +217,7 @@
 				<pathelement location="${baseDir}/build/test-examples"/>
 			</classpath>
 			<classpath>
-				<fileset dir="${baseDir}/lib">
-					<include name="**/*.jar" />
-				</fileset>
+				<path refid="dependencies" />
 				<path refid="emma.lib" />
 			</classpath>
 
@@ -241,9 +257,7 @@
 				<pathelement location="${baseDir}/build/test-concurrency"/>
 			</classpath>
 			<classpath>
-				<fileset dir="${baseDir}/lib">
-					<include name="**/*.jar" />
-				</fileset>
+				<path refid="dependencies" />
 				<path refid="emma.lib" />
 			</classpath>
 
@@ -282,9 +296,7 @@
 				<pathelement location="${baseDir}/build/test-performance"/>
 			</classpath>
 			<classpath>
-				<fileset dir="${baseDir}/lib">
-					<include name="**/*.jar" />
-				</fileset>
+				<path refid="dependencies" />
 				<path refid="emma.lib" />
 			</classpath>
 
@@ -375,6 +387,7 @@
 			<zipfileset src="${baseDir}/lib/cglib-2.2.jar" />
 			<zipfileset src="${baseDir}/lib/asm-all-3.2.jar" />
 			<zipfileset src="${baseDir}/lib/objenesis-1.2.jar" />
+			<zipfileset src="${baseDir}/lib/guice-2.0-no_aop.jar" />
 		</jar>
 		
 		<!-- full project -->

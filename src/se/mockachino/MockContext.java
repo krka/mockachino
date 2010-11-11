@@ -1,5 +1,6 @@
 package se.mockachino;
 
+import com.google.inject.TypeLiteral;
 import se.mockachino.annotations.Mock;
 import se.mockachino.annotations.Spy;
 import se.mockachino.exceptions.UsageError;
@@ -52,16 +53,38 @@ public class MockContext {
 	}
 
 	/**
+	 * Creates a new mock with a default handler and default settings.
+	 *
+	 * @param type the type literal of the interface or class to mock
+	 * @return a mock object of the same class
+	 */
+    public <T> T mock(TypeLiteral<T> type) {
+		checkNull("type", type);
+		MockSettings mockSettings = Settings.newSettings();
+		return mock(type, mockSettings);
+	}
+
+	/**
 	 * Creates a new mock with specified settings.
 	 *
 	 * @param clazz the interface or class to mock
 	 * @return a mock object of the same class
 	 */
 	public <T> T mock(Class<T> clazz, MockSettings settings) {
-		checkNull("clazz", clazz);
-		checkNull("settings", settings);
-		return mock(clazz, settings.getFallback(), settings.isQuick(), settings.getName(), settings.getExtraInterfaces());
+        return mock(TypeLiteral.get(clazz), settings);
 	}
+
+    /**
+     * Creates a new mock with specified settings.
+     *
+     * @param type the type literal of the interface or class to mock
+     * @return a mock object of the same class
+     */
+    public <T> T mock(TypeLiteral<T> type, MockSettings settings) {
+        checkNull("type", type);
+        checkNull("settings", settings);
+        return mock(type, settings.getFallback(), settings.isQuick(), settings.getName(), settings.getExtraInterfaces());
+    }
 
 	/**
 	 * Creates a new mock with class impl.getClass() with the impl as a default handler.
@@ -90,16 +113,16 @@ public class MockContext {
 		return mock((Class<T>)impl.getClass(), settings.spyOn(impl));
 	}
 
-	private <T> T mock(Class<T> clazz, CallHandler fallback, boolean quick, String name, Set<Class<?>> extraInterfaces) {
-		checkNull("clazz", clazz);
+	private <T> T mock(TypeLiteral<T> type, CallHandler fallback, boolean quick, String name, Set<Class<?>> extraInterfaces) {
+		checkNull("type", type);
 		checkNull("fallback", fallback);
 		if (name == null) {
-			name = getDefaultName(clazz, fallback);
+			name = getDefaultName(type.getRawType(), fallback);
 		}
 		MatcherThreadHandler.assertEmpty();
 		MockHandler mockHandler = new MockHandler(
-				this, fallback, new MockData(this, clazz, extraInterfaces), quick, name);
-		T mock = ProxyUtil.newProxy(clazz, mockHandler, extraInterfaces);
+				this, fallback, new MockData(this, type.getRawType(), type, extraInterfaces), quick, name);
+		T mock = (T) ProxyUtil.newProxy(type.getRawType(), mockHandler, extraInterfaces);
 		return mock;
 	}
 
