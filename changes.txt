@@ -1,4 +1,9 @@
 ----------------------
+- Version 0.5.1
+----------------------
+* Replaced the guice dependency with a much lighter gentyref dependency.
+
+----------------------
 - Version 0.5.0
 ----------------------
 

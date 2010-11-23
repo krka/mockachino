@@ -1,6 +1,5 @@
 package se.mockachino;
 
-import com.google.inject.TypeLiteral;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.matchers.MethodMatcherImpl;
 import se.mockachino.observer.MethodObserver;
@@ -12,6 +11,7 @@ import se.mockachino.util.MockachinoMethod;
 import se.mockachino.util.SafeIteratorList;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.*;
 
 public class MockData<T> {
@@ -40,13 +40,13 @@ public class MockData<T> {
 	private final List<Invocation> readOnlyCalls;
 	private final Map<MockachinoMethod, List<MethodObserver>> observers;
 	private final Map<MockachinoMethod, MethodStubs> stubs;
-    private final TypeLiteral typeLiteral;
+    private final Type type;
 
-    public MockData(MockContext context, Class<T> iface, TypeLiteral typeLiteral, Set<Class<?>> extraInterfaces) {
+    public MockData(MockContext context, Class<T> iface, Type type, Set<Class<?>> extraInterfaces) {
 		this.context = context;
 		this.iface = iface;
 		this.extraInterfaces = extraInterfaces;
-        this.typeLiteral = typeLiteral;
+        this.type = type;
 		invocations = new SafeIteratorList<Invocation>(new ArrayList<Invocation>(), Invocation.NULL);
 		readOnlyCalls = Collections.unmodifiableList(invocations);
 		observers = new HashMap<MockachinoMethod,List<MethodObserver>>();
@@ -201,7 +201,7 @@ public class MockData<T> {
         }
     }
 
-    public TypeLiteral getTypeLiteral() {
-        return typeLiteral;
+    public Type getTypeLiteral() {
+        return type;
     }
 }

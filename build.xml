@@ -387,7 +387,7 @@
 			<zipfileset src="${baseDir}/lib/cglib-2.2.jar" />
 			<zipfileset src="${baseDir}/lib/asm-all-3.2.jar" />
 			<zipfileset src="${baseDir}/lib/objenesis-1.2.jar" />
-			<zipfileset src="${baseDir}/lib/guice-2.0-no_aop.jar" />
+			<zipfileset src="${baseDir}/lib/gentyref-1.1.0.jar" />
 		</jar>
 		
 		<!-- full project -->

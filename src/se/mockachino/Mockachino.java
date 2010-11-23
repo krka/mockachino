@@ -1,6 +1,6 @@
 package se.mockachino;
 
-import com.google.inject.TypeLiteral;
+import com.googlecode.gentyref.TypeToken;
 import se.mockachino.alias.SimpleAlias;
 import se.mockachino.exceptions.UsageError;
 import se.mockachino.matchers.MatcherThreadHandler;
@@ -63,7 +63,7 @@ public class Mockachino {
      * @param type the type literal of the interface or class to mock
      * @return a mock object of the same class
      */
-    public static <T> T mock(TypeLiteral<T> type) {
+    public static <T> T mock(TypeToken<T> type) {
         return DEFAULT_CONTEXT.mock(type);
     }
 
@@ -84,7 +84,7 @@ public class Mockachino {
      * @param type the type literal of the interface or class to mock
      * @return a mock object of the same class
      */
-    public static <T> T mock(TypeLiteral<T> type, MockSettings settings) {
+    public static <T> T mock(TypeToken<T> type, MockSettings settings) {
         return DEFAULT_CONTEXT.mock(type, settings);
     }
 
