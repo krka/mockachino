@@ -82,6 +82,9 @@ public class VerifierTest {
         mock.contains(null);
         mock.contains(new Object());
 
+        // tostring doesn't trigger verification
+        mock.toString();
+
         Mockachino.verifyExactly(3).onAnyMethod(mock);
         Mockachino.verifyExactly(2).onMethod(mock,
                 new MethodMatcherImpl(MockachinoMethod.find(List.class, "contains"),
