@@ -5,7 +5,6 @@ import se.mockachino.*;
 import se.mockachino.matchers.MethodMatcherImpl;
 import se.mockachino.util.MockachinoMethod;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 public class DeepMockHandler implements CallHandler {
@@ -24,7 +23,7 @@ public class DeepMockHandler implements CallHandler {
 
         Type type = data.getTypeLiteral();
 
-        final Type returnType = getReturnType(type, method.getMethod());
+        final Type returnType = GenericTypeReflector.getExactReturnType(method.getMethod(), type);
 
         if (Mockachino.canMock(GenericTypeReflector.erase(returnType))) {
 			Object returnValue = context.mockType(returnType, Settings.fallback(this));
@@ -34,12 +33,4 @@ public class DeepMockHandler implements CallHandler {
 		return delegate.invoke(obj, call);
 	}
 
-    private Type getReturnType(Type type, Method method)
-    {
-        // Workaround for bug in gentyref
-        if (method.getDeclaringClass() == Object.class) {
-            return method.getReturnType();
-        }
-        return  GenericTypeReflector.getExactReturnType(method, type);
-    }
 }
