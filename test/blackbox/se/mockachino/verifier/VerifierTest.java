@@ -5,8 +5,13 @@ import se.mockachino.CallHandler;
 import se.mockachino.MethodCall;
 import se.mockachino.Mockachino;
 import se.mockachino.exceptions.VerificationError;
+import se.mockachino.matchers.MethodMatcherImpl;
+import se.mockachino.matchers.matcher.AnyMatcher;
+import se.mockachino.matchers.matcher.Matcher;
+import se.mockachino.util.MockachinoMethod;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class VerifierTest {
@@ -69,4 +74,19 @@ public class VerifierTest {
 		Mockachino.verifyExactly(0).on(mock1).add("Bar");
 		Mockachino.verifyExactly(1).on(mock1).add("Foo");
 	}
+
+    @Test
+    public void testMatchesAnyMethod() {
+        final List mock = Mockachino.mock(ArrayList.class);
+        mock.get(1);
+        mock.contains(null);
+        mock.contains(new Object());
+
+        Mockachino.verifyExactly(3).onAnyMethod(mock);
+        Mockachino.verifyExactly(2).onMethod(mock,
+                new MethodMatcherImpl(MockachinoMethod.find(List.class, "contains"),
+                        Arrays.<Matcher>asList(new AnyMatcher(Object.class))));
+
+        Mockachino.verifyExactly(2).onMethodWithAnyArgument(mock, MockachinoMethod.find(List.class, "contains"));
+    }
 }
