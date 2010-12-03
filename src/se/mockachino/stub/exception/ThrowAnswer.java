@@ -12,6 +12,8 @@ public class ThrowAnswer implements CallHandler {
 
 	@Override
 	public Object invoke(Object obj, MethodCall call) throws Throwable {
+		RuntimeException actualStacktrace = new RuntimeException();
+		e.setStackTrace(actualStacktrace.getStackTrace());
 		throw e;
 	}
 }
