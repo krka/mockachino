@@ -108,7 +108,6 @@ public class StubberTest {
 		List mock = Mockachino.mock(List.class);
 		Mockachino.stubThrow(new IllegalStateException("unstubbed method call!")).onAnyMethod(mock);
 		Mockachino.stubReturn(123).on(mock).size();
-		System.out.println("Test");
 
 		assertEquals(123, mock.size());
 		try {
