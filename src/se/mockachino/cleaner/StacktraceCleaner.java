@@ -41,6 +41,8 @@ public class StacktraceCleaner {
 		add("com.intellij.rt.execution.");
 		add("com.intellij.junit4.");
 		add("net.sf.cglib.");
+		add("junit.framework.");
+		add("org.apache.tools.ant.");
 	}};
 	private static boolean isClean(StackTraceElement element) {
 		String s = element.getClassName();
