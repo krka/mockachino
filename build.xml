@@ -45,6 +45,7 @@
 	<target name="compile-test-unit" depends="compile">
 		<mkdir dir="${baseDir}/build/test-unit" />
 		<javac
+				debug="true" debuglevel="lines,vars,source"
 				destdir="${baseDir}/build/test-unit"
 				>
 			<classpath path="${baseDir}/build/classes" />
@@ -57,6 +58,7 @@
 	<target name="compile-test-blackbox" depends="compile">
 		<mkdir dir="${baseDir}/build/test-blackbox" />
 		<javac
+				debug="true" debuglevel="lines,vars,source"
 				destdir="${baseDir}/build/test-blackbox"
 				>
 			<classpath path="${baseDir}/build/classes" />
@@ -69,6 +71,7 @@
 	<target name="compile-test-examples" depends="compile">
 		<mkdir dir="${baseDir}/build/test-examples" />
 		<javac
+				debug="true" debuglevel="lines,vars,source"
 				destdir="${baseDir}/build/test-examples"
 				>
 			<classpath path="${baseDir}/build/classes" />
@@ -81,6 +84,7 @@
 	<target name="compile-test-concurrency" depends="compile">
 		<mkdir dir="${baseDir}/build/test-concurrency" />
 		<javac
+				debug="true" debuglevel="lines,vars,source"
 				destdir="${baseDir}/build/test-concurrency"
 				>
 			<classpath path="${baseDir}/build/classes" />
@@ -93,6 +97,7 @@
 	<target name="compile-test-performance" depends="compile">
 		<mkdir dir="${baseDir}/build/test-performance" />
 		<javac
+				debug="true" debuglevel="lines,vars,source"
 				destdir="${baseDir}/build/test-performance"
 				>
 			<classpath path="${baseDir}/build/classes" />
