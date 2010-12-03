@@ -13,6 +13,8 @@ public class VerifyRangeStart {
 	private final MockPoint start;
 	private final MockPoint end;
 
+	private long timeout;
+
 	public VerifyRangeStart(MockContext mockContext, int min, int max) {
 		this.mockContext = mockContext;
 		this.min = min;
@@ -33,14 +35,14 @@ public class VerifyRangeStart {
 	public <T> T on(T mock) {
 		MockData data = Mockachino.getData(mock);
 		Iterable<Invocation> calls = data.getCalls(start, end);
-		VerifyHandler verifyHandler = new VerifyHandler(mock, calls, min, max);
+		VerifyHandler verifyHandler = new VerifyHandler(mock, calls, min, max, timeout);
 		return mockContext.createProxy(mock, verifyHandler);
 	}
 
     public void onMethod(Object mock, MethodMatcher matcher) {
         MockData data = Mockachino.getData(mock);
 
-        final VerifyHandler verifyHandler = new VerifyHandler(mock, data.getCalls(start, end), min, max);
+        final VerifyHandler verifyHandler = new VerifyHandler(mock, data.getCalls(start, end), min, max, timeout);
         verifyHandler.match(null, null, matcher);
     }
 
@@ -51,8 +53,13 @@ public class VerifyRangeStart {
     public void onAnyMethod(Object mock) {
         MockData data = Mockachino.getData(mock);
 
-        final VerifyHandler verifyHandler = new VerifyHandler(mock, data.getCalls(start, end), min, max);
+        final VerifyHandler verifyHandler = new VerifyHandler(mock, data.getCalls(start, end), min, max, timeout);
         verifyHandler.match(null, null, MatchAny.INSTANCE);
     }
+
+	public VerifyRangeStart withTimeout(long milliseconds) {
+		this.timeout = milliseconds;
+		return this;
+	}
 
 }

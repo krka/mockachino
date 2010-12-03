@@ -7,36 +7,73 @@ import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.order.InOrderVerifyHandler;
 import se.mockachino.util.MockachinoMethod;
 
+import java.util.Iterator;
 import java.util.List;
 
-public class VerifyHandler<T> extends MatchingHandler {
+public class VerifyHandler extends MatchingHandler {
     private static final BadUsageHandler BAD_USAGE_HANDLER = InOrderVerifyHandler.BAD_USAGE_HANDLER;
     
     private final Iterable<Invocation> calls;
 	private final int minCalls;
 	private final int maxCalls;
+	private final long timeout;
 
-	public VerifyHandler(T mock, Iterable<Invocation> calls,
-						 int minCalls, int maxCalls) {
+	public VerifyHandler(Object mock, Iterable<Invocation> calls,
+						 int minCalls, int maxCalls, long timeout) {
 		super("VerifyHandler", Mockachino.getData(mock).getName(), BAD_USAGE_HANDLER);
 		this.calls = calls;
 		this.minCalls = minCalls;
 		this.maxCalls = maxCalls;
+		this.timeout = timeout;
 	}
 
 	@Override
 	public void match(Object o, MockachinoMethod method, MethodMatcher matcher) {
+		long startTime = System.currentTimeMillis();
 		int counter = 0;
-		for (Invocation call : calls) {
-			if (matcher.matches(call.getMethodCall())) {
-				counter++;
+		Iterator<Invocation> invocationIterator = calls.iterator();
+		counter = consumeIterator(matcher, counter, invocationIterator);
+
+		while (shouldWait(startTime)) {
+
+			// No point in waiting if we have already exceeded the max count
+			if (counter > maxCalls) {
+				break;
 			}
+
+			// We must wait as long as we have too few calls.
+			if (maxCalls == Integer.MAX_VALUE) {
+				if (counter >= minCalls) {
+					break;
+				}
+			}
+
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				Thread.interrupted();
+			}
+			counter = consumeIterator(matcher, counter, invocationIterator);
 		}
 		String errorMessage = new Reporter(counter, minCalls, maxCalls).getErrorLine();
 		if (errorMessage != null) {
 			boolean wantsMisses = minCalls > 0;
 			error(errorMessage, matcher, wantsMisses ? 3 : 0);
 		}
+	}
+
+	private boolean shouldWait(long startTime) {
+		return System.currentTimeMillis() - startTime < timeout;
+	}
+
+	private int consumeIterator(MethodMatcher matcher, int counter, Iterator<Invocation> invocationIterator) {
+		while (invocationIterator.hasNext()) {
+			Invocation invocation = invocationIterator.next();
+			if (matcher.matches(invocation.getMethodCall())) {
+				counter++;
+			}
+		}
+		return counter;
 	}
 
 	private void error(String msg, MethodMatcher matcher, int maxMisses) {
