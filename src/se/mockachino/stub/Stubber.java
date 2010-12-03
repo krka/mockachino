@@ -19,7 +19,7 @@ public class Stubber {
 
 	public <T> T on(T mock) {
 		MockData data = Mockachino.getData(mock);
-		return MockContext.createProxy(mock, new StubHandler(answer, mock, data, verifier));
+		return MockContext.createProxy(mock, new StubHandler(answer, data, verifier));
 	}
 
 
@@ -32,4 +32,12 @@ public class Stubber {
 	public void onMethodWithAnyArgument(Object mock, MockachinoMethod method) {
 		onMethod(mock, method, MethodMatcherImpl.matchAll(method));
 	}
+
+	public void onAnyMethod(Object mock) {
+		MockData<Object> data = Mockachino.getData(mock);
+		for (MockachinoMethod method : data.getMethods()) {
+			onMethodWithAnyArgument(mock, method);
+		}
+	}
+
 }

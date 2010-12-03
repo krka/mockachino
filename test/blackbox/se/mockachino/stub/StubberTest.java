@@ -8,13 +8,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class StubberTest {
 	@Test
 	public void testVoid() {
 		List mock = Mockachino.mock(List.class);
-		Mockachino.stubReturn(null).on(mock).clear();
+		Mockachino.stubReturn((Object) null).on(mock).clear();
 	}
 
 	@Test
@@ -55,7 +56,7 @@ public class StubberTest {
 	public void testPrimitiveFail2() {
 		try {
 			List mock = Mockachino.mock(List.class);
-			Mockachino.stubReturn(null).on(mock).indexOf("");
+			Mockachino.stubReturn((Object) null).on(mock).indexOf("");
 			fail("Should have failed");
 		} catch (UsageError e) {
 			e.printStackTrace();
@@ -99,6 +100,22 @@ public class StubberTest {
 			fail("Should have failed");
 		} catch (UsageError e) {
 			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testStubAll() {
+		List mock = Mockachino.mock(List.class);
+		Mockachino.stubThrow(new IllegalStateException("unstubbed method call!")).onAnyMethod(mock);
+		Mockachino.stubReturn(123).on(mock).size();
+		System.out.println("Test");
+
+		assertEquals(123, mock.size());
+		try {
+			mock.get(123);
+			fail();
+		} catch (IllegalStateException e) {
+			// Expected result
 		}
 	}
 

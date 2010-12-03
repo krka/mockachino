@@ -3,6 +3,7 @@
 ----------------------
 * Replaced the guice dependency with a much lighter gentyref dependency.
 * Added more versatile verification modes.
+* Added stubbing of all methods on a mock.
 
 ----------------------
 - Version 0.5.0

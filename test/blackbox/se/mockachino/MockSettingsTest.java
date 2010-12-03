@@ -14,7 +14,7 @@ public class MockSettingsTest {
 		Mockachino.stubReturn("New name").on(mock).toString();
 		assertEquals("New name", mock.toString());
 
-		Mockachino.stubReturn(null).on(mock).toString();
+		Mockachino.stubReturn((Object) null).on(mock).toString();
 		assertEquals("MyMock", mock.toString());
 	}
 

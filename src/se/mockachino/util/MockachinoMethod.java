@@ -6,8 +6,7 @@ import java.util.Arrays;
 
 public class MockachinoMethod {
 	public static final MockachinoMethod EQUALS = find(Object.class, "equals");
-	public static final MockachinoMethod HASHCODE = find(Object.class, "hashCode");	
-	public static final MockachinoMethod TOSTRING = find(Object.class, "toString");
+	public static final MockachinoMethod HASHCODE = find(Object.class, "hashCode");
 	public static final MockachinoMethod NULL = new MockachinoMethod("<null>", new Class[0], void.class);
 
 	private final Method method;

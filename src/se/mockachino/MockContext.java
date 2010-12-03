@@ -132,7 +132,7 @@ public class MockContext {
 		}
 		MatcherThreadHandler.assertEmpty();
 		MockHandler mockHandler = new MockHandler(
-				this, fallback, new MockData(this, clazz, type, extraInterfaces), quick, name);
+				this, fallback, new MockData(this, clazz, type, extraInterfaces, name), quick, name);
 		return ProxyUtil.newProxy(clazz, mockHandler, extraInterfaces);
 	}
 

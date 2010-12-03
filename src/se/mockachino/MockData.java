@@ -41,12 +41,15 @@ public class MockData<T> {
 	private final Map<MockachinoMethod, List<MethodObserver>> observers;
 	private final Map<MockachinoMethod, MethodStubs> stubs;
     private final Type type;
+	private final Set<MockachinoMethod> methods;
+	private final String name;
 
-    public MockData(MockContext context, Class<T> iface, Type type, Set<Class<?>> extraInterfaces) {
+    public MockData(MockContext context, Class<T> iface, Type type, Set<Class<?>> extraInterfaces, String name) {
 		this.context = context;
 		this.iface = iface;
 		this.extraInterfaces = extraInterfaces;
         this.type = type;
+		this.name = name;
 		invocations = new SafeIteratorList<Invocation>(new ArrayList<Invocation>(), Invocation.NULL);
 		readOnlyCalls = Collections.unmodifiableList(invocations);
 		observers = new HashMap<MockachinoMethod,List<MethodObserver>>();
@@ -57,6 +60,7 @@ public class MockData<T> {
 		for (Class<?> extraInterface : extraInterfaces) {
             addMethods(extraInterface);
 		}
+		methods = Collections.unmodifiableSet(stubs.keySet());
 		setupEqualsAndHashcode();
 	}
 
@@ -87,6 +91,14 @@ public class MockData<T> {
 		observers.put(method,
 				new SafeIteratorList<MethodObserver>(
 						new ArrayList<MethodObserver>(), null));
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Set<MockachinoMethod> getMethods() {
+		return methods;
 	}
 
 	/**

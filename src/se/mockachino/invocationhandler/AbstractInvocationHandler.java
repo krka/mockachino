@@ -24,7 +24,7 @@ public abstract class AbstractInvocationHandler implements InvocationHandler {
 	}
 
 	protected Object defaultToString(MockachinoMethod method, Object ret) {
-		if (ret == null && method.equals(MockachinoMethod.TOSTRING)) {
+		if (ret == null && method.isToStringCall()) {
 			return name;
 		}
 		return ret;

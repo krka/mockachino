@@ -130,7 +130,7 @@
 	<target name="test-unit" depends="instr, compile-test-unit" description="Run unit tests">
 		<mkdir dir="${coverage.dir}/unit" />
 		<mkdir dir="${reports.dir}/unit" />
-		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="true" forkmode="perBatch" includeantruntime="true">
+		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch" includeantruntime="true">
 			<classpath>
 				<pathelement location="${out.instr.dir}" />
 				<pathelement location="${baseDir}/build/classes"/>
@@ -170,7 +170,7 @@
 	<target name="test-blackbox" depends="instr, compile-test-blackbox" description="Run blackbox tests">
 		<mkdir dir="${coverage.dir}/blackbox" />
 		<mkdir dir="${reports.dir}/blackbox" />
-		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="true" forkmode="perBatch" includeantruntime="true">
+		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch" includeantruntime="true">
 			<classpath>
 				<pathelement location="${out.instr.dir}" />
 				<pathelement location="${baseDir}/build/classes"/>
@@ -210,7 +210,7 @@
 	<target name="test-examples" depends="instr, compile-test-examples">
 		<mkdir dir="${coverage.dir}/examples" />
 		<mkdir dir="${reports.dir}/examples" />
-		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="true" forkmode="perBatch" includeantruntime="true">
+		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch" includeantruntime="true">
 			<classpath>
 				<pathelement location="${out.instr.dir}" />
 				<pathelement location="${baseDir}/build/classes"/>
@@ -250,7 +250,7 @@
 	<target name="test-concurrency" depends="instr, compile-test-concurrency">
 		<mkdir dir="${coverage.dir}/concurrency" />
 		<mkdir dir="${reports.dir}/concurrency" />
-		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="true" forkmode="perBatch" includeantruntime="true">
+		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch" includeantruntime="true">
 			<classpath>
 				<pathelement location="${out.instr.dir}" />
 				<pathelement location="${baseDir}/build/classes"/>
@@ -289,7 +289,7 @@
 	<target name="test-performance" depends="instr, compile-test-performance">
 		<mkdir dir="${coverage.dir}/performance" />
 		<mkdir dir="${reports.dir}/performance" />
-		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="true" forkmode="perBatch" includeantruntime="true">
+		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch" includeantruntime="true">
 			<classpath>
 				<pathelement location="${out.instr.dir}" />
 				<pathelement location="${baseDir}/build/classes"/>

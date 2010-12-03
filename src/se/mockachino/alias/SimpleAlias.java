@@ -28,7 +28,8 @@ public class SimpleAlias extends AbstractAlias {
 			multipleUsageError();
 		}
 		this.mock = mock;
-		MatchingHandler handler = new MatchingHandler("Alias", mock.toString(), BAD_USAGE_HANDLER) {
+		MockData<T> data = Mockachino.getData(mock);
+		MatchingHandler handler = new MatchingHandler("Alias", data.getName(), BAD_USAGE_HANDLER) {
 			@Override
 			protected void match(Object o, MockachinoMethod method, MethodMatcher matcher) {
 				if (SimpleAlias.this.methodMatcher != null) {
@@ -37,7 +38,6 @@ public class SimpleAlias extends AbstractAlias {
 				SimpleAlias.this.methodMatcher = matcher;
 			}
 		};
-		MockData<T> data = Mockachino.getData(mock);
 		return ProxyUtil.newProxy(data.getInterface(), handler);
 	}
 

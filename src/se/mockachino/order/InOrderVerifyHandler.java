@@ -1,6 +1,7 @@
 package se.mockachino.order;
 
 import se.mockachino.Invocation;
+import se.mockachino.Mockachino;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.util.MockachinoMethod;
@@ -20,8 +21,8 @@ public class InOrderVerifyHandler extends MatchingHandler {
 	private final int min;
 	private final OrderingContext orderingContext;
 
-    public InOrderVerifyHandler(OrderingContext orderingContext, Object mock, Iterable<Invocation> calls, int min) {
-		super("InOrderVerifyHandler", mock.toString(), BAD_USAGE_HANDLER);
+    public InOrderVerifyHandler(OrderingContext orderingContext, Object mock, Iterable<Invocation> calls, int min) {		
+		super("InOrderVerifyHandler", Mockachino.getData(mock).getName(), BAD_USAGE_HANDLER);
 		this.orderingContext = orderingContext;
 		this.calls = calls;
 		this.min = min;

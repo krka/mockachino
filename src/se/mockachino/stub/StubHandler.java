@@ -20,8 +20,8 @@ public class StubHandler extends MatchingHandler {
 	private final MockData data;
 	private final StubVerifier verifier;
 
-	public StubHandler(CallHandler answer, Object mock, MockData data, StubVerifier verifier) {
-		super("StubHandler", mock.toString(), BAD_USAGE_HANDLER);
+	public StubHandler(CallHandler answer, MockData data, StubVerifier verifier) {
+		super("StubHandler", data.getName(), BAD_USAGE_HANDLER);
 		this.answer = answer;
 		this.data = data;
 		this.verifier = verifier;
