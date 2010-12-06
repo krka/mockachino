@@ -17,7 +17,7 @@ public class TimeoutTest {
 	public void testTimeoutSuccessAtLeast1() {
 		final List mock = Mockachino.mock(ArrayList.class);
 		mock.size();
-		runTimeoutTest(Mockachino.verifyAtLeast(1), 0, 20, 200, 500, true, mock, new Runnable() {
+		runTimeoutTest(Mockachino.verifyAtLeast(1), 0, 60, 200, 500, true, mock, new Runnable() {
 			@Override
 			public void run() {
 			}

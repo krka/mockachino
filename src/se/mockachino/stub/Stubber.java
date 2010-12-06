@@ -24,6 +24,7 @@ public class Stubber {
 
 
 	public void onMethod(Object mock, MockachinoMethod method, MethodMatcher matcher) {
+        verifier.verify(method);
 		MockData data = Mockachino.getData(mock);
 		MethodStubs methodStubs = data.getStubs(method);
 		methodStubs.add(new MethodStub(answer, matcher));

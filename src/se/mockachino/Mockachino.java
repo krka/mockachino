@@ -13,6 +13,7 @@ import se.mockachino.proxy.ProxyUtil;
 import se.mockachino.stub.AcceptAllVerifier;
 import se.mockachino.stub.Stubber;
 import se.mockachino.stub.exception.ThrowAnswer;
+import se.mockachino.stub.exception.ThrowVerifier;
 import se.mockachino.stub.returnvalue.MultipleReturnAnswer;
 import se.mockachino.stub.returnvalue.MultipleReturnVerifier;
 import se.mockachino.stub.returnvalue.ReturnAnswer;
@@ -232,7 +233,7 @@ public class Mockachino {
     public static Stubber stubThrow(Throwable e) {
         MockContext.checkNull("exception", e);
         MatcherThreadHandler.assertEmpty();
-        return new Stubber(new ThrowAnswer(e), AcceptAllVerifier.INSTANCE);
+        return new Stubber(new ThrowAnswer(e), new ThrowVerifier(e));
     }
 
     /**

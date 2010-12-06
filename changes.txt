@@ -5,6 +5,8 @@
 * Added more versatile verification modes.
 * Added stubbing of all methods on a mock.
 * Implemented support for timeout.
+* when ... throws now rejects invalid exceptions.
+* when ... throws now creates a new exception instance for each invocation.
 
 ----------------------
 - Version 0.5.0
