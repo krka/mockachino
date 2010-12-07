@@ -329,7 +329,8 @@
 				<txt outfile="${coverage.dir}/performance/coverage.txt" />
 				<html outfile="${coverage.dir}/performance/coverage.html" />
 			</report>
-		</emma>	</target>
+		</emma>
+	</target>
 
 	<target name="javadoc" description="Generate javadoc">
 		<mkdir dir="${baseDir}/build/javadoc" />
