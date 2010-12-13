@@ -64,6 +64,24 @@ public class CollectionsTest {
     }
 
     @Test
+    public void testSet() {
+        Foo mock = Mockachino.mock(Foo.class);
+
+        assertNotNull(mock);
+        assertNotNull(mock.getSet(1));
+        assertTrue(mock.getSet(1) == mock.getSet(1));
+        assertFalse(mock.getSet(1) == mock.getSet(2));
+
+        Set<String> collection = mock.getSet(1);
+        collection.add("Hello");
+        collection.add("World");
+        assertEquals(2, collection.size());
+
+        Set<String> collection2 = mock.getSet(1);
+        assertEquals(2, collection2.size());
+    }
+
+    @Test
     public void testTreeMap() {
         Foo mock = Mockachino.mock(Foo.class);
 

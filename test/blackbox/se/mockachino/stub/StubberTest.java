@@ -118,4 +118,15 @@ public class StubberTest {
 		}
 	}
 
+    @Test(expected = UsageError.class)
+    public void testStubFails() {
+        List mock = Mockachino.mock(List.class);
+        Mockachino.stubReturn("").on(mock).indexOf(null);
+    }
+
+    @Test(expected = UsageError.class)
+    public void testStubFails2() {
+        List mock = Mockachino.mock(List.class);
+        Mockachino.stubReturn("").on(mock).toArray();
+    }
 }
