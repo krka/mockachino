@@ -2,6 +2,7 @@ package se.mockachino.util;
 
 import se.mockachino.matchers.matcher.Matcher;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,10 +18,6 @@ public class Formatting {
 			return "no calls";
 		}
 		return num + " calls";
-	}
-
-	public static String list(Object[] args) {
-		return join(", ", args);
 	}
 
 	public static String list(Iterable<Matcher> iterable) {
@@ -46,8 +43,12 @@ public class Formatting {
 			return "{" + join(", ", (Set) arg) + "}";
 		}
 		if (arg instanceof Map) {
-			return "(" + join(", ", (Set) ((Map) arg).entrySet()) + ")";
+            return "(" + join(", ", ((Map<java.lang.Object,java.lang.Object>) arg).entrySet()) + ")";
 		}
+        if (arg instanceof Map.Entry) {
+            return argument(((Map.Entry) arg).getKey()) + ":" +
+                    argument(((Map.Entry) arg).getValue());
+        }
 		return arg.toString();
 	}
 

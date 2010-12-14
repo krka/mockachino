@@ -116,7 +116,7 @@
 		<mkdir dir="${out.instr.dir}" />
 	</target>
 
-	<target name="test" depends="compile-test, test-unit, test-blackbox, test-examples" description="Run all quick tests">
+	<target name="test" depends="compile-test, test-unit, test-blackbox, test-examples, coverage-report" description="Run all quick tests">
 	</target>
 	
 	<target name="compile-test" depends="compile-test-unit, compile-test-blackbox, compile-test-examples, compile-test-concurrency, compile-test-performance">
@@ -160,17 +160,6 @@
 			</fileset>
 			<report format="frames" todir="${reports.dir}/unit/html"/>
 		</junitreport>
-		<emma enabled="${emma.enabled}" >
-			<report sourcepath="${baseDir}/src" >
-				<fileset dir="${coverage.dir}" >
-					<include name="*.emma" />
-					<include name="unit/*.emma" />
-				</fileset>
-
-				<txt outfile="${coverage.dir}/unit/coverage.txt" />
-				<html outfile="${coverage.dir}/unit/coverage.html" />
-			</report>
-		</emma>
 	</target>
 	<target name="test-blackbox" depends="instr, compile-test-blackbox" description="Run blackbox tests">
 		<mkdir dir="${coverage.dir}/blackbox" />
@@ -200,17 +189,6 @@
 			</fileset>
 			<report format="frames" todir="${reports.dir}/blackbox/html"/>
 		</junitreport>
-		<emma enabled="${emma.enabled}" >
-			<report sourcepath="${baseDir}/src" >
-				<fileset dir="${coverage.dir}" >
-					<include name="*.emma" />
-					<include name="blackbox/*.emma" />
-				</fileset>
-
-				<txt outfile="${coverage.dir}/blackbox/coverage.txt" />
-				<html outfile="${coverage.dir}/blackbox/coverage.html" />
-			</report>
-		</emma>
 	</target>
 	<target name="test-examples" depends="instr, compile-test-examples">
 		<mkdir dir="${coverage.dir}/examples" />
@@ -240,17 +218,6 @@
 			</fileset>
 			<report format="frames" todir="${reports.dir}/examples/html"/>
 		</junitreport>
-		<emma enabled="${emma.enabled}" >
-			<report sourcepath="${baseDir}/src" >
-				<fileset dir="${coverage.dir}" >
-					<include name="*.emma" />
-					<include name="examples/*.emma" />
-				</fileset>
-
-				<txt outfile="${coverage.dir}/examples/coverage.txt" />
-				<html outfile="${coverage.dir}/examples/coverage.html" />
-			</report>
-		</emma>
 	</target>
 	<target name="test-concurrency" depends="instr, compile-test-concurrency">
 		<mkdir dir="${coverage.dir}/concurrency" />
@@ -280,17 +247,7 @@
 			</fileset>
 			<report format="frames" todir="${reports.dir}/concurrency/html"/>
 		</junitreport>
-		<emma enabled="${emma.enabled}" >
-			<report sourcepath="${baseDir}/src" >
-				<fileset dir="${coverage.dir}" >
-					<include name="*.emma" />
-					<include name="concurrency/*.emma" />
-				</fileset>
-
-				<txt outfile="${coverage.dir}/concurrency/coverage.txt" />
-				<html outfile="${coverage.dir}/concurrency/coverage.html" />
-			</report>
-		</emma>	</target>
+	</target>
 	<target name="test-performance" depends="instr, compile-test-performance">
 		<mkdir dir="${coverage.dir}/performance" />
 		<mkdir dir="${reports.dir}/performance" />
@@ -319,17 +276,6 @@
 			</fileset>
 			<report format="frames" todir="${reports.dir}/performance/html"/>
 		</junitreport>
-		<emma enabled="${emma.enabled}" >
-			<report sourcepath="${baseDir}/src" >
-				<fileset dir="${coverage.dir}" >
-					<include name="*.emma" />
-					<include name="performance/*.emma" />
-				</fileset>
-
-				<txt outfile="${coverage.dir}/performance/coverage.txt" />
-				<html outfile="${coverage.dir}/performance/coverage.html" />
-			</report>
-		</emma>
 	</target>
 
 	<target name="javadoc" description="Generate javadoc">
@@ -367,6 +313,22 @@
 		</javadoc>
 	</target>
 
+	<target name="coverage-report">
+		<emma enabled="${emma.enabled}" >
+			<report sourcepath="${baseDir}/src" >
+				<fileset dir="${coverage.dir}" >
+					<include name="*.emma" />
+					<include name="unit/*.emma" />
+					<include name="blackbox/*.emma" />
+					<include name="examples/*.emma" />
+				</fileset>
+
+				<txt outfile="${coverage.dir}/coverage.txt" />
+				<html outfile="${coverage.dir}/coverage.html" />
+			</report>
+		</emma>	
+	</target>
+	
 	<target name="javadoc-full" description="Generate full javadoc">
 		<mkdir dir="${baseDir}/build/javadoc-full" />
 		<javadoc destdir="${baseDir}/build/javadoc-full">
