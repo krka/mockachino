@@ -90,7 +90,7 @@ public class MatchersTest {
 		Mockachino.verifyExactly(2).on(mock).compare(type(String.class), type(Object.class));
 		Mockachino.verifyOnce().on(mock).compare(type(String.class), eq(null));
 		Mockachino.verifyOnce().on(mock).compare(notEq(null), eq(null));
-		
+
 	}
 
 	@Test
@@ -162,15 +162,15 @@ public class MatchersTest {
 		}
 	}
 
-    private static interface MockInterface {
-        void foo(long a);
-    }
+	private static interface MockInterface {
+		void foo(long a);
+	}
 
-    @Test
-    public void testMatcherConversion() {
-        MockInterface mock = Mockachino.mock(MockInterface.class);
-        mock.foo(123L);
-        Mockachino.verifyOnce().on(mock).foo(Matchers.eq(123));
-    }
+	@Test
+	public void testMatcherConversion() {
+		MockInterface mock = Mockachino.mock(MockInterface.class);
+		mock.foo(123L);
+		Mockachino.verifyOnce().on(mock).foo(Matchers.eq(123));
+	}
 
 }

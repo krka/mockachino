@@ -19,6 +19,7 @@ public class SafeIteratorList<T> implements List<T> {
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
 			int index = 0;
+
 			@Override
 			public boolean hasNext() {
 				if (index >= size()) {

@@ -5,7 +5,6 @@ import se.mockachino.util.Formatting;
 
 /**
  * This class contain a lot of built in matchers.
- *
  */
 public class MatchersBase {
 

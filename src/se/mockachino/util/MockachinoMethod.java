@@ -41,11 +41,11 @@ public class MockachinoMethod {
 		return returnType;
 	}
 
-    public Method getMethod() {
-        return method;
-    }
+	public Method getMethod() {
+		return method;
+	}
 
-    @Override
+	@Override
 	public String toString() {
 		StringBuilder params = new StringBuilder();
 		boolean first = true;
@@ -99,7 +99,7 @@ public class MockachinoMethod {
 		return method.invoke(impl, objects);
 	}
 
-    public boolean isToStringCall() {
-        return name.equals("toString") && parameters.length == 0;
-    }
+	public boolean isToStringCall() {
+		return name.equals("toString") && parameters.length == 0;
+	}
 }

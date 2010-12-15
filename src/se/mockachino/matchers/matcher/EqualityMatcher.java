@@ -19,14 +19,14 @@ public class EqualityMatcher<T> extends BasicMatcher<T> {
 		return value.equals(other) || primitiveEquals(other);
 	}
 
-    private boolean primitiveEquals(T other) {
-        if (value instanceof Number && other instanceof Number) {
-            return ((Number) value).doubleValue() == ((Number) other).doubleValue();
-        }
-        return false;
-    }
+	private boolean primitiveEquals(T other) {
+		if (value instanceof Number && other instanceof Number) {
+			return ((Number) value).doubleValue() == ((Number) other).doubleValue();
+		}
+		return false;
+	}
 
-    @Override
+	@Override
 	public String asString() {
 		return Formatting.argument(value);
 	}

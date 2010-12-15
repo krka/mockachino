@@ -1,9 +1,8 @@
 package se.mockachino.order;
 
 import org.junit.Test;
-import se.mockachino.MockContext;
+import se.mockachino.Invocation;
 import se.mockachino.Mockachino;
-import se.mockachino.exceptions.UsageError;
 import se.mockachino.exceptions.VerificationError;
 
 import java.util.List;
@@ -42,17 +41,21 @@ public class MockPointTest {
 	}
 
 	@Test
-	public void testUsageFail() {
-		MockContext context = new MockContext();
-		MockPoint first = context.newOrdering().afterLastCall();
-		MockPoint last = context.newOrdering().afterLastCall();
+	public void testVerificationFail() {
+		MockPoint first = Mockachino.newOrdering().afterLastCall();
+		MockPoint last = Mockachino.newOrdering().afterLastCall();
 
 		List<String> mock = mock(List.class);
 		mock.add("A");
+		System.out.println(first);
+		System.out.println(last);
+		for (Invocation inv : Mockachino.getData(mock).getCalls(first, last)) {
+			System.out.println(inv.getCallNumber() + ": " + inv);
+		}
 		try {
 			between(first, last).verifyAtLeast(1).on(mock).add("A");
 			fail("Should fail");
-		} catch (UsageError e) {
+		} catch (VerificationError e) {
 			e.printStackTrace();
 		}
 	}

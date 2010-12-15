@@ -105,31 +105,31 @@ public class VerifyHandlerTest {
 		}
 	}
 
-    @Test
-    public void testBadVerification() {
-        StringTokenizer mock = Mockachino.mock(StringTokenizer.class, fallback(Mockachino.DEEP_MOCK));
+	@Test
+	public void testBadVerification() {
+		StringTokenizer mock = Mockachino.mock(StringTokenizer.class, fallback(Mockachino.DEEP_MOCK));
 
-        mock.nextElement();
-        mock.nextToken();
+		mock.nextElement();
+		mock.nextToken();
 
-        // Correct usage
-        Mockachino.verifyAtLeast(1).on(mock).nextElement();
-        Mockachino.verifyAtLeast(1).on(mock).nextToken();
+		// Correct usage
+		Mockachino.verifyAtLeast(1).on(mock).nextElement();
+		Mockachino.verifyAtLeast(1).on(mock).nextToken();
 
-        try {
-            Mockachino.verifyAtLeast(1).on(mock).nextElement().equals(null);
-            fail("Should have failed");
-        } catch (UsageError e) {
-            e.printStackTrace();
-        }
+		try {
+			Mockachino.verifyAtLeast(1).on(mock).nextElement().equals(null);
+			fail("Should have failed");
+		} catch (UsageError e) {
+			e.printStackTrace();
+		}
 
-        try {
-            StringTokenizer verifier = Mockachino.verifyAtLeast(1).on(mock);
-            verifier.nextToken().equals(null);
-            fail("Should have failed - can't make proxy for final classes");
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+		try {
+			StringTokenizer verifier = Mockachino.verifyAtLeast(1).on(mock);
+			verifier.nextToken().equals(null);
+			fail("Should have failed - can't make proxy for final classes");
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
 
-    }
+	}
 }

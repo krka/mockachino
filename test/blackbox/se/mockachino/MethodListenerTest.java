@@ -21,7 +21,7 @@ public class MethodListenerTest {
 			}
 		};
 		Mockachino.observeWith(listener).on(mock).get(123);
-		
+
 		mock.get(123);
 		mock.get(124);
 		assertEquals(1, list.size());

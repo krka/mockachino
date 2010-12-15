@@ -8,25 +8,23 @@ import se.mockachino.util.MockachinoMethod;
 import java.lang.reflect.Type;
 
 public class DeepMockHandler implements CallHandler {
-	private final MockContext context;
 	private final CallHandler delegate;
 
-	public DeepMockHandler(MockContext context, CallHandler delegate) {
-		this.context = context;
+	public DeepMockHandler(CallHandler delegate) {
 		this.delegate = delegate;
 	}
 
 	@Override
 	public Object invoke(Object obj, MethodCall call) throws Throwable {
-        final MockData<Object> data = Mockachino.getData(obj);
+		final MockData<Object> data = Mockachino.getData(obj);
 		MockachinoMethod method = call.getMethod();
 
-        Type type = data.getTypeLiteral();
+		Type type = data.getTypeLiteral();
 
-        final Type returnType = GenericTypeReflector.getExactReturnType(method.getMethod(), type);
+		final Type returnType = GenericTypeReflector.getExactReturnType(method.getMethod(), type);
 
-        if (Mockachino.canMock(GenericTypeReflector.erase(returnType))) {
-			Object returnValue = context.mockType(returnType, Settings.fallback(this));
+		if (Mockachino.canMock(GenericTypeReflector.erase(returnType))) {
+			Object returnValue = Mockachino.mockType(returnType, Settings.fallback(this));
 			Mockachino.stubReturn(returnValue).onMethod(obj, method, new MethodMatcherImpl(method, call.getArguments()));
 			return returnValue;
 		}

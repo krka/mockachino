@@ -32,29 +32,29 @@ public class FormattingTest {
 		s = Formatting.join(", ", (Object[]) null);
 		assertEquals("", s);
 
-    }
-
-    @Test
-    public void testVarargs() {
-        String s = Formatting.join(true, ", ", 1, 2, new Object[]{7, 8});
-        assertEquals("1, 2, 7, 8", s);
-
-        s = Formatting.join(false, ", ", 1, 2, new Object[]{7, 8});
-        assertEquals("1, 2, Object[]{7, 8}", s);
 	}
 
-    @Test
-    public void testCollection() {
-        String s = Formatting.join(", ", 1, 2, new ArrayList(Arrays.asList(4, 5, 6)));
-        assertEquals("1, 2, [4, 5, 6]", s);
+	@Test
+	public void testVarargs() {
+		String s = Formatting.join(true, ", ", 1, 2, new Object[]{7, 8});
+		assertEquals("1, 2, 7, 8", s);
 
-        s = Formatting.join(", ", 1, 2, new TreeSet(Arrays.asList(4, 5, 6)));
-        assertEquals("1, 2, {4, 5, 6}", s);
+		s = Formatting.join(false, ", ", 1, 2, new Object[]{7, 8});
+		assertEquals("1, 2, Object[]{7, 8}", s);
+	}
 
-        Map map = new HashMap();
-        map.put("A", "a");
-        map.put("B", "b");
-        s = Formatting.join(", ", 1, 2, map);
-        assertEquals("1, 2, (\"A\":\"a\", \"B\":\"b\")", s);
-    }
+	@Test
+	public void testCollection() {
+		String s = Formatting.join(", ", 1, 2, new ArrayList(Arrays.asList(4, 5, 6)));
+		assertEquals("1, 2, [4, 5, 6]", s);
+
+		s = Formatting.join(", ", 1, 2, new TreeSet(Arrays.asList(4, 5, 6)));
+		assertEquals("1, 2, {4, 5, 6}", s);
+
+		Map map = new HashMap();
+		map.put("A", "a");
+		map.put("B", "b");
+		s = Formatting.join(", ", 1, 2, map);
+		assertEquals("1, 2, (\"A\":\"a\", \"B\":\"b\")", s);
+	}
 }

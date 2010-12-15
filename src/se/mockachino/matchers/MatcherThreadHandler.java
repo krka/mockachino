@@ -16,15 +16,15 @@ public class MatcherThreadHandler {
 			return MatcherThreadHandler.getMatcher();
 		}
 
-        // Support for varargs
-        if (varArgs && value.getClass().isArray()) {
-            int n = Array.getLength(value);
-            Matcher[] matchers = new Matcher[n];
-            for (int i = 0; i < n; i++) {
-                matchers[i] = getMatcher(Array.get(value, i), false);
-            }
-            return new ArrayMatcher(matchers, value.getClass().getComponentType(), true);
-        }
+		// Support for varargs
+		if (varArgs && value.getClass().isArray()) {
+			int n = Array.getLength(value);
+			Matcher[] matchers = new Matcher[n];
+			for (int i = 0; i < n; i++) {
+				matchers[i] = getMatcher(Array.get(value, i), false);
+			}
+			return new ArrayMatcher(matchers, value.getClass().getComponentType(), true);
+		}
 
 		if (value instanceof Number) {
 			if (((Number) value).longValue() == 0) {
@@ -67,8 +67,8 @@ public class MatcherThreadHandler {
 		if (matchers.get().size() > 0) {
 			matchers.get().clear();
 			throw new UsageError(
-							"Matchers called in wrong context. " +
-									"Only use matchers inside verification or stubbing method calls.");
+					"Matchers called in wrong context. " +
+							"Only use matchers inside verification or stubbing method calls.");
 		}
 
 	}

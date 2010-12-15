@@ -33,60 +33,58 @@ public class MockData<T> {
 	private static final MethodMatcher HASHCODE_METHOD_MATCHER = MethodMatcherImpl.matchAll(MockachinoMethod.HASHCODE);
 	private static final MethodStub DEFAULT_HASHCODE_STUB = new MethodStub(DEFAULT_HASHCODE, HASHCODE_METHOD_MATCHER);
 
-	private final MockContext context;
 	private final Class<T> iface;
 	private final Set<Class<?>> extraInterfaces;
 	private final List<Invocation> invocations;
 	private final List<Invocation> readOnlyCalls;
 	private final Map<MockachinoMethod, List<MethodObserver>> observers;
 	private final Map<MockachinoMethod, MethodStubs> stubs;
-    private final Type type;
+	private final Type type;
 	private final Set<MockachinoMethod> methods;
 	private final String name;
 
-    public MockData(MockContext context, Class<T> iface, Type type, Set<Class<?>> extraInterfaces, String name) {
-		this.context = context;
+	public MockData(Class<T> iface, Type type, Set<Class<?>> extraInterfaces, String name) {
 		this.iface = iface;
 		this.extraInterfaces = extraInterfaces;
-        this.type = type;
+		this.type = type;
 		this.name = name;
 		invocations = new SafeIteratorList<Invocation>(new ArrayList<Invocation>(), Invocation.NULL);
 		readOnlyCalls = Collections.unmodifiableList(invocations);
-		observers = new HashMap<MockachinoMethod,List<MethodObserver>>();
+		observers = new HashMap<MockachinoMethod, List<MethodObserver>>();
 
 		stubs = new HashMap<MockachinoMethod, MethodStubs>();
-        addMethods(iface);
-        addMethods(Object.class);
+		addMethods(iface);
+		addMethods(Object.class);
 		for (Class<?> extraInterface : extraInterfaces) {
-            addMethods(extraInterface);
+			addMethods(extraInterface);
 		}
 		methods = Collections.unmodifiableSet(stubs.keySet());
 		setupEqualsAndHashcode();
 	}
 
-    private void addMethods(Class<?> clazz) {
-        if (clazz == null) {
-            return;
-        }
-        for (Class<?> superClass: clazz.getInterfaces()){
-            addMethods(superClass);
-        }
-        addMethods(clazz.getSuperclass());
-        for (Method method : clazz.getDeclaredMethods()) {
-            try {
-                method.setAccessible(true);
-                addContainer(method);
-            } catch (SecurityException e) {
-                // Ignore this method
-            }
-        }
-    }
+	private void addMethods(Class<?> clazz) {
+		if (clazz == null) {
+			return;
+		}
+		for (Class<?> superClass : clazz.getInterfaces()) {
+			addMethods(superClass);
+		}
+		addMethods(clazz.getSuperclass());
+		for (Method method : clazz.getDeclaredMethods()) {
+			try {
+				method.setAccessible(true);
+				addContainer(method);
+			} catch (SecurityException e) {
+				// Ignore this method
+			}
+		}
+	}
 
-    private void addContainer(Method reflectMethod) {
+	private void addContainer(Method reflectMethod) {
 		MockachinoMethod method = new MockachinoMethod(reflectMethod);
-        if (stubs.containsKey(method)) {
-            return;
-        }
+		if (stubs.containsKey(method)) {
+			return;
+		}
 		stubs.put(method, new MethodStubs());
 		observers.put(method,
 				new SafeIteratorList<MethodObserver>(
@@ -103,6 +101,7 @@ public class MockData<T> {
 
 	/**
 	 * Gets a list of all the method invocations made for the mock object
+	 *
 	 * @return the list of invocations
 	 */
 	public Iterable<Invocation> getInvocations() {
@@ -112,6 +111,7 @@ public class MockData<T> {
 	/**
 	 * Gets a list of all the method invocations made for the mock object
 	 * between (inclusive) two points in time.
+	 *
 	 * @return the list of invocations
 	 */
 	public Iterable<Invocation> getCalls(MockPoint start, MockPoint end) {
@@ -120,6 +120,7 @@ public class MockData<T> {
 
 	/**
 	 * Get all stubs for the mock and the method
+	 *
 	 * @param method
 	 * @return the stubs
 	 */
@@ -129,6 +130,7 @@ public class MockData<T> {
 
 	/**
 	 * Get all observers hooked to a specific method on the mock
+	 *
 	 * @param method
 	 * @return all observers
 	 */
@@ -153,16 +155,16 @@ public class MockData<T> {
 	 * @return the method call which was added
 	 */
 	public synchronized Invocation addCall(Object obj, MockachinoMethod method, Object[] args, StackTraceElement[] stackTrace) {
-        int callNumber = context.incrementSequence();
-        MethodCall call = new MethodCall(method, args);
-        Invocation invocation = new Invocation(obj, call, callNumber, stackTrace);
-        if (!method.isToStringCall()) {
-            invocations.add(invocation);
-        }
-        return invocation;
-    }
+		int callNumber = MockUtil.incrementSequence();
+		MethodCall call = new MethodCall(method, args);
+		Invocation invocation = new Invocation(obj, call, callNumber, stackTrace);
+		if (!method.isToStringCall()) {
+			invocations.add(invocation);
+		}
+		return invocation;
+	}
 
-    /**
+	/**
 	 * Clear the list of invocations
 	 */
 	public synchronized void resetCalls() {
@@ -200,20 +202,21 @@ public class MockData<T> {
 	/**
 	 * Get the set of additionally implemented interfaces by the mock.
 	 * This may be an empty set if no other interfaces are defined.
+	 *
 	 * @return
 	 */
 	public Set<Class<?>> getExtraInterfaces() {
-		return extraInterfaces;		
+		return extraInterfaces;
 	}
 
-    public synchronized void deleteLastInvocation() {
-        int index = invocations.size() - 1;
-        if (index >= 0) {
-            invocations.remove(index);
-        }
-    }
+	public synchronized void deleteLastInvocation() {
+		int index = invocations.size() - 1;
+		if (index >= 0) {
+			invocations.remove(index);
+		}
+	}
 
-    public Type getTypeLiteral() {
-        return type;
-    }
+	public Type getTypeLiteral() {
+		return type;
+	}
 }

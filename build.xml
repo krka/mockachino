@@ -1,374 +1,380 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Mockachino" basedir="." default="all">
-	<property name="emma.dir" value="/usr/share/java" />
-	<path id="emma.lib" >
-		<pathelement location="${emma.dir}/emma.jar" />
-		<pathelement location="${emma.dir}/emma_ant.jar" />
-	</path>
-	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+    <property name="emma.dir" value="/usr/share/java"/>
+    <path id="emma.lib">
+        <pathelement location="${emma.dir}/emma.jar"/>
+        <pathelement location="${emma.dir}/emma_ant.jar"/>
+    </path>
+    <taskdef resource="emma_ant.properties" classpathref="emma.lib"/>
 
 
-	<dirname property="baseDir" file="${ant.file}"/>
-	<property name="reports.dir" value="${basedir}/build/testreport"/>
-	<property file="${baseDir}/version.properties" />
-	<property name="suffix" value="${version.major}.${version.minor}.${version.fix}" />
+    <dirname property="baseDir" file="${ant.file}"/>
+    <property name="reports.dir" value="${basedir}/build/testreport"/>
+    <property file="${baseDir}/version.properties"/>
+    <property name="suffix" value="${version.major}.${version.minor}.${version.fix}"/>
 
-	<property name="coverage.dir" value="${baseDir}/build/coverage" />
+    <property name="coverage.dir" value="${baseDir}/build/coverage"/>
 
-	<path id="dependencies">
-		<fileset dir="${baseDir}/lib">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
+    <path id="dependencies">
+        <fileset dir="${baseDir}/lib">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
 
 
+    <target name="all" depends="compile, test, package" description="Test and package"/>
 
-	<target name="all" depends="compile, test, package" description="Test and package"/>
+    <target name="clean" description="Removes old build files">
+        <delete dir="${baseDir}/build" failonerror="false"/>
+    </target>
 
-	<target name="clean" description="Removes old build files">
-		<delete dir="${baseDir}/build" failonerror="false"/>
-	</target>
+    <target name="compile">
+        <mkdir dir="${baseDir}/build/classes"/>
+        <javac
+                debug="true"
+                destdir="${baseDir}/build/classes"
+                >
+            <classpath>
+                <path refid="dependencies"/>
+            </classpath>
+            <src path="src"></src>
+        </javac>
+    </target>
 
-	<target name="compile">
-		<mkdir dir="${baseDir}/build/classes" />
-		<javac
-				debug="true"
-				destdir="${baseDir}/build/classes"
-				>
-			<classpath>
-				<path refid="dependencies" />
-			</classpath>
-			<src path="src"></src>
-		</javac>
-	</target>
+    <target name="compile-test-unit" depends="compile">
+        <mkdir dir="${baseDir}/build/test-unit"/>
+        <javac
+                debug="true" debuglevel="lines,vars,source"
+                destdir="${baseDir}/build/test-unit"
+                >
+            <classpath path="${baseDir}/build/classes"/>
+            <classpath>
+                <path refid="dependencies"/>
+            </classpath>
+            <src path="test/unit"></src>
+        </javac>
+    </target>
+    <target name="compile-test-blackbox" depends="compile">
+        <mkdir dir="${baseDir}/build/test-blackbox"/>
+        <javac
+                debug="true" debuglevel="lines,vars,source"
+                destdir="${baseDir}/build/test-blackbox"
+                >
+            <classpath path="${baseDir}/build/classes"/>
+            <classpath>
+                <path refid="dependencies"/>
+            </classpath>
+            <src path="test/blackbox"></src>
+        </javac>
+    </target>
+    <target name="compile-test-examples" depends="compile">
+        <mkdir dir="${baseDir}/build/test-examples"/>
+        <javac
+                debug="true" debuglevel="lines,vars,source"
+                destdir="${baseDir}/build/test-examples"
+                >
+            <classpath path="${baseDir}/build/classes"/>
+            <classpath>
+                <path refid="dependencies"/>
+            </classpath>
+            <src path="test/examples"></src>
+        </javac>
+    </target>
+    <target name="compile-test-concurrency" depends="compile">
+        <mkdir dir="${baseDir}/build/test-concurrency"/>
+        <javac
+                debug="true" debuglevel="lines,vars,source"
+                destdir="${baseDir}/build/test-concurrency"
+                >
+            <classpath path="${baseDir}/build/classes"/>
+            <classpath>
+                <path refid="dependencies"/>
+            </classpath>
+            <src path="test/concurrency"></src>
+        </javac>
+    </target>
+    <target name="compile-test-performance" depends="compile">
+        <mkdir dir="${baseDir}/build/test-performance"/>
+        <javac
+                debug="true" debuglevel="lines,vars,source"
+                destdir="${baseDir}/build/test-performance"
+                >
+            <classpath path="${baseDir}/build/classes"/>
+            <classpath>
+                <path refid="dependencies"/>
+            </classpath>
+            <src path="test/performance"></src>
+        </javac>
+    </target>
 
-	<target name="compile-test-unit" depends="compile">
-		<mkdir dir="${baseDir}/build/test-unit" />
-		<javac
-				debug="true" debuglevel="lines,vars,source"
-				destdir="${baseDir}/build/test-unit"
-				>
-			<classpath path="${baseDir}/build/classes" />
-			<classpath>
-				<path refid="dependencies" />
-			</classpath>
-			<src path="test/unit"></src>
-		</javac>
-	</target>
-	<target name="compile-test-blackbox" depends="compile">
-		<mkdir dir="${baseDir}/build/test-blackbox" />
-		<javac
-				debug="true" debuglevel="lines,vars,source"
-				destdir="${baseDir}/build/test-blackbox"
-				>
-			<classpath path="${baseDir}/build/classes" />
-			<classpath>
-				<path refid="dependencies" />
-			</classpath>
-			<src path="test/blackbox"></src>
-		</javac>
-	</target>
-	<target name="compile-test-examples" depends="compile">
-		<mkdir dir="${baseDir}/build/test-examples" />
-		<javac
-				debug="true" debuglevel="lines,vars,source"
-				destdir="${baseDir}/build/test-examples"
-				>
-			<classpath path="${baseDir}/build/classes" />
-			<classpath>
-				<path refid="dependencies" />
-			</classpath>
-			<src path="test/examples"></src>
-		</javac>
-	</target>
-	<target name="compile-test-concurrency" depends="compile">
-		<mkdir dir="${baseDir}/build/test-concurrency" />
-		<javac
-				debug="true" debuglevel="lines,vars,source"
-				destdir="${baseDir}/build/test-concurrency"
-				>
-			<classpath path="${baseDir}/build/classes" />
-			<classpath>
-				<path refid="dependencies" />
-			</classpath>
-			<src path="test/concurrency"></src>
-		</javac>
-	</target>
-	<target name="compile-test-performance" depends="compile">
-		<mkdir dir="${baseDir}/build/test-performance" />
-		<javac
-				debug="true" debuglevel="lines,vars,source"
-				destdir="${baseDir}/build/test-performance"
-				>
-			<classpath path="${baseDir}/build/classes" />
-			<classpath>
-				<path refid="dependencies" />
-			</classpath>
-			<src path="test/performance"></src>
-		</javac>
-	</target>
+    <target name="emma" description="turns on EMMA instrumentation/reporting">
+        <property name="emma.enabled" value="true"/>
+        <!-- EMMA instr class output directory: -->
+        <property name="out.instr.dir" value="${baseDir}/build/outinstr"/>
 
-	<target name="emma" description="turns on EMMA instrumentation/reporting" >
-		<property name="emma.enabled" value="true" />
-		<!-- EMMA instr class output directory: -->
-		<property name="out.instr.dir" value="${baseDir}/build/outinstr" />
+        <mkdir dir="${out.instr.dir}"/>
+    </target>
 
-		<mkdir dir="${out.instr.dir}" />
-	</target>
+    <target name="test" depends="compile-test, test-unit, test-blackbox, test-examples, coverage-report"
+            description="Run all quick tests">
+    </target>
 
-	<target name="test" depends="compile-test, test-unit, test-blackbox, test-examples, coverage-report" description="Run all quick tests">
-	</target>
-	
-	<target name="compile-test" depends="compile-test-unit, compile-test-blackbox, compile-test-examples, compile-test-concurrency, compile-test-performance">
-	</target>
-	
-	<target name="instr" depends="compile">
-			<emma enabled="${emma.enabled}" >
-			<instr instrpath="${baseDir}/build/classes"
-				   destdir="${out.instr.dir}"
-				   metadatafile="${coverage.dir}/metadata.emma"
-				   merge="true"
-					/>
-		</emma>
-	</target>
-	
-	<target name="test-unit" depends="instr, compile-test-unit" description="Run unit tests">
-		<mkdir dir="${coverage.dir}/unit" />
-		<mkdir dir="${reports.dir}/unit" />
-		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch" includeantruntime="true">
-			<classpath>
-				<pathelement location="${out.instr.dir}" />
-				<pathelement location="${baseDir}/build/classes"/>
-				<pathelement location="${baseDir}/build/test-unit"/>
-			</classpath>
-			<classpath>
-				<path refid="dependencies" />
-				<path refid="emma.lib" />
-			</classpath>
+    <target name="compile-test"
+            depends="compile-test-unit, compile-test-blackbox, compile-test-examples, compile-test-concurrency, compile-test-performance">
+    </target>
 
-			<formatter type="xml"/>
-			<batchtest fork="yes" todir="${reports.dir}/unit">
-				<fileset dir="${basedir}/test/unit">
-				</fileset>
-			</batchtest>
-			<jvmarg value="-Demma.coverage.out.file=${coverage.dir}/unit/coverage.emma" />
-			<jvmarg value="-Demma.coverage.out.merge=true" />
-		</junit>
-		<junitreport todir="${reports.dir}/unit">
-			<fileset dir="${reports.dir}/unit">
-				<include name="TEST-*.xml"/>
-			</fileset>
-			<report format="frames" todir="${reports.dir}/unit/html"/>
-		</junitreport>
-	</target>
-	<target name="test-blackbox" depends="instr, compile-test-blackbox" description="Run blackbox tests">
-		<mkdir dir="${coverage.dir}/blackbox" />
-		<mkdir dir="${reports.dir}/blackbox" />
-		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch" includeantruntime="true">
-			<classpath>
-				<pathelement location="${out.instr.dir}" />
-				<pathelement location="${baseDir}/build/classes"/>
-				<pathelement location="${baseDir}/build/test-blackbox"/>
-			</classpath>
-			<classpath>
-				<path refid="dependencies" />
-				<path refid="emma.lib" />
-			</classpath>
+    <target name="instr" depends="compile">
+        <emma enabled="${emma.enabled}">
+            <instr instrpath="${baseDir}/build/classes"
+                   destdir="${out.instr.dir}"
+                   metadatafile="${coverage.dir}/metadata.emma"
+                   merge="true"
+                    />
+        </emma>
+    </target>
 
-			<formatter type="xml"/>
-			<batchtest fork="yes" todir="${reports.dir}/blackbox">
-				<fileset dir="${basedir}/test/blackbox">
-				</fileset>
-			</batchtest>
-			<jvmarg value="-Demma.coverage.out.file=${coverage.dir}/blackbox/coverage.emma" />
-			<jvmarg value="-Demma.coverage.out.merge=true" />
-		</junit>
-		<junitreport todir="${reports.dir}/blackbox">
-			<fileset dir="${reports.dir}/blackbox">
-				<include name="TEST-*.xml"/>
-			</fileset>
-			<report format="frames" todir="${reports.dir}/blackbox/html"/>
-		</junitreport>
-	</target>
-	<target name="test-examples" depends="instr, compile-test-examples">
-		<mkdir dir="${coverage.dir}/examples" />
-		<mkdir dir="${reports.dir}/examples" />
-		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch" includeantruntime="true">
-			<classpath>
-				<pathelement location="${out.instr.dir}" />
-				<pathelement location="${baseDir}/build/classes"/>
-				<pathelement location="${baseDir}/build/test-examples"/>
-			</classpath>
-			<classpath>
-				<path refid="dependencies" />
-				<path refid="emma.lib" />
-			</classpath>
+    <target name="test-unit" depends="instr, compile-test-unit" description="Run unit tests">
+        <mkdir dir="${coverage.dir}/unit"/>
+        <mkdir dir="${reports.dir}/unit"/>
+        <junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch"
+               includeantruntime="true">
+            <classpath>
+                <pathelement location="${out.instr.dir}"/>
+                <pathelement location="${baseDir}/build/classes"/>
+                <pathelement location="${baseDir}/build/test-unit"/>
+            </classpath>
+            <classpath>
+                <path refid="dependencies"/>
+                <path refid="emma.lib"/>
+            </classpath>
 
-			<formatter type="xml"/>
-			<batchtest fork="yes" todir="${reports.dir}/examples">
-				<fileset dir="${basedir}/test/examples">
-				</fileset>
-			</batchtest>
-			<jvmarg value="-Demma.coverage.out.file=${coverage.dir}/examples/coverage.emma" />
-			<jvmarg value="-Demma.coverage.out.merge=true" />
-		</junit>
-		<junitreport todir="${reports.dir}/examples">
-			<fileset dir="${reports.dir}/examples">
-				<include name="TEST-*.xml"/>
-			</fileset>
-			<report format="frames" todir="${reports.dir}/examples/html"/>
-		</junitreport>
-	</target>
-	<target name="test-concurrency" depends="instr, compile-test-concurrency">
-		<mkdir dir="${coverage.dir}/concurrency" />
-		<mkdir dir="${reports.dir}/concurrency" />
-		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch" includeantruntime="true">
-			<classpath>
-				<pathelement location="${out.instr.dir}" />
-				<pathelement location="${baseDir}/build/classes"/>
-				<pathelement location="${baseDir}/build/test-concurrency"/>
-			</classpath>
-			<classpath>
-				<path refid="dependencies" />
-				<path refid="emma.lib" />
-			</classpath>
+            <formatter type="xml"/>
+            <batchtest fork="yes" todir="${reports.dir}/unit">
+                <fileset dir="${basedir}/test/unit">
+                </fileset>
+            </batchtest>
+            <jvmarg value="-Demma.coverage.out.file=${coverage.dir}/unit/coverage.emma"/>
+            <jvmarg value="-Demma.coverage.out.merge=true"/>
+        </junit>
+        <junitreport todir="${reports.dir}/unit">
+            <fileset dir="${reports.dir}/unit">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${reports.dir}/unit/html"/>
+        </junitreport>
+    </target>
+    <target name="test-blackbox" depends="instr, compile-test-blackbox" description="Run blackbox tests">
+        <mkdir dir="${coverage.dir}/blackbox"/>
+        <mkdir dir="${reports.dir}/blackbox"/>
+        <junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch"
+               includeantruntime="true">
+            <classpath>
+                <pathelement location="${out.instr.dir}"/>
+                <pathelement location="${baseDir}/build/classes"/>
+                <pathelement location="${baseDir}/build/test-blackbox"/>
+            </classpath>
+            <classpath>
+                <path refid="dependencies"/>
+                <path refid="emma.lib"/>
+            </classpath>
 
-			<formatter type="xml"/>
-			<batchtest fork="yes" todir="${reports.dir}/concurrency">
-				<fileset dir="${basedir}/test/concurrency">
-				</fileset>
-			</batchtest>
-			<jvmarg value="-Demma.coverage.out.file=${coverage.dir}/concurrency/coverage.emma" />
-			<jvmarg value="-Demma.coverage.out.merge=true" />
-		</junit>
-		<junitreport todir="${reports.dir}/concurrency">
-			<fileset dir="${reports.dir}/concurrency">
-				<include name="TEST-*.xml"/>
-			</fileset>
-			<report format="frames" todir="${reports.dir}/concurrency/html"/>
-		</junitreport>
-	</target>
-	<target name="test-performance" depends="instr, compile-test-performance">
-		<mkdir dir="${coverage.dir}/performance" />
-		<mkdir dir="${reports.dir}/performance" />
-		<junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch" includeantruntime="true">
-			<classpath>
-				<pathelement location="${out.instr.dir}" />
-				<pathelement location="${baseDir}/build/classes"/>
-				<pathelement location="${baseDir}/build/test-performance"/>
-			</classpath>
-			<classpath>
-				<path refid="dependencies" />
-				<path refid="emma.lib" />
-			</classpath>
+            <formatter type="xml"/>
+            <batchtest fork="yes" todir="${reports.dir}/blackbox">
+                <fileset dir="${basedir}/test/blackbox">
+                </fileset>
+            </batchtest>
+            <jvmarg value="-Demma.coverage.out.file=${coverage.dir}/blackbox/coverage.emma"/>
+            <jvmarg value="-Demma.coverage.out.merge=true"/>
+        </junit>
+        <junitreport todir="${reports.dir}/blackbox">
+            <fileset dir="${reports.dir}/blackbox">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${reports.dir}/blackbox/html"/>
+        </junitreport>
+    </target>
+    <target name="test-examples" depends="instr, compile-test-examples">
+        <mkdir dir="${coverage.dir}/examples"/>
+        <mkdir dir="${reports.dir}/examples"/>
+        <junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch"
+               includeantruntime="true">
+            <classpath>
+                <pathelement location="${out.instr.dir}"/>
+                <pathelement location="${baseDir}/build/classes"/>
+                <pathelement location="${baseDir}/build/test-examples"/>
+            </classpath>
+            <classpath>
+                <path refid="dependencies"/>
+                <path refid="emma.lib"/>
+            </classpath>
 
-			<formatter type="xml"/>
-			<batchtest fork="yes" todir="${reports.dir}/performance">
-				<fileset dir="${basedir}/test/performance">
-				</fileset>
-			</batchtest>
-			<jvmarg value="-Demma.coverage.out.file=${coverage.dir}/performance/coverage.emma" />
-			<jvmarg value="-Demma.coverage.out.merge=true" />
-		</junit>
-		<junitreport todir="${reports.dir}/performance">
-			<fileset dir="${reports.dir}/performance">
-				<include name="TEST-*.xml"/>
-			</fileset>
-			<report format="frames" todir="${reports.dir}/performance/html"/>
-		</junitreport>
-	</target>
+            <formatter type="xml"/>
+            <batchtest fork="yes" todir="${reports.dir}/examples">
+                <fileset dir="${basedir}/test/examples">
+                </fileset>
+            </batchtest>
+            <jvmarg value="-Demma.coverage.out.file=${coverage.dir}/examples/coverage.emma"/>
+            <jvmarg value="-Demma.coverage.out.merge=true"/>
+        </junit>
+        <junitreport todir="${reports.dir}/examples">
+            <fileset dir="${reports.dir}/examples">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${reports.dir}/examples/html"/>
+        </junitreport>
+    </target>
+    <target name="test-concurrency" depends="instr, compile-test-concurrency">
+        <mkdir dir="${coverage.dir}/concurrency"/>
+        <mkdir dir="${reports.dir}/concurrency"/>
+        <junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch"
+               includeantruntime="true">
+            <classpath>
+                <pathelement location="${out.instr.dir}"/>
+                <pathelement location="${baseDir}/build/classes"/>
+                <pathelement location="${baseDir}/build/test-concurrency"/>
+            </classpath>
+            <classpath>
+                <path refid="dependencies"/>
+                <path refid="emma.lib"/>
+            </classpath>
 
-	<target name="javadoc" description="Generate javadoc">
-		<mkdir dir="${baseDir}/build/javadoc" />
-		<javadoc destdir="${baseDir}/build/javadoc">
-			<fileset dir="${baseDir}/src">
-				<include name="**/Mockachino.java" />
-				<include name="**/MockContext.java" />
-				<include name="**/MockData.java" />
-				
-				<include name="**/MatchersBase.java" />
-				<include name="**/Matchers.java" />
-				<include name="**/Matcher.java" />
-				<include name="**/Settings.java" />
-				<include name="**/MockSettings.java" />
+            <formatter type="xml"/>
+            <batchtest fork="yes" todir="${reports.dir}/concurrency">
+                <fileset dir="${basedir}/test/concurrency">
+                </fileset>
+            </batchtest>
+            <jvmarg value="-Demma.coverage.out.file=${coverage.dir}/concurrency/coverage.emma"/>
+            <jvmarg value="-Demma.coverage.out.merge=true"/>
+        </junit>
+        <junitreport todir="${reports.dir}/concurrency">
+            <fileset dir="${reports.dir}/concurrency">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${reports.dir}/concurrency/html"/>
+        </junitreport>
+    </target>
+    <target name="test-performance" depends="instr, compile-test-performance">
+        <mkdir dir="${coverage.dir}/performance"/>
+        <mkdir dir="${reports.dir}/performance"/>
+        <junit printsummary="yes" haltonfailure="yes" failureproperty="test.failed" fork="false" forkmode="perBatch"
+               includeantruntime="true">
+            <classpath>
+                <pathelement location="${out.instr.dir}"/>
+                <pathelement location="${baseDir}/build/classes"/>
+                <pathelement location="${baseDir}/build/test-performance"/>
+            </classpath>
+            <classpath>
+                <path refid="dependencies"/>
+                <path refid="emma.lib"/>
+            </classpath>
 
-				<include name="**/MockachinoMethod.java" />
-				<include name="**/MethodCall.java" />
-				<include name="**/CallHandler.java" />
+            <formatter type="xml"/>
+            <batchtest fork="yes" todir="${reports.dir}/performance">
+                <fileset dir="${basedir}/test/performance">
+                </fileset>
+            </batchtest>
+            <jvmarg value="-Demma.coverage.out.file=${coverage.dir}/performance/coverage.emma"/>
+            <jvmarg value="-Demma.coverage.out.merge=true"/>
+        </junit>
+        <junitreport todir="${reports.dir}/performance">
+            <fileset dir="${reports.dir}/performance">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${reports.dir}/performance/html"/>
+        </junitreport>
+    </target>
 
-				<include name="**/MockPoint.java" />
-				<include name="**/OrderingContext.java" />
+    <target name="javadoc" description="Generate javadoc">
+        <mkdir dir="${baseDir}/build/javadoc"/>
+        <javadoc destdir="${baseDir}/build/javadoc">
+            <fileset dir="${baseDir}/src">
+                <include name="**/Mockachino.java"/>
+                <include name="**/MockContext.java"/>
+                <include name="**/MockData.java"/>
 
-				<include name="**/UsageError.java" />
-				<include name="**/VerificationError.java" />
+                <include name="**/MatchersBase.java"/>
+                <include name="**/Matchers.java"/>
+                <include name="**/Matcher.java"/>
+                <include name="**/Settings.java"/>
+                <include name="**/MockSettings.java"/>
 
-				<!-- fluent objects -->
-				<include name="**/ObserverAdder.java" />
-				<include name="**/Stubber.java" />
-				<include name="**/VerifyRangeStart.java" />
-				<include name="**/InOrderVerify.java" />
-				<include name="**/BetweenVerifyContext.java" />
+                <include name="**/MockachinoMethod.java"/>
+                <include name="**/MethodCall.java"/>
+                <include name="**/CallHandler.java"/>
 
-			</fileset>
-		</javadoc>
-	</target>
+                <include name="**/MockPoint.java"/>
+                <include name="**/OrderingContext.java"/>
 
-	<target name="coverage-report">
-		<emma enabled="${emma.enabled}" >
-			<report sourcepath="${baseDir}/src" >
-				<fileset dir="${coverage.dir}" >
-					<include name="*.emma" />
-					<include name="unit/*.emma" />
-					<include name="blackbox/*.emma" />
-					<include name="examples/*.emma" />
-				</fileset>
+                <include name="**/UsageError.java"/>
+                <include name="**/VerificationError.java"/>
 
-				<txt outfile="${coverage.dir}/coverage.txt" />
-				<html outfile="${coverage.dir}/coverage.html" />
-			</report>
-		</emma>	
-	</target>
-	
-	<target name="javadoc-full" description="Generate full javadoc">
-		<mkdir dir="${baseDir}/build/javadoc-full" />
-		<javadoc destdir="${baseDir}/build/javadoc-full">
-			<fileset dir="${baseDir}/src">
-			</fileset>
-		</javadoc>
-	</target>
+                <!-- fluent objects -->
+                <include name="**/ObserverAdder.java"/>
+                <include name="**/Stubber.java"/>
+                <include name="**/VerifyRangeStart.java"/>
+                <include name="**/InOrderVerify.java"/>
+                <include name="**/BetweenVerifyContext.java"/>
 
-	<target name="package" depends="compile" description="Package jars">
-		<!-- classes, source -->
-		<jar destfile="${baseDir}/build/mockachino-light-${suffix}.jar">
-			<fileset dir="${baseDir}/build/classes"/>
-			<fileset dir="${baseDir}/src">
-				<exclude name="**/.svn" />
-			</fileset>
-            <zipfileset src="${baseDir}/lib/gentyref-1.1.1-20101127.232143-2.jar" />
-		</jar>
-		
-		<!-- classes, source, dependencies -->
-		<jar destfile="${baseDir}/build/mockachino-full-${suffix}.jar">
-			<fileset dir="${baseDir}/build/classes"/>
-			<fileset dir="${baseDir}/src">
-				<exclude name="**/.svn" />
-			</fileset>
-			<zipfileset src="${baseDir}/lib/cglib-2.2.jar" />
-			<zipfileset src="${baseDir}/lib/asm-all-3.2.jar" />
-			<zipfileset src="${baseDir}/lib/objenesis-1.2.jar" />
-            <zipfileset src="${baseDir}/lib/gentyref-1.1.1-20101127.232143-2.jar" />
-		</jar>
-		
-		<!-- full project -->
-		<zip destfile="${baseDir}/build/mockachino-dev-${suffix}.zip">
-			<fileset dir="${baseDir}">
-				<exclude name="coverage.ec" />
-				<exclude name=".idea/**" />
-				<exclude name="build/**" />
-				<exclude name="out/**" />
-				<exclude name="**/.svn" />
-			</fileset>
-		</zip>
-	</target>
+            </fileset>
+        </javadoc>
+    </target>
+
+    <target name="coverage-report">
+        <emma enabled="${emma.enabled}">
+            <report sourcepath="${baseDir}/src">
+                <fileset dir="${coverage.dir}">
+                    <include name="*.emma"/>
+                    <include name="unit/*.emma"/>
+                    <include name="blackbox/*.emma"/>
+                    <include name="examples/*.emma"/>
+                </fileset>
+
+                <txt outfile="${coverage.dir}/coverage.txt"/>
+                <html outfile="${coverage.dir}/coverage.html"/>
+            </report>
+        </emma>
+    </target>
+
+    <target name="javadoc-full" description="Generate full javadoc">
+        <mkdir dir="${baseDir}/build/javadoc-full"/>
+        <javadoc destdir="${baseDir}/build/javadoc-full">
+            <fileset dir="${baseDir}/src">
+            </fileset>
+        </javadoc>
+    </target>
+
+    <target name="package" depends="compile" description="Package jars">
+        <!-- classes, source -->
+        <jar destfile="${baseDir}/build/mockachino-light-${suffix}.jar">
+            <fileset dir="${baseDir}/build/classes"/>
+            <fileset dir="${baseDir}/src">
+                <exclude name="**/.svn"/>
+            </fileset>
+            <zipfileset src="${baseDir}/lib/gentyref-1.1.1-20101127.232143-2.jar"/>
+        </jar>
+
+        <!-- classes, source, dependencies -->
+        <jar destfile="${baseDir}/build/mockachino-full-${suffix}.jar">
+            <fileset dir="${baseDir}/build/classes"/>
+            <fileset dir="${baseDir}/src">
+                <exclude name="**/.svn"/>
+            </fileset>
+            <zipfileset src="${baseDir}/lib/cglib-2.2.jar"/>
+            <zipfileset src="${baseDir}/lib/asm-all-3.2.jar"/>
+            <zipfileset src="${baseDir}/lib/objenesis-1.2.jar"/>
+            <zipfileset src="${baseDir}/lib/gentyref-1.1.1-20101127.232143-2.jar"/>
+        </jar>
+
+        <!-- full project -->
+        <zip destfile="${baseDir}/build/mockachino-dev-${suffix}.zip">
+            <fileset dir="${baseDir}">
+                <exclude name="coverage.ec"/>
+                <exclude name=".idea/**"/>
+                <exclude name="build/**"/>
+                <exclude name="out/**"/>
+                <exclude name="**/.svn"/>
+            </fileset>
+        </zip>
+    </target>
 </project>
 		

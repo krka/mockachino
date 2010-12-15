@@ -60,7 +60,7 @@ public class TimeoutTest {
 	@Test
 	public void testTimeoutFailAtMost() {
 		final List mock = Mockachino.mock(ArrayList.class);
-		runTimeoutTest(Mockachino.verifyAtMost(1), 200, 220, 200, 500, false, mock, new Runnable() {
+		runTimeoutTest(Mockachino.verifyAtMost(1), 100, 520, 100, 5000, false, mock, new Runnable() {
 			@Override
 			public void run() {
 				mock.size();
@@ -110,6 +110,6 @@ public class TimeoutTest {
 		assertTrue("Time: " + time + " expected at most " + maxExecutionTime, time <= maxExecutionTime);
 		assertTrue("Time: " + time + " expected at least " + minExecutionTime, time >= minExecutionTime);
 
-        assertEquals(wantsOk, status);
-	}	
+		assertEquals(wantsOk, status);
+	}
 }

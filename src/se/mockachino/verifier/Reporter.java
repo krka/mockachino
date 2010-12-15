@@ -17,7 +17,7 @@ public class Reporter {
 		return minCalls <= actual && actual <= maxCalls;
 	}
 
-	public String getErrorLine(){
+	public String getErrorLine() {
 		// verifyNever()
 		if (maxCalls <= 0) {
 			if (actual > 0) {

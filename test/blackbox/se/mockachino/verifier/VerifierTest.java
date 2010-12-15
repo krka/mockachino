@@ -75,21 +75,21 @@ public class VerifierTest {
 		Mockachino.verifyExactly(1).on(mock1).add("Foo");
 	}
 
-    @Test
-    public void testMatchesAnyMethod() {
-        final List mock = Mockachino.mock(ArrayList.class);
-        mock.get(1);
-        mock.contains(null);
-        mock.contains(new Object());
+	@Test
+	public void testMatchesAnyMethod() {
+		final List mock = Mockachino.mock(ArrayList.class);
+		mock.get(1);
+		mock.contains(null);
+		mock.contains(new Object());
 
-        // tostring doesn't trigger verification
-        mock.toString();
+		// tostring doesn't trigger verification
+		mock.toString();
 
-        Mockachino.verifyExactly(3).onAnyMethod(mock);
-        Mockachino.verifyExactly(2).onMethod(mock,
-                new MethodMatcherImpl(MockachinoMethod.find(List.class, "contains"),
-                        Arrays.<Matcher>asList(new AnyMatcher(Object.class))));
+		Mockachino.verifyExactly(3).onAnyMethod(mock);
+		Mockachino.verifyExactly(2).onMethod(mock,
+				new MethodMatcherImpl(MockachinoMethod.find(List.class, "contains"),
+						Arrays.<Matcher>asList(new AnyMatcher(Object.class))));
 
-        Mockachino.verifyExactly(2).onMethodWithAnyArgument(mock, MockachinoMethod.find(List.class, "contains"));
-    }
+		Mockachino.verifyExactly(2).onMethodWithAnyArgument(mock, MockachinoMethod.find(List.class, "contains"));
+	}
 }

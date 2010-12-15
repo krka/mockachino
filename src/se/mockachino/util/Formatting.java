@@ -2,7 +2,6 @@ package se.mockachino.util;
 
 import se.mockachino.matchers.matcher.Matcher;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,9 +23,9 @@ public class Formatting {
 		return join(", ", iterable);
 	}
 
-    public static String list(Object[] args, boolean varArgs) {
-        return join(varArgs, ", ", args);
-    }
+	public static String list(Object[] args, boolean varArgs) {
+		return join(varArgs, ", ", args);
+	}
 
 	public static String argument(Object arg) {
 		arg = PrimitiveList.toList(arg);
@@ -43,12 +42,12 @@ public class Formatting {
 			return "{" + join(", ", (Set) arg) + "}";
 		}
 		if (arg instanceof Map) {
-            return "(" + join(", ", ((Map<java.lang.Object,java.lang.Object>) arg).entrySet()) + ")";
+			return "(" + join(", ", ((Map<java.lang.Object, java.lang.Object>) arg).entrySet()) + ")";
 		}
-        if (arg instanceof Map.Entry) {
-            return argument(((Map.Entry) arg).getKey()) + ":" +
-                    argument(((Map.Entry) arg).getValue());
-        }
+		if (arg instanceof Map.Entry) {
+			return argument(((Map.Entry) arg).getKey()) + ":" +
+					argument(((Map.Entry) arg).getValue());
+		}
 		return arg.toString();
 	}
 
@@ -69,29 +68,30 @@ public class Formatting {
 		return builder.toString();
 	}
 
-    public static String join(String sep, Object... objects) {
-        return join(false, sep, objects);
-    }
+	public static String join(String sep, Object... objects) {
+		return join(false, sep, objects);
+	}
 
 	public static String join(boolean varArg, String sep, Object... objects) {
 		if (objects == null) {
 			return "";
 		}
 		StringBuilder builder = new StringBuilder();
-        int n = objects.length;
-        for (int i = 0; i < n; i++) {
-            if (i > 0) {
-                builder.append(sep);
-            }
-            Object obj = objects[i];
-            if (varArg && i == n - 1) {
-                builder.append(join(false, sep, (Object[]) obj));
-            } else {
-                builder.append(argument(obj));
-            }
+		int n = objects.length;
+		for (int i = 0; i < n; i++) {
+			if (i > 0) {
+				builder.append(sep);
+			}
+			Object obj = objects[i];
+			if (varArg && i == n - 1) {
+				builder.append(join(false, sep, (Object[]) obj));
+			} else {
+				builder.append(argument(obj));
+			}
 		}
 		return builder.toString();
 	}
+
 	public static String toString(StackTraceElement[] stacktrace) {
 		return toString(stacktrace, Integer.MAX_VALUE);
 	}

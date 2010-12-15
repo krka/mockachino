@@ -13,7 +13,7 @@ import static se.mockachino.Settings.spyOn;
 import static se.mockachino.matchers.Matchers.*;
 
 public class MockachinoTest {
-	
+
 	@Test
 	public void testSimpleTest() {
 		List mock = Mockachino.mock(List.class);
@@ -164,6 +164,7 @@ public class MockachinoTest {
 
 	private static interface Foo {
 		String bar(String s);
+
 		int bar(int i);
 	}
 
@@ -317,12 +318,9 @@ public class MockachinoTest {
 
 	@Test
 	public void testEquals() {
-		MockContext context = new MockContext();
-		List mock1 = context.mock(List.class);
-		List mock2 = context.mock(List.class);
+		List mock1 = Mockachino.mock(List.class);
+		List mock2 = Mockachino.mock(List.class);
 
-		assertEquals("Mock:List:1", mock1.toString());
-		assertEquals("Mock:List:2", mock2.toString());
 		assertTrue(mock1.hashCode() != 0);
 		assertTrue(mock2.hashCode() != 0);
 		assertNotSame(mock1.hashCode(), mock2.hashCode());

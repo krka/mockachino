@@ -11,9 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 
 public class VerifyHandler extends MatchingHandler {
-    private static final BadUsageHandler BAD_USAGE_HANDLER = InOrderVerifyHandler.BAD_USAGE_HANDLER;
-    
-    private final Iterable<Invocation> calls;
+	private static final BadUsageHandler BAD_USAGE_HANDLER = InOrderVerifyHandler.BAD_USAGE_HANDLER;
+
+	private final Iterable<Invocation> calls;
 	private final int minCalls;
 	private final int maxCalls;
 	private final long timeout;
@@ -85,7 +85,7 @@ public class VerifyHandler extends MatchingHandler {
 
 	private String getBestMatches(MethodMatcher matcher, int maxMisses, MethodCallGrouper grouper) {
 		StringBuilder report = new StringBuilder();
-		report.append("\nMethod pattern:\n"  + matcher.toString() + "\n");
+		report.append("\nMethod pattern:\n" + matcher.toString() + "\n");
 
 		boolean reachedHit = false;
 		boolean reachedMiss = false;
@@ -105,11 +105,11 @@ public class VerifyHandler extends MatchingHandler {
 			report.append(call.toString() + count(call) + "\n" + getStacktrace(call));
 		}
 		/*
-		if (filteredCalls.size() < calls.size()) {
-			report.append("... there were " + (calls.size() - filteredCalls.size()) + " more interactions with the mock, but they are not shown here.\n");
+				  if (filteredCalls.size() < calls.size()) {
+					  report.append("... there were " + (calls.size() - filteredCalls.size()) + " more interactions with the mock, but they are not shown here.\n");
 
-		}
-		*/
+				  }
+				  */
 		return report.toString();
 	}
 

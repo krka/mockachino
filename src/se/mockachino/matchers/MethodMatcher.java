@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface MethodMatcher {
 	boolean matches(MethodCall methodCall);
+
 	List<Matcher> getArgumentMatchers();
+
 	MockachinoMethod getMethod();
 }

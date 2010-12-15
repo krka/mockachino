@@ -8,15 +8,15 @@ import java.util.Arrays;
 public class MethodCall {
 
 
-    private static final Object[] NO_ARGS = new Object[0];
+	private static final Object[] NO_ARGS = new Object[0];
 
 
 	private final MockachinoMethod method;
 	private final Object[] args;
 
-    public MethodCall(MockachinoMethod method, Object[] args) {
+	public MethodCall(MockachinoMethod method, Object[] args) {
 		this.method = method;
-        if (args == null) {
+		if (args == null) {
 			args = NO_ARGS;
 		}
 		this.args = args;
@@ -45,6 +45,6 @@ public class MethodCall {
 		if (!Arrays.equals(args, other.args)) {
 			return false;
 		}
-        return true;
+		return true;
 	}
 }

@@ -11,17 +11,17 @@ import se.mockachino.verifier.MatchingHandler;
 import se.mockachino.verifier.Reporter;
 
 public class InOrderVerifyHandler extends MatchingHandler {
-    public static final BadUsageHandler BAD_USAGE_HANDLER = new BadUsageHandler(
-            new BadUsageBuilder(
-                    "Incorrect usage. You can not chain calls when verifying a deep mock. " +
-                    "You probably used verify().on(mock).method1().method2(). " +
-                    "Correct usage is verify().on(mock.method1()).method2()"));
+	public static final BadUsageHandler BAD_USAGE_HANDLER = new BadUsageHandler(
+			new BadUsageBuilder(
+					"Incorrect usage. You can not chain calls when verifying a deep mock. " +
+							"You probably used verify().on(mock).method1().method2(). " +
+							"Correct usage is verify().on(mock.method1()).method2()"));
 
 	private final Iterable<Invocation> calls;
 	private final int min;
 	private final OrderingContext orderingContext;
 
-    public InOrderVerifyHandler(OrderingContext orderingContext, Object mock, Iterable<Invocation> calls, int min) {		
+	public InOrderVerifyHandler(OrderingContext orderingContext, Object mock, Iterable<Invocation> calls, int min) {
 		super("InOrderVerifyHandler", Mockachino.getData(mock).getName(), BAD_USAGE_HANDLER);
 		this.orderingContext = orderingContext;
 		this.calls = calls;
@@ -56,7 +56,7 @@ public class InOrderVerifyHandler extends MatchingHandler {
 			}
 		}
 		String errorMessage = new Reporter(count, min, Integer.MAX_VALUE).getErrorLine();
-		errorMessage += "\nMethod pattern:\n"  + matcher.toString() + "\n";
+		errorMessage += "\nMethod pattern:\n" + matcher.toString() + "\n";
 		if (lastCallNumber > 0) {
 			errorMessage += "\nAfter:\n" + lastCall + "\n" + lastCall.getStackTraceString();
 		}

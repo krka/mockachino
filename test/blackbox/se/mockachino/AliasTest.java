@@ -29,7 +29,7 @@ public class AliasTest {
 		SimpleAlias a = Mockachino.newAlias();
 		a.bind(mock).add(Matchers.regexp("Hell.*"));
 
-		assertEquals(2,  a.count());
+		assertEquals(2, a.count());
 	}
 
 	@Test

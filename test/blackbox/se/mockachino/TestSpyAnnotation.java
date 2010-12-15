@@ -13,31 +13,31 @@ import static org.junit.Assert.assertNotNull;
 
 public class TestSpyAnnotation {
 
-    @Spy
-    public List spy = new ArrayList();
+	@Spy
+	public List spy = new ArrayList();
 
-    @Before
-    public void before() {
-        Mockachino.setupMocks(this);
-    }
+	@Before
+	public void before() {
+		Mockachino.setupMocks(this);
+	}
 
-    @Test
-    public void simpleTest() {
-        verify(spy);
+	@Test
+	public void simpleTest() {
+		verify(spy);
 
-        assertEquals(0, spy.size());
-        spy.add("Hello");
-        spy.add("World");
-        assertEquals(2, spy.size());
-        assertEquals("Hello", spy.get(0));
+		assertEquals(0, spy.size());
+		spy.add("Hello");
+		spy.add("World");
+		assertEquals(2, spy.size());
+		assertEquals("Hello", spy.get(0));
 
-        Mockachino.verifyExactly(2).on(spy).size();
-        Mockachino.verifyExactly(2).on(spy).add(Matchers.any(Object.class));
-        Mockachino.verifyExactly(1).on(spy).get(0);
-    }
+		Mockachino.verifyExactly(2).on(spy).size();
+		Mockachino.verifyExactly(2).on(spy).add(Matchers.any(Object.class));
+		Mockachino.verifyExactly(1).on(spy).get(0);
+	}
 
-    private void verify(List mock) {
-        assertNotNull(mock);
-        assertNotNull(Mockachino.getData(mock));
-    }
+	private void verify(List mock) {
+		assertNotNull(mock);
+		assertNotNull(Mockachino.getData(mock));
+	}
 }

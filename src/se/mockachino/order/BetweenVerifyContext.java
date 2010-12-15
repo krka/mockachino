@@ -1,20 +1,17 @@
 package se.mockachino.order;
 
 import se.mockachino.Invocation;
-import se.mockachino.MockContext;
 import se.mockachino.MockData;
 import se.mockachino.Mockachino;
 import se.mockachino.matchers.MatcherThreadHandler;
 import se.mockachino.verifier.VerifyRangeStart;
 
 public class BetweenVerifyContext {
-	private final MockContext mockContext;
 	private final MockPoint start;
 	private final MockPoint end;
 
-	public BetweenVerifyContext(MockContext mockContext,
-								MockPoint start, MockPoint end) {
-		this.mockContext = mockContext;
+	public BetweenVerifyContext(
+			MockPoint start, MockPoint end) {
 		this.start = start;
 		this.end = end;
 	}
@@ -25,10 +22,9 @@ public class BetweenVerifyContext {
 	}
 
 
-
 	/**
 	 * Verifies that a method call is called between min and max times, inclusive.
-	 *
+	 * <p/>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyRange(1, 2).on(mock).method();
@@ -40,12 +36,12 @@ public class BetweenVerifyContext {
 	 */
 	public VerifyRangeStart verifyRange(int min, int max) {
 		MatcherThreadHandler.assertEmpty();
-		return new VerifyRangeStart(mockContext, min, max, start, end);
+		return new VerifyRangeStart(min, max, start, end);
 	}
 
 	/**
 	 * Verifies that a method call is called an exact number of times.
-	 *
+	 * <p/>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyExactly(3).on(mock).method();
@@ -60,7 +56,7 @@ public class BetweenVerifyContext {
 
 	/**
 	 * Verifies that a method call is never called.
-	 *
+	 * <p/>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyNever().on(mock).method();
@@ -74,7 +70,7 @@ public class BetweenVerifyContext {
 
 	/**
 	 * Verifies that a method call is only called exactly once.
-	 *
+	 * <p/>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyOnce().on(mock).method();
@@ -88,7 +84,7 @@ public class BetweenVerifyContext {
 
 	/**
 	 * Verifies that a method call is called at least a specific number of times.
-	 *
+	 * <p/>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyAtLeast(3).on(mock).method();
@@ -103,7 +99,7 @@ public class BetweenVerifyContext {
 
 	/**
 	 * Verifies that a method call is called at most a specific number of times.
-	 *
+	 * <p/>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyAtMost(3).on(mock).method();
@@ -119,7 +115,7 @@ public class BetweenVerifyContext {
 	/**
 	 * Creates a new ordering context which is used to verify method calls in order.
 	 * Ordering contexts are completely independent of each other.
-	 *
+	 * <p/>
 	 * Typical usage:
 	 * <pre>
 	 * OrderingContext context = Mockachino.newOrdering();
@@ -130,6 +126,6 @@ public class BetweenVerifyContext {
 	 */
 	public OrderingContext newOrdering() {
 		MatcherThreadHandler.assertEmpty();
-		return new OrderingContext(mockContext, start, end);
+		return new OrderingContext(start, end);
 	}
 }

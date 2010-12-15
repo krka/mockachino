@@ -76,14 +76,14 @@ public class StubberTest {
 
 	@Test
 	public void testObjectOk() {
-			List mock = Mockachino.mock(List.class);
-			Mockachino.stubReturn("").on(mock).get(0);
+		List mock = Mockachino.mock(List.class);
+		Mockachino.stubReturn("").on(mock).get(0);
 	}
 
 	@Test
 	public void testObjectExtendsOk() {
 		Process mock = Mockachino.mock(Process.class);
-		Mockachino.stubReturn(new InputStream(){
+		Mockachino.stubReturn(new InputStream() {
 			@Override
 			public int read() throws IOException {
 				throw new UnsupportedOperationException("NYI");
@@ -118,15 +118,15 @@ public class StubberTest {
 		}
 	}
 
-    @Test(expected = UsageError.class)
-    public void testStubFails() {
-        List mock = Mockachino.mock(List.class);
-        Mockachino.stubReturn("").on(mock).indexOf(null);
-    }
+	@Test(expected = UsageError.class)
+	public void testStubFails() {
+		List mock = Mockachino.mock(List.class);
+		Mockachino.stubReturn("").on(mock).indexOf(null);
+	}
 
-    @Test(expected = UsageError.class)
-    public void testStubFails2() {
-        List mock = Mockachino.mock(List.class);
-        Mockachino.stubReturn("").on(mock).toArray();
-    }
+	@Test(expected = UsageError.class)
+	public void testStubFails2() {
+		List mock = Mockachino.mock(List.class);
+		Mockachino.stubReturn("").on(mock).toArray();
+	}
 }

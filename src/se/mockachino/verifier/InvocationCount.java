@@ -11,10 +11,10 @@ public class InvocationCount extends Invocation {
 	}
 
 	public InvocationCount(Object obj, MethodCall methodCall, int callNumber, StackTraceElement[] stacktrace) {
-        super(obj, methodCall, callNumber, stacktrace);
+		super(obj, methodCall, callNumber, stacktrace);
 	}
 
-    public void increment(int amount) {
+	public void increment(int amount) {
 		count += amount;
 	}
 

@@ -18,10 +18,10 @@ public class InvocationComparator implements Comparator<Invocation> {
 		this.argumentMatchers = argumentMatchers;
 	}
 
-    @Override
+	@Override
 	public int compare(Invocation c1, Invocation c2) {
-        MethodCall o1 = c1.getMethodCall();
-        MethodCall o2 = c2.getMethodCall();
+		MethodCall o1 = c1.getMethodCall();
+		MethodCall o2 = c2.getMethodCall();
 		// First compare on names
 		{
 			int value = comp(nameMatches(o1), nameMatches(o2));
@@ -37,7 +37,6 @@ public class InvocationComparator implements Comparator<Invocation> {
 				return value;
 			}
 		}
-
 
 
 		// Compare on actual arguments and types
@@ -80,7 +79,7 @@ public class InvocationComparator implements Comparator<Invocation> {
 		if (len1 > len2) {
 			return 1;
 		}
-		
+
 		// Compare on argument hashcodes in order to put equal
 		// argument lists next to each other
 
@@ -89,8 +88,8 @@ public class InvocationComparator implements Comparator<Invocation> {
 	}
 
 	private int compareOrigin(Invocation c1, Invocation c2) {
-        MethodCall o1 = c1.getMethodCall();
-        MethodCall o2 = c2.getMethodCall();
+		MethodCall o1 = c1.getMethodCall();
+		MethodCall o2 = c2.getMethodCall();
 		int n = getNumArgs(o1);
 		Object[] args1 = o1.getArguments();
 		Object[] args2 = o2.getArguments();
@@ -144,7 +143,7 @@ public class InvocationComparator implements Comparator<Invocation> {
 
 		return element1.getLineNumber() - element2.getLineNumber();
 	}
-	
+
 	private boolean matchNull(MethodCall methodCall, int index) {
 		Object[] args = methodCall.getArguments();
 		if (index >= args.length) {

@@ -1,24 +1,21 @@
 package se.mockachino.order;
 
 import se.mockachino.Invocation;
-import se.mockachino.MockContext;
 import se.mockachino.matchers.MatcherThreadHandler;
 
 public class OrderingContext {
-	private final MockContext context;
 	private final MockPoint start;
 	private final MockPoint end;
 	private Invocation currentInvocation = Invocation.NULL;
 
-	public OrderingContext(MockContext context, MockPoint start, MockPoint end) {
-		this.context = context;
+	public OrderingContext(MockPoint start, MockPoint end) {
 		this.start = start;
 		this.end = end;
 	}
 
 	/**
 	 * Verifies that a method call is called at least once.
-	 *
+	 * <p/>
 	 * Typical usage:
 	 * <pre>
 	 * orderingContext.verify().on(mock).method();
@@ -32,7 +29,7 @@ public class OrderingContext {
 
 	/**
 	 * Verifies that a method call is called at least min number of times.
-	 *
+	 * <p/>
 	 * Typical usage:
 	 * <pre>
 	 * orderingContext.verifyAtLeast(3).on(mock).method();
@@ -43,7 +40,7 @@ public class OrderingContext {
 	 */
 	public InOrderVerify verifyAtLeast(int min) {
 		MatcherThreadHandler.assertEmpty();
-		return new InOrderVerify(this, context, min, start, end);
+		return new InOrderVerify(this, min, start, end);
 	}
 
 	Invocation getCurrentInvocation() {
@@ -57,7 +54,7 @@ public class OrderingContext {
 	private MockPoint getPoint(int offset) {
 		MatcherThreadHandler.assertEmpty();
 		int base = currentInvocation.getCallNumber();
-		return new MockPoint(context, base + offset);
+		return new MockPoint(base + offset);
 	}
 
 	public MockPoint atLastCall() {

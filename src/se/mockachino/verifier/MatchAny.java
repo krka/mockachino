@@ -8,26 +8,22 @@ import se.mockachino.util.MockachinoMethod;
 import java.util.Collections;
 import java.util.List;
 
-class MatchAny implements MethodMatcher
-{
+class MatchAny implements MethodMatcher {
 
-    public static final MatchAny INSTANCE = new MatchAny();
-    
-    @Override
-    public boolean matches(MethodCall methodCall)
-    {
-        return true;
-    }
+	public static final MatchAny INSTANCE = new MatchAny();
 
-    @Override
-    public List<Matcher> getArgumentMatchers()
-    {
-        return Collections.EMPTY_LIST;
-    }
+	@Override
+	public boolean matches(MethodCall methodCall) {
+		return true;
+	}
 
-    @Override
-    public MockachinoMethod getMethod()
-    {
-        return MockachinoMethod.NULL;
-    }
+	@Override
+	public List<Matcher> getArgumentMatchers() {
+		return Collections.EMPTY_LIST;
+	}
+
+	@Override
+	public MockachinoMethod getMethod() {
+		return MockachinoMethod.NULL;
+	}
 }

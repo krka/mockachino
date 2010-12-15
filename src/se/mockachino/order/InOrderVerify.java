@@ -1,20 +1,19 @@
 package se.mockachino.order;
 
 import se.mockachino.Invocation;
-import se.mockachino.MockContext;
 import se.mockachino.MockData;
 import se.mockachino.Mockachino;
 import se.mockachino.proxy.ProxyUtil;
 
 public class InOrderVerify {
 	private final OrderingContext orderingContext;
-    private final int min;
+	private final int min;
 	private final MockPoint start;
 	private final MockPoint end;
 
-	public InOrderVerify(OrderingContext orderingContext, MockContext context, int min, MockPoint start, MockPoint end) {
+	public InOrderVerify(OrderingContext orderingContext, int min, MockPoint start, MockPoint end) {
 		this.orderingContext = orderingContext;
-        this.min = min;
+		this.min = min;
 		this.start = start;
 		this.end = end;
 	}

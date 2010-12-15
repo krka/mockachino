@@ -8,12 +8,13 @@ import java.util.Set;
 
 public class MockSettings {
 	private boolean quick;
-	private CallHandler fallback = MockContext.DEFAULT_VALUES;
+	private CallHandler fallback = Mockachino.DEFAULT_VALUES;
 	private String name;
 	private Set<Class<?>> interfaces = new HashSet<Class<?>>();
 
 	/**
 	 * Sets the fallback handler to be a spy of impl
+	 *
 	 * @param impl
 	 * @return the same mocksettings object
 	 */
@@ -27,6 +28,7 @@ public class MockSettings {
 
 	/**
 	 * Sets the fallback handler.
+	 *
 	 * @param fallback
 	 * @return the same mocksettings object
 	 */
@@ -40,6 +42,7 @@ public class MockSettings {
 
 	/**
 	 * Sets the name of the mock
+	 *
 	 * @param name
 	 * @return the same mocksettings object
 	 */
@@ -53,7 +56,7 @@ public class MockSettings {
 
 	/**
 	 * Sets the mock to be quick.
-	 *
+	 * <p/>
 	 * A quick mock simply does not record the stacktrace of calls made.
 	 *
 	 * @return the same mocksettings object
@@ -65,7 +68,7 @@ public class MockSettings {
 
 	/**
 	 * Sets the mock to not be quick.
-	 *
+	 * <p/>
 	 * A quick mock simply does not record the stacktrace of calls made.
 	 *
 	 * @return the same mocksettings object

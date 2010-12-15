@@ -62,17 +62,16 @@ public class EqualsHashcodeTest {
 
 	@Test
 	public void testTostring() {
-		MockContext context = new MockContext();
-		List mock = context.mock(List.class);
+		List mock = Mockachino.mock(List.class);
 
-		assertEquals("Mock:List:1", mock.toString());
+		String mockName = mock.toString();
+		assertTrue(mockName, mockName.matches("^Mock:List:(\\d+)$"));
 		Mockachino.stubReturn("MyName").on(mock).toString();
 		assertEquals("MyName", mock.toString());
 		MockData<Object> data = Mockachino.getData((Object) mock);
 		data.resetStubs();
 		Mockachino.stubReturn(System.identityHashCode(mock)).on((Object) mock).hashCode();
 		Mockachino.stubReturn(true).on((Object) mock).equals(same((Object) mock));
-		assertEquals("Mock:List:1", mock.toString());
+		assertEquals(mockName, mock.toString());
 	}
-
 }

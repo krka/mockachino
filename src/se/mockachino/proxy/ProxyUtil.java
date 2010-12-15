@@ -1,8 +1,11 @@
 package se.mockachino.proxy;
 
+import se.mockachino.MockData;
+import se.mockachino.Mockachino;
 import se.mockachino.ProxyMetadata;
 import se.mockachino.cleaner.StacktraceCleaner;
 import se.mockachino.exceptions.UsageError;
+import se.mockachino.matchers.MatcherThreadHandler;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Modifier;
@@ -12,6 +15,7 @@ import java.util.Set;
 
 public class ProxyUtil {
 	private static final boolean USE_CGLIB = canUseCgLib();
+
 	private static boolean canUseCgLib() {
 		try {
 			Class.forName("net.sf.cglib.proxy.Enhancer");
@@ -24,7 +28,7 @@ public class ProxyUtil {
 	public static <T> T newProxy(Class<T> clazz, InvocationHandler handler) {
 		return newProxy(clazz, handler, (Set<Class<?>>) Collections.EMPTY_SET);
 	}
-	
+
 	public static <T> T newProxy(Class<T> clazz, InvocationHandler handler, Set<Class<?>> extraInterfaces) {
 		for (Class<?> extraInterface : extraInterfaces) {
 			if (extraInterface == null) {
@@ -78,10 +82,22 @@ public class ProxyUtil {
 				) {
 			return false;
 		}
-		
+
 		if (USE_CGLIB) {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Generic method for creating a proxy for a mock object.
+	 * <p/>
+	 * Probably not interesting for regular users of Mockachino
+	 */
+	public static <T> T createProxy(T mock, InvocationHandler handler) {
+		MatcherThreadHandler.assertEmpty();
+		MockData data = Mockachino.getData(mock);
+		Class<T> iface = data.getInterface();
+		return newProxy(iface, handler, (Set<Class<?>>) data.getExtraInterfaces());
 	}
 }

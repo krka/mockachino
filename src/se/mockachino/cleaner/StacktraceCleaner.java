@@ -32,7 +32,7 @@ public class StacktraceCleaner {
 		return ret;
 	}
 
-	private static final Collection<String> bannedNames = new ArrayList<String>(){{
+	private static final Collection<String> bannedNames = new ArrayList<String>() {{
 		add("se.mockachino.");
 		add("$Proxy");
 		add("sun.reflect.");
@@ -44,13 +44,14 @@ public class StacktraceCleaner {
 		add("junit.framework.");
 		add("org.apache.tools.ant.");
 	}};
+
 	private static boolean isClean(StackTraceElement element) {
 		String s = element.getClassName();
-        if (element.getLineNumber() <= 0 ||
+		if (element.getLineNumber() <= 0 ||
 				element.isNativeMethod() ||
 				s.startsWith("$")) {
-            return false;
-        }
+			return false;
+		}
 		if (s.endsWith("Test") || s.contains("Test$")) {
 			return true;
 		}

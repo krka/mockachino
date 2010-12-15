@@ -18,7 +18,7 @@ public class SimpleAlias extends AbstractAlias {
 	private static final BadUsageHandler BAD_USAGE_HANDLER = new BadUsageHandler(
 			new BadUsageBuilder(
 					"Incorrect usage. You can not chain calls when binding a verifier." +
-					"You probably used verifier.bind(mock).method1().method2()."));
+							"You probably used verifier.bind(mock).method1().method2()."));
 
 	private MethodMatcher methodMatcher;
 	private Object mock;
@@ -47,17 +47,17 @@ public class SimpleAlias extends AbstractAlias {
 
 	@Override
 	public List<Invocation> getMatches() {
-        if (methodMatcher == null) {
-            throw new UsageError("Alias must be bound to a mock method");
-        }
-        List<Invocation> res = new ArrayList<Invocation>();
-        MockData<Object> data = Mockachino.getData(mock);
-        for (Invocation call : data.getInvocations()) {
-            if (methodMatcher.matches(call.getMethodCall())) {
-                res.add(call);
-            }
-        }
-        return res;
-    }
+		if (methodMatcher == null) {
+			throw new UsageError("Alias must be bound to a mock method");
+		}
+		List<Invocation> res = new ArrayList<Invocation>();
+		MockData<Object> data = Mockachino.getData(mock);
+		for (Invocation call : data.getInvocations()) {
+			if (methodMatcher.matches(call.getMethodCall())) {
+				res.add(call);
+			}
+		}
+		return res;
+	}
 
 }

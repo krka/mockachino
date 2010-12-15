@@ -6,6 +6,7 @@ import java.util.Map;
 public class Primitives {
 	private static final Map<Class<?>, Object> defaultValues = new HashMap<Class<?>, Object>();
 	private static final Map<Class<?>, Class<?>> realClasses = new HashMap<Class<?>, Class<?>>();
+
 	static {
 		bindClasses(Boolean.class, boolean.class, Boolean.FALSE);
 		bindClasses(Integer.class, int.class, Integer.valueOf(0));

@@ -9,14 +9,14 @@ import se.mockachino.verifier.BadUsageHandler;
 import se.mockachino.verifier.MatchingHandler;
 
 public class StubHandler extends MatchingHandler {
-    private static final BadUsageHandler BAD_USAGE_HANDLER = new BadUsageHandler(
-            new BadUsageBuilder(
-                    "Incorrect usage. You can not chain calls when stubbing a deep mock. " +
-                    "You probably used stubReturn(value).on(mock).method1().method2(). " +
-                    "Correct usage is stubReturn(value).on(mock.method1()).method2()"));
+	private static final BadUsageHandler BAD_USAGE_HANDLER = new BadUsageHandler(
+			new BadUsageBuilder(
+					"Incorrect usage. You can not chain calls when stubbing a deep mock. " +
+							"You probably used stubReturn(value).on(mock).method1().method2(). " +
+							"Correct usage is stubReturn(value).on(mock.method1()).method2()"));
 
 
-    private final CallHandler answer;
+	private final CallHandler answer;
 	private final MockData data;
 	private final StubVerifier verifier;
 
