@@ -7,6 +7,7 @@
 * Implemented support for timeout.
 * when ... throws now rejects invalid exceptions.
 * when ... throws now creates a new exception instance for each invocation.
+* Removed MockContext
 
 ----------------------
 - Version 0.5.0
