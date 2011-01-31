@@ -40,8 +40,8 @@ public class WhenStubber<T> {
 		Mockachino.stubReturn(value).onMethod(mock, method, matcher);
 	}
 
-	public void thenReturn(T... values) {
-		Mockachino.stubReturn(values).onMethod(mock, method, matcher);
+	public void thenReturn(T value, T... values) {
+		Mockachino.stubReturn(value, values).onMethod(mock, method, matcher);
 	}
 
 	public void thenAnswer(CallHandler answer) {

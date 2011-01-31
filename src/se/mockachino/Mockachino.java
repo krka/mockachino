@@ -283,17 +283,14 @@ public class Mockachino {
 	 * @param returnValue the returnValue to return when the method is called.
 	 * @return a stubber
 	 */
-	public static Stubber stubReturn(Object returnValue) {
+	public static <T> Stubber stubReturn(T returnValue) {
 		MatcherThreadHandler.assertEmpty();
 		return new Stubber(new ReturnAnswer(returnValue), new ReturnVerifier(returnValue));
 	}
 
-	public static Stubber stubReturn(Object... returnValues) {
+	public static <T> Stubber stubReturn(T returnValue, T... returnValues) {
 		MatcherThreadHandler.assertEmpty();
-		if (returnValues == null || returnValues.length < 1) {
-			returnValues = new Object[]{null};
-		}
-		return new Stubber(new MultipleReturnAnswer(returnValues), new MultipleReturnVerifier(returnValues));
+		return new Stubber(new MultipleReturnAnswer(returnValue, returnValues), new MultipleReturnVerifier(returnValue, returnValues));
 	}
 
 	/**
