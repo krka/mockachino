@@ -5,10 +5,14 @@ import se.mockachino.alias.SimpleAlias;
 import se.mockachino.annotations.Mock;
 import se.mockachino.annotations.Spy;
 import se.mockachino.exceptions.UsageError;
+import se.mockachino.exceptions.VerificationError;
 import se.mockachino.invocationhandler.CollectionsHandler;
 import se.mockachino.invocationhandler.DeepMockHandler;
 import se.mockachino.invocationhandler.PrimitiveInvocationHandler;
 import se.mockachino.matchers.MatcherThreadHandler;
+import se.mockachino.matchers.Matchers;
+import se.mockachino.matchers.matcher.EqualityMatcher;
+import se.mockachino.matchers.matcher.Matcher;
 import se.mockachino.mock.WhenStubber;
 import se.mockachino.observer.ObserverAdder;
 import se.mockachino.order.BetweenVerifyContext;
@@ -24,8 +28,11 @@ import se.mockachino.stub.returnvalue.MultipleReturnVerifier;
 import se.mockachino.stub.returnvalue.ReturnAnswer;
 import se.mockachino.stub.returnvalue.ReturnVerifier;
 import se.mockachino.verifier.VerifyRangeStart;
+import sun.plugin2.liveconnect.ArgumentHelper;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 /**
@@ -283,14 +290,17 @@ public class Mockachino {
 	 * @param returnValue the returnValue to return when the method is called.
 	 * @return a stubber
 	 */
-	public static <T> Stubber stubReturn(T returnValue) {
+	public static Stubber stubReturn(Object returnValue) {
 		MatcherThreadHandler.assertEmpty();
 		return new Stubber(new ReturnAnswer(returnValue), new ReturnVerifier(returnValue));
 	}
 
-	public static <T> Stubber stubReturn(T returnValue, T... returnValues) {
+	public static Stubber stubReturn(Object... returnValues) {
 		MatcherThreadHandler.assertEmpty();
-		return new Stubber(new MultipleReturnAnswer(returnValue, returnValues), new MultipleReturnVerifier(returnValue, returnValues));
+		if (returnValues == null || returnValues.length < 1) {
+			returnValues = new Object[]{null};
+		}
+		return new Stubber(new MultipleReturnAnswer(returnValues), new MultipleReturnVerifier(returnValues));
 	}
 
 	/**
@@ -475,5 +485,36 @@ public class Mockachino {
 				field.set(obj, MockUtil.mockType(field.getGenericType(), new MockSettings()));
 			}
 		}
-	}
+    }
+
+    public static <T> T awaitState(final long timeoutMillis, Object compareTo, final T object) {
+        final Matcher matcher = toMatcher(compareTo);
+        final Class<?> matcherType = Primitives.getRealClass(matcher.getType());
+        return (T) ProxyUtil.newProxy(object.getClass(), new InvocationHandler() {
+            @Override
+            public Object invoke(Object o, Method method, Object[] args) throws Throwable {
+                if (!Primitives.getRealClass(method.getReturnType()).isAssignableFrom(matcherType)) {
+                    throw new UsageError(method + " is not comparable with " + matcherType);
+                }
+                long t = System.currentTimeMillis();
+                while (true) {
+                    Object result = method.invoke(object, args);
+                    if (matcher.matches(result)) {
+                        return result;
+                    }
+                    Thread.sleep(20);
+                    if (System.currentTimeMillis() - t > timeoutMillis) {
+                        throw new VerificationError("await state timed out. Expected " + matcher + " but got " + result);
+                    }
+                }
+            }
+        });
+    }
+
+    private static Matcher toMatcher(Object compareTo) {
+        if (MatcherThreadHandler.isClean()) {
+            return new EqualityMatcher(compareTo);
+        }
+        return MatcherThreadHandler.getMatcher(compareTo, false);
+    }
 }
