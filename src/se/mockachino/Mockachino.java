@@ -10,7 +10,6 @@ import se.mockachino.invocationhandler.CollectionsHandler;
 import se.mockachino.invocationhandler.DeepMockHandler;
 import se.mockachino.invocationhandler.PrimitiveInvocationHandler;
 import se.mockachino.matchers.MatcherThreadHandler;
-import se.mockachino.matchers.Matchers;
 import se.mockachino.matchers.matcher.EqualityMatcher;
 import se.mockachino.matchers.matcher.Matcher;
 import se.mockachino.mock.WhenStubber;
@@ -28,7 +27,6 @@ import se.mockachino.stub.returnvalue.MultipleReturnVerifier;
 import se.mockachino.stub.returnvalue.ReturnAnswer;
 import se.mockachino.stub.returnvalue.ReturnVerifier;
 import se.mockachino.verifier.VerifyRangeStart;
-import sun.plugin2.liveconnect.ArgumentHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
