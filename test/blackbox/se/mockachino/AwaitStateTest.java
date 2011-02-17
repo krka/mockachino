@@ -1,18 +1,11 @@
 package se.mockachino;
 
 import org.junit.Test;
-import se.mockachino.alias.Alias;
-import se.mockachino.alias.SimpleAlias;
-import se.mockachino.matchers.Matchers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicReference;
-
-import static org.junit.Assert.assertEquals;
-import static se.mockachino.matchers.Matchers.any;
 
 public class AwaitStateTest {
     @Test
