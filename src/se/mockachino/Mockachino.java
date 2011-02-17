@@ -28,10 +28,7 @@ import se.mockachino.stub.returnvalue.ReturnAnswer;
 import se.mockachino.stub.returnvalue.ReturnVerifier;
 import se.mockachino.verifier.VerifyRangeStart;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 
 /**
  * This is the main entry point of all your mocking needs.
@@ -288,18 +285,15 @@ public class Mockachino {
 	 * @param returnValue the returnValue to return when the method is called.
 	 * @return a stubber
 	 */
-	public static Stubber stubReturn(Object returnValue) {
+	public static <T> Stubber stubReturn(T returnValue) {
 		MatcherThreadHandler.assertEmpty();
 		return new Stubber(new ReturnAnswer(returnValue), new ReturnVerifier(returnValue));
 	}
 
-	public static Stubber stubReturn(Object... returnValues) {
+	public static <T> Stubber stubReturn(T returnValue, T... returnValues) {
 		MatcherThreadHandler.assertEmpty();
-		if (returnValues == null || returnValues.length < 1) {
-			returnValues = new Object[]{null};
-		}
-		return new Stubber(new MultipleReturnAnswer(returnValues), new MultipleReturnVerifier(returnValues));
-	}
+		return new Stubber(new MultipleReturnAnswer(returnValue, returnValues), new MultipleReturnVerifier(returnValue, returnValues));
+    }
 
 	/**
 	 * Stubs a method call with a specific answer strategy.
@@ -496,12 +490,25 @@ public class Mockachino {
                 }
                 long t = System.currentTimeMillis();
                 while (true) {
-                    Object result = method.invoke(object, args);
-                    if (matcher.matches(result)) {
-                        return result;
+                    Object result = null;
+                    Exception exception = null;
+                    try {
+                        result = method.invoke(object, args);
+                        if (matcher.matches(result)) {
+                            return result;
+                        }
+                    } catch (IllegalAccessException e) {
+                        throw e;
+                    } catch (IllegalArgumentException e) {
+                        throw e;
+                    } catch (InvocationTargetException e) {
+                        exception = e;
                     }
                     Thread.sleep(20);
                     if (System.currentTimeMillis() - t > timeoutMillis) {
+                        if (exception != null) {
+                            throw new VerificationError("await state timed out. Got exception: " + exception.getMessage(), exception);
+                        }
                         throw new VerificationError("await state timed out. Expected " + matcher + " but got " + result);
                     }
                 }

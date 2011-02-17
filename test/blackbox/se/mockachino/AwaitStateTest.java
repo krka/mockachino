@@ -17,7 +17,7 @@ public class AwaitStateTest {
                 ref.add("Foo");
             }
         }, 50);
-        Mockachino.awaitState(100, 1, ref).size();
+        Mockachino.awaitState(300, 1, ref).size();
     }
 
     @Test
@@ -29,6 +29,6 @@ public class AwaitStateTest {
                 ref.add("Foo");
             }
         }, 50);
-        Mockachino.awaitState(100, "Foo", ref).get(0);
+        Mockachino.awaitState(300, "Foo", ref).get(0);
     }
 }

@@ -7,4 +7,9 @@ public class VerificationError extends RuntimeException {
 		super(s);
 		StacktraceCleaner.cleanError(this);
 	}
+
+    public VerificationError(String s, Exception exception) {
+        super(s, exception);
+        StacktraceCleaner.cleanError(this);
+    }
 }
