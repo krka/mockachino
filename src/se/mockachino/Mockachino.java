@@ -4,7 +4,7 @@ import com.googlecode.gentyref.TypeToken;
 import se.mockachino.alias.SimpleAlias;
 import se.mockachino.annotations.Mock;
 import se.mockachino.annotations.Spy;
-import se.mockachino.exceptions.UsageError;
+import se.mockachino.assertion.AssertThrows;import se.mockachino.exceptions.UsageError;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.invocationhandler.CollectionsHandler;
 import se.mockachino.invocationhandler.DeepMockHandler;
@@ -521,5 +521,9 @@ public class Mockachino {
             return new EqualityMatcher(compareTo);
         }
         return MatcherThreadHandler.getMatcher(compareTo, false);
+    }
+
+    public static AssertThrows assertThrows(Class<? extends Throwable> clazz) {
+        return new AssertThrows(clazz);
     }
 }
