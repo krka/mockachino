@@ -95,9 +95,13 @@ public class MockachinoMethod {
 	}
 
 
-	public Object invoke(Object impl, Object[] objects) throws InvocationTargetException, IllegalAccessException {
-		return method.invoke(impl, objects);
-	}
+	public Object invoke(Object impl, Object[] objects) throws Throwable {
+        try {
+            return method.invoke(impl, objects);
+        } catch (InvocationTargetException e) {
+            throw e.getCause();
+        }
+    }
 
 	public boolean isToStringCall() {
 		return name.equals("toString") && parameters.length == 0;
