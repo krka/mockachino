@@ -3,6 +3,8 @@ package se.mockachino.invocationhandler;
 import com.googlecode.gentyref.GenericTypeReflector;
 import se.mockachino.*;
 import se.mockachino.matchers.MethodMatcherImpl;
+import se.mockachino.stub.MethodStub;
+import se.mockachino.stub.MethodStubs;
 import se.mockachino.util.MockachinoMethod;
 
 import java.lang.reflect.Type;
@@ -24,10 +26,19 @@ public class DeepMockHandler implements CallHandler {
 		final Type returnType = GenericTypeReflector.getExactReturnType(method.getMethod(), type);
 
 		if (Mockachino.canMock(GenericTypeReflector.erase(returnType))) {
-			Object returnValue = Mockachino.mockType(returnType, Settings.fallback(this));
-			Mockachino.stubReturn(returnValue).onMethod(obj, method, new MethodMatcherImpl(method, call.getArguments()));
-			return returnValue;
-		}
+            synchronized (obj) {
+                // Since this is lazily added, we need to make sure it hasn't already been added by another thread.
+                MethodStubs stubs = data.getStubs(method);
+                MethodStub stub = stubs.findMatch(call);
+                if (stub != null) {
+                    return stub.getAnswer().invoke(obj, call);
+                }
+
+                Object returnValue = Mockachino.mockType(returnType, Settings.fallback(this));
+                Mockachino.stubReturn(returnValue).onMethod(obj, method, new MethodMatcherImpl(method, call.getArguments()));
+                return returnValue;
+            }
+        }
 		return delegate.invoke(obj, call);
 	}
 
