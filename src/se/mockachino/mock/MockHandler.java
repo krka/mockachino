@@ -13,8 +13,7 @@ import java.util.List;
 public class MockHandler<T> extends AbstractInvocationHandler {
 	private static final StackTraceElement[] EMPTY_STACKTRACE = new StackTraceElement[]{};
 
-	private static final MockachinoMethod GET_CONTEXT = MockachinoMethod.find(ProxyMetadata.class, "mockachino_getContext");
-	private static final MockachinoMethod GET_MOCKDATA = MockachinoMethod.find(ProxyMetadata.class, "mockachino_getMockData");
+    private static final MockachinoMethod GET_MOCKDATA = MockachinoMethod.find(ProxyMetadata.class, "mockachino_getMockData");
 
 	private final CallHandler fallback;
 	private final MockData<T> mockData;
