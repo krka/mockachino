@@ -2,6 +2,7 @@ package se.mockachino.stub;
 
 import se.mockachino.CallHandler;
 import se.mockachino.MockData;
+import se.mockachino.VerifyableCallHandler;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.util.MockachinoMethod;
 import se.mockachino.verifier.BadUsageBuilder;
@@ -16,20 +17,18 @@ public class StubHandler extends MatchingHandler {
 							"Correct usage is stubReturn(value).on(mock.method1()).method2()"));
 
 
-	private final CallHandler answer;
+	private final VerifyableCallHandler answer;
 	private final MockData data;
-	private final StubVerifier verifier;
 
-	public StubHandler(CallHandler answer, MockData data, StubVerifier verifier) {
+	public StubHandler(VerifyableCallHandler answer, MockData data) {
 		super("StubHandler", data.getName(), BAD_USAGE_HANDLER);
 		this.answer = answer;
 		this.data = data;
-		this.verifier = verifier;
 	}
 
 	@Override
 	public void match(Object o, MockachinoMethod method, MethodMatcher matcher) {
-		verifier.verify(method);
+        answer.verify(method);
 		data.getStubs(method).add(new MethodStub(answer, matcher));
 	}
 }

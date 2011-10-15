@@ -10,7 +10,9 @@ import se.mockachino.matchers.MatcherThreadHandler;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 public class ProxyUtil {
@@ -25,42 +27,51 @@ public class ProxyUtil {
 		}
 	}
 
-	public static <T> T newProxy(Class<T> clazz, InvocationHandler handler) {
-		return newProxy(clazz, handler, (Set<Class<?>>) Collections.EMPTY_SET);
-	}
+	public static Object newProxy(Class<?> clazz, InvocationHandler handler) {
+        Set<Class<?>> interfaces = new HashSet<Class<?>>(Arrays.asList(clazz.getInterfaces()));
 
-	public static <T> T newProxy(Class<T> clazz, InvocationHandler handler, Set<Class<?>> extraInterfaces) {
-		for (Class<?> extraInterface : extraInterfaces) {
-			if (extraInterface == null) {
-				throw new UsageError("extra interface can not be null");
-			}
-			if (!extraInterface.isInterface()) {
-				throw new UsageError(extraInterface + " must be an interface");
-			}
-		}
-		if (clazz.isInterface()) {
-			Class<?>[] classes = new Class<?>[2 + extraInterfaces.size()];
-			classes[0] = clazz;
-			classes[1] = ProxyMetadata.class;
+        if (clazz.isInterface()) {
+            return newInterfaceProxy(clazz, handler, interfaces);
+        }
+        while (clazz != Object.class &&
+                (clazz.isSynthetic() ||
+                        clazz.isAnonymousClass() ||
+                        clazz.getName().startsWith("$Proxy") ||
+                        Modifier.isFinal(clazz.getModifiers()) ||
+                        Modifier.isNative(clazz.getModifiers()) ||
+                        clazz == Proxy.class)) {
 
-			int i = 2;
-			for (Class<?> extraInterface : extraInterfaces) {
-				classes[i] = extraInterface;
-				i++;
-			}
-			return (T) Proxy.newProxyInstance(ProxyUtil.class.getClassLoader(), classes, handler);
-		}
+            clazz = clazz.getSuperclass();
+        }
+        if (clazz == Object.class && !interfaces.isEmpty()) {
+            return newInterfaceProxy(null, handler, interfaces);
+        }
+
 		if (!USE_CGLIB) {
 			throw new UsageError("Only interfaces can be mocked without cglib and asm installed");
 		}
 		try {
-			return CglibAsmUtil.getCglibProxy(clazz, handler, extraInterfaces);
+			return CglibAsmUtil.getCglibProxy(clazz, handler, interfaces);
 		} catch (Exception e) {
 			throw clean(new RuntimeException(e));
 		}
 	}
 
-	private static <T extends Throwable> T clean(T e) {
+    private static Object newInterfaceProxy(Class<?> clazz, InvocationHandler handler, Set<Class<?>> interfaces) {
+        if (clazz != null) {
+            interfaces.add(clazz);
+        }
+        interfaces.add(ProxyMetadata.class);
+        Class<?>[] classes = new Class<?>[interfaces.size()];
+        int i = 0;
+        for (Class<?> extraInterface : interfaces) {
+            classes[i] = extraInterface;
+            i++;
+        }
+        return Proxy.newProxyInstance(ProxyUtil.class.getClassLoader(), classes, handler);
+    }
+
+    private static <T extends Throwable> T clean(T e) {
 		return StacktraceCleaner.cleanError(e);
 	}
 
@@ -98,6 +109,6 @@ public class ProxyUtil {
 		MatcherThreadHandler.assertEmpty();
 		MockData data = Mockachino.getData(mock);
 		Class<T> iface = data.getInterface();
-		return newProxy(iface, handler, (Set<Class<?>>) data.getExtraInterfaces());
+		return (T) newProxy(iface, handler);
 	}
 }

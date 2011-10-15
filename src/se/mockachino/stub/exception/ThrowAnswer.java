@@ -2,16 +2,21 @@ package se.mockachino.stub.exception;
 
 import se.mockachino.CallHandler;
 import se.mockachino.MethodCall;
+import se.mockachino.VerifyableCallHandler;
 import se.mockachino.exceptions.UsageError;
+import se.mockachino.util.MockachinoMethod;
 
 import java.lang.reflect.Constructor;
 
-public class ThrowAnswer implements CallHandler {
+public class ThrowAnswer implements VerifyableCallHandler {
 
 	private final Constructor<Throwable> constructor;
 	private final Object[] params;
+    private final Class<? extends Throwable> clazz;
 
-	public ThrowAnswer(Throwable e) {
+    public ThrowAnswer(Throwable e) {
+        this.clazz = e.getClass();
+
 		Throwable cause = e.getCause();
 		String message = e.getMessage();
 
@@ -54,4 +59,20 @@ public class ThrowAnswer implements CallHandler {
 	public Object invoke(Object obj, MethodCall call) throws Throwable {
 		throw constructor.newInstance(params);
 	}
+
+    @Override
+    public void verify(MockachinoMethod method) {
+        if (RuntimeException.class.isAssignableFrom(clazz) ||
+                Error.class.isAssignableFrom(clazz)) {
+            return;
+        }
+
+        Class<?>[] validExceptions = method.getMethod().getExceptionTypes();
+        for (Class<?> validException : validExceptions) {
+            if (validException.isAssignableFrom(clazz)) {
+                return;
+            }
+        }
+        throw new UsageError(method + " may not throw " + clazz);
+    }
 }

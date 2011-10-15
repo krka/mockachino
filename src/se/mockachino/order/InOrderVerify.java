@@ -22,6 +22,6 @@ public class InOrderVerify {
 		MockData<T> data = Mockachino.getData(mock);
 		Class<T> clazz = data.getInterface();
 		Iterable<Invocation> calls = data.getCalls(start, end);
-		return ProxyUtil.newProxy(clazz, new InOrderVerifyHandler(orderingContext, mock, calls, min));
+		return (T) ProxyUtil.newProxy(clazz, new InOrderVerifyHandler(orderingContext, mock, calls, min));
 	}
 }

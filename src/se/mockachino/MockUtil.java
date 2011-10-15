@@ -24,10 +24,10 @@ public class MockUtil {
 	public static Object mockType(Type type, MockSettings settings) {
 		checkNull("type", type);
 		checkNull("settings", settings);
-		return mockType(type, settings.getFallback(), settings.isQuick(), settings.getName(), settings.getExtraInterfaces());
+		return mockType(type, settings.getFallback(), settings.isQuick(), settings.getName());
 	}
 
-	private static Object mockType(Type type, CallHandler fallback, boolean quick, String name, Set<Class<?>> extraInterfaces) {
+	private static Object mockType(Type type, CallHandler fallback, boolean quick, String name) {
 		checkNull("type", type);
 		checkNull("fallback", fallback);
 		final Class<?> clazz = GenericTypeReflector.erase(type);
@@ -36,8 +36,8 @@ public class MockUtil {
 		}
 		MatcherThreadHandler.assertEmpty();
 		MockHandler mockHandler = new MockHandler(
-				fallback, new MockData(clazz, type, extraInterfaces, name), quick, name);
-		return ProxyUtil.newProxy(clazz, mockHandler, extraInterfaces);
+				fallback, new MockData(clazz, type, name), quick, name);
+		return ProxyUtil.newProxy(clazz, mockHandler);
 	}
 
 	static void checkNull(String name, Object obj) {

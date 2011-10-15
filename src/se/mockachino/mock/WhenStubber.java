@@ -1,12 +1,13 @@
 package se.mockachino.mock;
 
-import se.mockachino.CallHandler;
-import se.mockachino.Invocation;
-import se.mockachino.MockData;
-import se.mockachino.Mockachino;
+import se.mockachino.*;
 import se.mockachino.exceptions.UsageError;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.matchers.MethodMatcherImpl;
+import se.mockachino.stub.Stubber;
+import se.mockachino.stub.exception.ThrowAnswer;
+import se.mockachino.stub.returnvalue.ReturnAnswer;
+import se.mockachino.stub.returnvalue.SequentialAnswers;
 import se.mockachino.util.MockachinoMethod;
 
 public class WhenStubber<T> {
@@ -17,7 +18,9 @@ public class WhenStubber<T> {
 	private final MockachinoMethod method;
 	private final MethodMatcher matcher;
 
-	public WhenStubber() {
+    private Stubber stub;
+
+    public WhenStubber() {
 		Invocation invocation = lastInvocation.get();
 		if (invocation == null) {
 			throw new UsageError("Illegal when(X).thenReturn(..) expression. X needs to be on the form mock.method(...)");
@@ -36,20 +39,38 @@ public class WhenStubber<T> {
 		data.deleteLastInvocation();
 	}
 
-	public void thenReturn(T value) {
-		Mockachino.stubReturn(value).onMethod(mock, method, matcher);
+    private void addStub(VerifyableCallHandler answer) {
+        if (stub == null) {
+            stub = new Stubber(new SequentialAnswers(answer));
+            stub.onMethod(mock, method, matcher);
+        } else {
+            stub.extend(answer);
+        }
+    }
+
+	public WhenStubber thenReturn(T value) {
+        addStub(new ReturnAnswer(value));
+        return this;
 	}
 
-	public void thenReturn(T value, T... values) {
-		Mockachino.stubReturn(value, values).onMethod(mock, method, matcher);
+	public WhenStubber thenReturn(T value, T... values) {
+        addStub(new ReturnAnswer(value));
+        if (values != null) {
+            for (T t : values) {
+                addStub(new ReturnAnswer(t));
+            }
+        }
+        return this;
 	}
 
-	public void thenAnswer(CallHandler answer) {
-		Mockachino.stubAnswer(answer).onMethod(mock, method, matcher);
+	public WhenStubber thenAnswer(CallHandler answer) {
+        addStub(new VerifyableCallHandlerWrapper(answer));
+        return this;
 	}
 
-	public void thenThrow(Throwable t) {
-		Mockachino.stubThrow(t).onMethod(mock, method, matcher);
+	public WhenStubber thenThrow(Throwable t) {
+        addStub(new ThrowAnswer(t));
+        return this;
 	}
 
 }

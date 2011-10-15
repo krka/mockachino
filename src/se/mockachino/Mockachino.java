@@ -4,7 +4,8 @@ import com.googlecode.gentyref.TypeToken;
 import se.mockachino.alias.SimpleAlias;
 import se.mockachino.annotations.Mock;
 import se.mockachino.annotations.Spy;
-import se.mockachino.assertion.AssertThrows;import se.mockachino.exceptions.UsageError;
+import se.mockachino.assertion.AssertThrows;
+import se.mockachino.exceptions.UsageError;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.invocationhandler.CollectionsHandler;
 import se.mockachino.invocationhandler.DeepMockHandler;
@@ -18,14 +19,10 @@ import se.mockachino.order.BetweenVerifyContext;
 import se.mockachino.order.MockPoint;
 import se.mockachino.order.OrderingContext;
 import se.mockachino.proxy.ProxyUtil;
-import se.mockachino.stub.AcceptAllVerifier;
 import se.mockachino.stub.Stubber;
 import se.mockachino.stub.exception.ThrowAnswer;
-import se.mockachino.stub.exception.ThrowVerifier;
-import se.mockachino.stub.returnvalue.MultipleReturnAnswer;
-import se.mockachino.stub.returnvalue.MultipleReturnVerifier;
 import se.mockachino.stub.returnvalue.ReturnAnswer;
-import se.mockachino.stub.returnvalue.ReturnVerifier;
+import se.mockachino.stub.returnvalue.SequentialAnswers;
 import se.mockachino.verifier.VerifyRangeStart;
 
 import java.lang.reflect.*;
@@ -268,7 +265,7 @@ public class Mockachino {
 	public static Stubber stubThrow(Throwable e) {
 		MockUtil.checkNull("exception", e);
 		MatcherThreadHandler.assertEmpty();
-		return new Stubber(new ThrowAnswer(e), new ThrowVerifier(e));
+		return new Stubber(new SequentialAnswers(new ThrowAnswer(e)));
 	}
 
 	/**
@@ -287,12 +284,18 @@ public class Mockachino {
 	 */
 	public static <T> Stubber stubReturn(T returnValue) {
 		MatcherThreadHandler.assertEmpty();
-		return new Stubber(new ReturnAnswer(returnValue), new ReturnVerifier(returnValue));
+		return new Stubber(new SequentialAnswers(new ReturnAnswer(returnValue)));
 	}
 
 	public static <T> Stubber stubReturn(T returnValue, T... returnValues) {
 		MatcherThreadHandler.assertEmpty();
-		return new Stubber(new MultipleReturnAnswer(returnValue, returnValues), new MultipleReturnVerifier(returnValue, returnValues));
+        Stubber stubber = new Stubber(new SequentialAnswers(new ReturnAnswer(returnValue)));
+        if (returnValues != null) {
+            for (T value : returnValues) {
+                stubber.extend(new ReturnAnswer(value));
+            }
+        }
+        return stubber;
     }
 
 	/**
@@ -311,7 +314,7 @@ public class Mockachino {
 	public static Stubber stubAnswer(CallHandler answer) {
 		MockUtil.checkNull("answer", answer);
 		MatcherThreadHandler.assertEmpty();
-		return new Stubber(answer, AcceptAllVerifier.INSTANCE);
+		return new Stubber(new SequentialAnswers(new VerifyableCallHandlerWrapper(answer)));
 	}
 
 

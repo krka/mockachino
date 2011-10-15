@@ -34,7 +34,6 @@ public class MockData<T> {
 	private static final MethodStub DEFAULT_HASHCODE_STUB = new MethodStub(DEFAULT_HASHCODE, HASHCODE_METHOD_MATCHER);
 
 	private final Class<T> iface;
-	private final Set<Class<?>> extraInterfaces;
 	private final List<Invocation> invocations;
 	private final List<Invocation> readOnlyCalls;
 	private final Map<MockachinoMethod, List<MethodObserver>> observers;
@@ -43,9 +42,8 @@ public class MockData<T> {
 	private final Set<MockachinoMethod> methods;
 	private final String name;
 
-	public MockData(Class<T> iface, Type type, Set<Class<?>> extraInterfaces, String name) {
+	public MockData(Class<T> iface, Type type, String name) {
 		this.iface = iface;
-		this.extraInterfaces = extraInterfaces;
 		this.type = type;
 		this.name = name;
 		invocations = new SafeIteratorList<Invocation>(new ArrayList<Invocation>(), Invocation.NULL);
@@ -55,9 +53,6 @@ public class MockData<T> {
 		stubs = new HashMap<MockachinoMethod, MethodStubs>();
 		addMethods(iface);
 		addMethods(Object.class);
-		for (Class<?> extraInterface : extraInterfaces) {
-			addMethods(extraInterface);
-		}
 		methods = Collections.unmodifiableSet(stubs.keySet());
 		setupEqualsAndHashcode();
 	}
@@ -197,16 +192,6 @@ public class MockData<T> {
 		for (List<MethodObserver> methodObservers : observers.values()) {
 			methodObservers.clear();
 		}
-	}
-
-	/**
-	 * Get the set of additionally implemented interfaces by the mock.
-	 * This may be an empty set if no other interfaces are defined.
-	 *
-	 * @return
-	 */
-	public Set<Class<?>> getExtraInterfaces() {
-		return extraInterfaces;
 	}
 
 	public synchronized void deleteLastInvocation() {

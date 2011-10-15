@@ -21,7 +21,7 @@ public class BadUsageBuilder {
 			if (!ProxyUtil.canMock(returnType)) {
 				return Primitives.forType(returnType);
 			}
-			proxy = ProxyUtil.newProxy(returnType, new BadUsageThrower(message), new HashSet<Class<?>>());
+			proxy = ProxyUtil.newProxy(returnType, new BadUsageThrower(message));
 			proxys.put(returnType, proxy);
 		}
 		return proxy;

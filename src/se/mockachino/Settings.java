@@ -29,8 +29,4 @@ public class Settings {
 	public static MockSettings name(String name) {
 		return new MockSettings().name(name);
 	}
-
-	public static MockSettings add(Class<?>... interfaces) {
-		return new MockSettings().add(interfaces);
-	}
 }

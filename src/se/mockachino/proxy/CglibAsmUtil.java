@@ -10,6 +10,7 @@ import se.mockachino.exceptions.UsageError;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.List;
 import java.util.Set;
 
@@ -33,18 +34,13 @@ public class CglibAsmUtil {
 				return handler.invoke(o, method, objects);
 			}
 		};
-		Class[] classes = CglibAsmUtil.CLASSES;
-		if (extraInterfaces.size() > 0) {
-			classes = new Class[1 + extraInterfaces.size()];
-			classes[0] = ProxyMetadata.class;
-
-			int i = 1;
-			for (Class<?> extraInterface : extraInterfaces) {
-				classes[i] = extraInterface;
-				i++;
-			}
-
-		}
+        extraInterfaces.add(ProxyMetadata.class);
+        Class[] classes = new Class[extraInterfaces.size()];
+        int i = 0;
+        for (Class<?> extraInterface : extraInterfaces) {
+            classes[i] = extraInterface;
+            i++;
+        }
 
 		Enhancer enhancer = new Enhancer() {
 			@Override
@@ -69,7 +65,7 @@ public class CglibAsmUtil {
 		for (Constructor<?> constructor : clazz.getConstructors()) {
 			Class<?>[] types = constructor.getParameterTypes();
 			Object[] args = new Object[types.length];
-			for (int i = 0; i < types.length; i++) {
+			for (i = 0; i < types.length; i++) {
 				args[i] = Primitives.forType(types[i]);
 			}
 			try {

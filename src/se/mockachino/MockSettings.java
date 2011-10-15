@@ -10,7 +10,6 @@ public class MockSettings {
 	private boolean quick;
 	private CallHandler fallback = Mockachino.DEFAULT_VALUES;
 	private String name;
-	private Set<Class<?>> interfaces = new HashSet<Class<?>>();
 
 	/**
 	 * Sets the fallback handler to be a spy of impl
@@ -78,18 +77,6 @@ public class MockSettings {
 		return this;
 	}
 
-	/**
-	 * Lets the mock implement additional interfaces.
-	 *
-	 * @return the same mocksettings object
-	 */
-	public MockSettings add(Class<?>... interfaces) {
-		for (Class<?> anInterface : interfaces) {
-			this.interfaces.add(anInterface);
-		}
-		return this;
-	}
-
 	public CallHandler getFallback() {
 		return fallback;
 	}
@@ -100,9 +87,5 @@ public class MockSettings {
 
 	public String getName() {
 		return name;
-	}
-
-	public Set<Class<?>> getExtraInterfaces() {
-		return interfaces;
 	}
 }

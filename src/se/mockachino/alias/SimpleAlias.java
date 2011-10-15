@@ -38,7 +38,7 @@ public class SimpleAlias extends AbstractAlias {
 				SimpleAlias.this.methodMatcher = matcher;
 			}
 		};
-		return ProxyUtil.newProxy(data.getInterface(), handler);
+		return (T) ProxyUtil.newProxy(data.getInterface(), handler);
 	}
 
 	private void multipleUsageError() {
