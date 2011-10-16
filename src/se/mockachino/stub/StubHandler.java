@@ -21,7 +21,7 @@ public class StubHandler extends MatchingHandler {
 	private final MockData data;
 
 	public StubHandler(VerifyableCallHandler answer, MockData data) {
-		super("StubHandler", data.getName(), BAD_USAGE_HANDLER);
+		super("StubHandler", data.getName(), BAD_USAGE_HANDLER, data.getTypeLiteral());
 		this.answer = answer;
 		this.data = data;
 	}

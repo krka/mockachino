@@ -1,7 +1,10 @@
 package se.mockachino.util;
 
+import com.googlecode.gentyref.GenericTypeReflector;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 
 public class MockachinoMethod {
@@ -13,9 +16,11 @@ public class MockachinoMethod {
 	private final String name;
 	private final Class[] parameters;
 	private final Class returnType;
+    private final Type type;
 
-	public MockachinoMethod(Method method) {
-		method.setAccessible(true);
+    public MockachinoMethod(Type type, Method method) {
+        this.type = type;
+        method.setAccessible(true);
 		this.method = method;
 		name = method.getName();
 		parameters = method.getParameterTypes();
@@ -27,6 +32,7 @@ public class MockachinoMethod {
 		this.name = name;
 		this.parameters = parameterTypes;
 		this.returnType = returnType;
+        this.type = null;
 	}
 
 	public String getName() {
@@ -37,8 +43,8 @@ public class MockachinoMethod {
 		return parameters;
 	}
 
-	public Class getReturnType() {
-		return returnType;
+	public Class<?> getReturnType() {
+		return GenericTypeReflector.erase(GenericTypeReflector.getExactReturnType(method, type));
 	}
 
 	public Method getMethod() {
@@ -88,7 +94,7 @@ public class MockachinoMethod {
 	public static MockachinoMethod find(Class clazz, String name) {
 		for (Method method : clazz.getMethods()) {
 			if (method.getName().equals(name)) {
-				return new MockachinoMethod(method);
+				return new MockachinoMethod(clazz, method);
 			}
 		}
 		return null;

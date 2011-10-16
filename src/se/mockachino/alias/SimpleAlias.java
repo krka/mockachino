@@ -29,7 +29,7 @@ public class SimpleAlias extends AbstractAlias {
 		}
 		this.mock = mock;
 		MockData<T> data = Mockachino.getData(mock);
-		MatchingHandler handler = new MatchingHandler("Alias", data.getName(), BAD_USAGE_HANDLER) {
+		MatchingHandler handler = new MatchingHandler("Alias", data.getName(), BAD_USAGE_HANDLER, data.getTypeLiteral()) {
 			@Override
 			protected void match(Object o, MockachinoMethod method, MethodMatcher matcher) {
 				if (SimpleAlias.this.methodMatcher != null) {

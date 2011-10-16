@@ -76,7 +76,7 @@ public class MockData<T> {
 	}
 
 	private void addContainer(Method reflectMethod) {
-		MockachinoMethod method = new MockachinoMethod(reflectMethod);
+		MockachinoMethod method = new MockachinoMethod(type, reflectMethod);
 		if (stubs.containsKey(method)) {
 			return;
 		}

@@ -48,12 +48,12 @@ public class WhenStubber<T> {
         }
     }
 
-	public WhenStubber thenReturn(T value) {
+	public WhenStubber<T> thenReturn(T value) {
         addStub(new ReturnAnswer(value));
         return this;
 	}
 
-	public WhenStubber thenReturn(T value, T... values) {
+	public WhenStubber<T> thenReturn(T value, T... values) {
         addStub(new ReturnAnswer(value));
         if (values != null) {
             for (T t : values) {
@@ -63,12 +63,12 @@ public class WhenStubber<T> {
         return this;
 	}
 
-	public WhenStubber thenAnswer(CallHandler answer) {
+	public WhenStubber<T> thenAnswer(CallHandler answer) {
         addStub(new VerifyableCallHandlerWrapper(answer));
         return this;
 	}
 
-	public WhenStubber thenThrow(Throwable t) {
+	public WhenStubber<T> thenThrow(Throwable t) {
         addStub(new ThrowAnswer(t));
         return this;
 	}

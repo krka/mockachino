@@ -1,13 +1,13 @@
 package se.mockachino.stub;
 
-import se.mockachino.CallHandler;
-import se.mockachino.MockData;
-import se.mockachino.Mockachino;
-import se.mockachino.VerifyableCallHandler;
+import se.mockachino.*;
 import se.mockachino.exceptions.UsageError;
 import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.matchers.MethodMatcherImpl;
+import se.mockachino.mock.WhenStubber;
 import se.mockachino.proxy.ProxyUtil;
+import se.mockachino.stub.exception.ThrowAnswer;
+import se.mockachino.stub.returnvalue.ReturnAnswer;
 import se.mockachino.stub.returnvalue.SequentialAnswers;
 import se.mockachino.util.MockachinoMethod;
 
@@ -46,7 +46,33 @@ public class Stubber {
 
     public void extend(VerifyableCallHandler answer) {
         this.answer.add(answer);
-        this.answer.verify(method);
+        if (method != null) {
+            this.answer.verify(method);
+        }
     }
 
+    public Stubber thenReturn(Object returnValue) {
+        extend(new ReturnAnswer(returnValue));
+        return this;
+    }
+
+    public Stubber thenReturn(Object returnValue, Object... returnValues) {
+        extend(new ReturnAnswer(returnValue));
+        if (returnValues != null) {
+            for (Object value : returnValues) {
+                extend(new ReturnAnswer(value));
+            }
+        }
+        return this;
+    }
+
+    public Stubber thenAnswer(CallHandler answer) {
+        extend(new VerifyableCallHandlerWrapper(answer));
+        return this;
+    }
+
+    public Stubber thenThrow(Throwable throwable) {
+        extend(new ThrowAnswer(throwable));
+        return this;
+    }
 }

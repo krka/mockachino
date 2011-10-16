@@ -20,7 +20,7 @@ public class ReturnAnswer implements VerifyableCallHandler {
 
     @Override
     public void verify(MockachinoMethod method) {
-        verifyReturnType((Class<?>) method.getReturnType(), returnValue);
+        verifyReturnType(method.getReturnType(), returnValue);
     }
 
     protected static void verifyReturnType(Class<?> returnType, Object value) {

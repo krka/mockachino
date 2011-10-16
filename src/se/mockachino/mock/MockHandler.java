@@ -20,7 +20,7 @@ public class MockHandler<T> extends AbstractInvocationHandler {
 	private final boolean quick;
 
 	public MockHandler(CallHandler fallback, MockData<T> mockData, boolean quick, String name) {
-		super(name);
+		super(name, mockData.getTypeLiteral());
 		this.fallback = fallback;
 		this.mockData = mockData;
 		this.quick = quick;

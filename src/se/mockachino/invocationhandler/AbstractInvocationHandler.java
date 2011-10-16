@@ -5,17 +5,20 @@ import se.mockachino.util.MockachinoMethod;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
 public abstract class AbstractInvocationHandler implements InvocationHandler {
 
 	protected final String name;
+    private final Type type;
 
-	protected AbstractInvocationHandler(String name) {
+    protected AbstractInvocationHandler(String name, Type type) {
 		this.name = name;
-	}
+        this.type = type;
+    }
 
 	public final Object invoke(Object o, Method reflectMethod, Object[] objects) throws Throwable {
-		MockachinoMethod method = new MockachinoMethod(reflectMethod);
+		MockachinoMethod method = new MockachinoMethod(type, reflectMethod);
 		try {
 			return defaultToString(method, doInvoke(o, method, objects));
 		} catch (Throwable throwable) {

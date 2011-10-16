@@ -13,7 +13,7 @@ public class AddObserverHandler extends MatchingHandler {
 	private final CallHandler observer;
 
 	public AddObserverHandler(MockData mockData, Object mock, CallHandler observer) {
-		super("Observer", mockData.getName(), Mockachino.DEFAULT_VALUES);
+		super("Observer", mockData.getName(), Mockachino.DEFAULT_VALUES, mockData.getTypeLiteral());
 		this.mockData = mockData;
 		this.mock = mock;
 		this.observer = observer;

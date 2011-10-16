@@ -22,7 +22,7 @@ public class InOrderVerifyHandler extends MatchingHandler {
 	private final OrderingContext orderingContext;
 
 	public InOrderVerifyHandler(OrderingContext orderingContext, Object mock, Iterable<Invocation> calls, int min) {
-		super("InOrderVerifyHandler", Mockachino.getData(mock).getName(), BAD_USAGE_HANDLER);
+		super("InOrderVerifyHandler", Mockachino.getData(mock).getName(), BAD_USAGE_HANDLER, Mockachino.getData(mock).getTypeLiteral());
 		this.orderingContext = orderingContext;
 		this.calls = calls;
 		this.min = min;

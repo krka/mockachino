@@ -1,4 +1,15 @@
 ----------------------
+- Version 0.6.0
+----------------------
+* Removed option to add extra interfaces on mocks.
+* Added utility method assertThrows. Works on both mocks and regular objects.
+* Spy now works automatically on final, anonymous classes and proxy classes
+  as long as there exists an interface to spy through.
+* Added chaining of thenReturn / thenThrows / thenAnswer when stubbing.
+* Fixed deep mock concurrency bug.
+* Fixed bug with wrong exception being thrown for spies.
+
+----------------------
 - Version 0.5.1
 ----------------------
 * Replaced the guice dependency with a much lighter gentyref dependency.

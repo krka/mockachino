@@ -7,11 +7,13 @@ import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.matchers.MethodMatcherImpl;
 import se.mockachino.util.MockachinoMethod;
 
+import java.lang.reflect.Type;
+
 public abstract class MatchingHandler extends AbstractInvocationHandler {
 	private final CallHandler defaultAnswer;
 
-	protected MatchingHandler(String kind, String id, CallHandler defaultAnswer) {
-		super(kind + ":" + id);
+	protected MatchingHandler(String kind, String id, CallHandler defaultAnswer, Type type) {
+		super(kind + ":" + id, type);
 		this.defaultAnswer = defaultAnswer;
 	}
 

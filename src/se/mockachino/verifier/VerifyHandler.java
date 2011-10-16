@@ -20,7 +20,7 @@ public class VerifyHandler extends MatchingHandler {
 
 	public VerifyHandler(Object mock, Iterable<Invocation> calls,
 						 int minCalls, int maxCalls, long timeout) {
-		super("VerifyHandler", Mockachino.getData(mock).getName(), BAD_USAGE_HANDLER);
+		super("VerifyHandler", Mockachino.getData(mock).getName(), BAD_USAGE_HANDLER, Mockachino.getData(mock).getTypeLiteral());
 		this.calls = calls;
 		this.minCalls = minCalls;
 		this.maxCalls = maxCalls;
