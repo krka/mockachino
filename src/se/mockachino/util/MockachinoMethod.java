@@ -35,7 +35,7 @@ public class MockachinoMethod {
         this.type = null;
 	}
 
-	public String getName() {
+    public String getName() {
 		return name;
 	}
 
@@ -44,7 +44,7 @@ public class MockachinoMethod {
 	}
 
 	public Class<?> getReturnType() {
-		return GenericTypeReflector.erase(GenericTypeReflector.getExactReturnType(method, type));
+        return getReturnClass(type, method);
 	}
 
 	public Method getMethod() {
@@ -112,4 +112,16 @@ public class MockachinoMethod {
 	public boolean isToStringCall() {
 		return name.equals("toString") && parameters.length == 0;
 	}
+
+    public static Type getReturnType(Type type, Method method) {
+        try {
+            return GenericTypeReflector.getExactReturnType(method, type);
+        } catch (Exception e) {
+            return method.getReturnType();
+        }
+    }
+
+    public static Class<?> getReturnClass(Type type, Method method) {
+        return GenericTypeReflector.erase(getReturnType(type, method));
+    }
 }

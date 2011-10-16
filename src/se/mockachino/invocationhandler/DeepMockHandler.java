@@ -23,7 +23,7 @@ public class DeepMockHandler implements CallHandler {
 
 		Type type = data.getTypeLiteral();
 
-		final Type returnType = GenericTypeReflector.getExactReturnType(method.getMethod(), type);
+		final Type returnType = MockachinoMethod.getReturnType(type, method.getMethod());
 
 		if (Mockachino.canMock(GenericTypeReflector.erase(returnType))) {
             synchronized (obj) {
