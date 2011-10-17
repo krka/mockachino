@@ -37,7 +37,7 @@
             <classpath>
                 <path refid="dependencies"/>
             </classpath>
-            <src path="src"></src>
+            <src path="src/main/java"></src>
         </javac>
     </target>
 
@@ -287,7 +287,7 @@
     <target name="javadoc" description="Generate javadoc">
         <mkdir dir="${baseDir}/build/javadoc"/>
         <javadoc destdir="${baseDir}/build/javadoc">
-            <fileset dir="${baseDir}/src">
+            <fileset dir="${baseDir}/src/main/java">
                 <include name="**/Mockachino.java"/>
                 <include name="**/MockContext.java"/>
                 <include name="**/MockData.java"/>
@@ -321,7 +321,7 @@
 
     <target name="coverage-report">
         <emma enabled="${emma.enabled}">
-            <report sourcepath="${baseDir}/src">
+            <report sourcepath="${baseDir}/src/main/java">
                 <fileset dir="${coverage.dir}">
                     <include name="*.emma"/>
                     <include name="unit/*.emma"/>
@@ -338,7 +338,7 @@
     <target name="javadoc-full" description="Generate full javadoc">
         <mkdir dir="${baseDir}/build/javadoc-full"/>
         <javadoc destdir="${baseDir}/build/javadoc-full">
-            <fileset dir="${baseDir}/src">
+            <fileset dir="${baseDir}/src/main/java">
             </fileset>
         </javadoc>
     </target>
@@ -347,7 +347,7 @@
         <!-- classes, source -->
         <jar destfile="${baseDir}/build/mockachino-light-${suffix}.jar">
             <fileset dir="${baseDir}/build/classes"/>
-            <fileset dir="${baseDir}/src">
+            <fileset dir="${baseDir}/src/main/java">
                 <exclude name="**/.svn"/>
             </fileset>
             <zipfileset src="${baseDir}/lib/gentyref-1.1.1-20101127.232143-2.jar"/>
@@ -356,7 +356,7 @@
         <!-- classes, source, dependencies -->
         <jar destfile="${baseDir}/build/mockachino-full-${suffix}.jar">
             <fileset dir="${baseDir}/build/classes"/>
-            <fileset dir="${baseDir}/src">
+            <fileset dir="${baseDir}/src/main/java">
                 <exclude name="**/.svn"/>
             </fileset>
             <zipfileset src="${baseDir}/lib/cglib-2.2.jar"/>
