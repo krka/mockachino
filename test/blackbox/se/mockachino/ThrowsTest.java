@@ -28,13 +28,37 @@ public class ThrowsTest {
     try {
       mock.size();
     } catch (Exception e) {
+      assertEquals(expected.getMessage(), e.getMessage());
+      assertEquals(expected.getCause(), e.getCause());
       StackTraceElement[] exp = expected.getStackTrace();
       StackTraceElement[] act = e.getStackTrace();
 
       assertEquals(exp[0].getClassName(), act[0].getClassName());
       assertEquals(exp[0].getLineNumber() + 2, act[0].getLineNumber());
     }
+  }
 
+  @Test
+  public void testCorrectStacktraceNonStandardException() throws TestException {
+    TestClass mock = Mockachino.mock(TestClass.class);
+    Mockachino.stubThrow(new TestException(333)).on(mock).doIt();
+
+    for (int i = 0; i < 10; i++) {
+      // Do some work, to make sure expected will have a different line than the one above.
+  }
+
+    TestException expected = new TestException(333);
+    try {
+      mock.doIt();
+    } catch (Exception e) {
+      assertEquals(expected.getMessage(), e.getMessage());
+      assertEquals(expected.getCause(), e.getCause());
+      StackTraceElement[] exp = expected.getStackTrace();
+      StackTraceElement[] act = e.getStackTrace();
+
+      assertEquals(exp[0].getClassName(), act[0].getClassName());
+      assertEquals(exp[0].getLineNumber() + 2, act[0].getLineNumber());
+    }
   }
 
   @Test
@@ -113,6 +137,7 @@ public class ThrowsTest {
 
   public class TestException extends Exception {
     public TestException(int val) {
+      super("Reason: " + val);
     }
   }
 }

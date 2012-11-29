@@ -1,11 +1,21 @@
 package se.mockachino.stub.exception;
 
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
+import org.objenesis.instantiator.ObjectInstantiator;
 import se.mockachino.MethodCall;
 import se.mockachino.VerifyableCallHandler;
 import se.mockachino.exceptions.UsageError;
+import se.mockachino.proxy.ObjenesisUtil;
 import se.mockachino.util.MockachinoMethod;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ThrowAnswer implements VerifyableCallHandler {
 
@@ -13,6 +23,8 @@ public class ThrowAnswer implements VerifyableCallHandler {
   private final Class<? extends Throwable> clazz;
   private final Throwable throwable;
   private final Object[] initArgs;
+  private final Set<Field> fields;
+  private Field cause;
 
   public ThrowAnswer(Throwable e) {
     this.clazz = e.getClass();
@@ -20,6 +32,7 @@ public class ThrowAnswer implements VerifyableCallHandler {
     Constructor<Throwable> bestConstructor = findBestConstructor(e.getClass());
     if (bestConstructor != null) {
       throwable = null;
+      fields = null;
       constructor = bestConstructor;
       Class<?>[] parameterTypes = constructor.getParameterTypes();
       initArgs = new Object[parameterTypes.length];
@@ -35,8 +48,36 @@ public class ThrowAnswer implements VerifyableCallHandler {
       }
     } else {
       throwable = e;
+      fields = allFields(clazz);
+      for (Field field : fields) {
+        if (field.getName().equals("cause")) {
+          cause = field;
+        }
+        field.setAccessible(true);
+      }
       constructor = null;
       initArgs = null;
+    }
+  }
+
+  private Set<Field> allFields(Class<?> clazz) {
+    HashSet<Field> set = new HashSet<Field>();
+    allFields(clazz, set);
+    return set;
+  }
+
+  private void allFields(Class<?> clazz, HashSet<Field> set) {
+    for (Field field : clazz.getDeclaredFields()) {
+      if (!Modifier.isStatic(field.getModifiers())) {
+        set.add(field);
+      }
+    }
+    for (Class<?> iface : clazz.getInterfaces()) {
+      allFields(iface, set);
+    }
+    Class<?> superclass = clazz.getSuperclass();
+    if (superclass != null) {
+      allFields(superclass, set);
     }
   }
 
@@ -86,7 +127,16 @@ public class ThrowAnswer implements VerifyableCallHandler {
   @Override
   public Object invoke(Object obj, MethodCall call) throws Throwable {
     if (throwable != null) {
-      throw throwable;
+      Throwable newThrowable = (Throwable) ObjenesisUtil.newInstance(clazz);
+      for (Field field : fields) {
+        Object value = field.get(throwable);
+        if (field == cause) {
+          value = newThrowable;
+        }
+        field.set(newThrowable, value);
+      }
+      newThrowable.setStackTrace(new RuntimeException().getStackTrace());
+      throw newThrowable;
     }
     throw constructor.newInstance(initArgs);
   }
