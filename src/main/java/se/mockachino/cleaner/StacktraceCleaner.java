@@ -5,11 +5,14 @@ import java.util.Collection;
 import java.util.List;
 
 public class StacktraceCleaner {
+  public static final boolean ENABLED = false;
 
 	public static <T extends Throwable> T cleanError(T e) {
-		e.setStackTrace(convert(getCleanStacktrace(e)));
-		return e;
-	}
+    if (ENABLED) {
+      e.setStackTrace(convert(getCleanStacktrace(e)));
+    }
+    return e;
+  }
 
 	private static List<StackTraceElement> getCleanStacktrace(Throwable e) {
 		StackTraceElement[] stackTraceElements = e.getStackTrace();
