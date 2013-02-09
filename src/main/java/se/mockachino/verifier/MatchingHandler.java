@@ -9,20 +9,21 @@ import se.mockachino.util.MockachinoMethod;
 
 import java.lang.reflect.Type;
 
-public abstract class MatchingHandler extends AbstractInvocationHandler {
-	private final CallHandler defaultAnswer;
+public abstract class MatchingHandler<T> extends AbstractInvocationHandler<T> {
+	private final CallHandler<T> defaultAnswer;
 
-	protected MatchingHandler(String kind, String id, CallHandler defaultAnswer, Type type) {
+	protected MatchingHandler(String kind, String id, CallHandler<T> defaultAnswer, Type type) {
 		super(kind + ":" + id, type);
 		this.defaultAnswer = defaultAnswer;
 	}
 
-	public final Object doInvoke(Object o, MockachinoMethod method, Object[] objects) throws Throwable {
-		MethodMatcher matcher = new MethodMatcherImpl(method, objects);
+    @Override
+	public final Object doInvoke(Object o, MockachinoMethod<T> method, Object[] objects) throws Throwable {
+		MethodMatcher<T> matcher = new MethodMatcherImpl<T>(method, objects);
 		match(o, method, matcher);
 
-		return defaultAnswer.invoke(o, new MethodCall(method, objects));
+		return defaultAnswer.invoke(o, new MethodCall<T>(method, objects));
 	}
 
-	protected abstract void match(Object o, MockachinoMethod method, MethodMatcher matcher);
+	protected abstract void match(Object o, MockachinoMethod<T> method, MethodMatcher<T> matcher);
 }

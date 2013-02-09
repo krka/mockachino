@@ -3,7 +3,7 @@ package se.mockachino.spy;
 import se.mockachino.CallHandler;
 import se.mockachino.MethodCall;
 
-public class SpyHandler implements CallHandler {
+public class SpyHandler<T> implements CallHandler<T> {
 	private final Object spy;
 
 	public SpyHandler(Object spy) {
@@ -11,7 +11,7 @@ public class SpyHandler implements CallHandler {
 	}
 
 	@Override
-	public Object invoke(Object obj, MethodCall call) throws Throwable {
+	public T invoke(Object obj, MethodCall<T> call) throws Throwable {
 		return call.getMethod().invoke(spy, call.getArguments());
 	}
 }

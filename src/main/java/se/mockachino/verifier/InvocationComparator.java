@@ -9,19 +9,19 @@ import se.mockachino.util.MockachinoMethod;
 import java.util.Comparator;
 import java.util.List;
 
-public class InvocationComparator implements Comparator<Invocation> {
-	private final MockachinoMethod method;
-	private final List<Matcher> argumentMatchers;
+public class InvocationComparator<T> implements Comparator<Invocation<T>> {
+	private final MockachinoMethod<T> method;
+	private final List<Matcher<?>> argumentMatchers;
 
-	public InvocationComparator(MockachinoMethod method, List<Matcher> argumentMatchers) {
+	public InvocationComparator(MockachinoMethod<T> method, List<Matcher<?>> argumentMatchers) {
 		this.method = method;
 		this.argumentMatchers = argumentMatchers;
 	}
 
 	@Override
-	public int compare(Invocation c1, Invocation c2) {
-		MethodCall o1 = c1.getMethodCall();
-		MethodCall o2 = c2.getMethodCall();
+	public int compare(Invocation<T> c1, Invocation<T> c2) {
+		MethodCall<T> o1 = c1.getMethodCall();
+		MethodCall<T> o2 = c2.getMethodCall();
 		// First compare on names
 		{
 			int value = comp(nameMatches(o1), nameMatches(o2));
@@ -182,19 +182,20 @@ public class InvocationComparator implements Comparator<Invocation> {
 		return realClass.isInstance(obj);
 	}
 
-	private boolean matchArg(MethodCall methodCall, int index, Matcher matcher) {
+	private boolean matchArg(MethodCall<T> methodCall, int index, Matcher<?> matcher) {
 		Object[] args = methodCall.getArguments();
 		if (index >= args.length) {
 			return false;
 		}
-		return matcher.matches(args[index]);
+        Matcher untypedMatcher = matcher;
+        return untypedMatcher.matches(args[index]);
 	}
 
-	private boolean methodMatches(MethodCall o1) {
+	private boolean methodMatches(MethodCall<T> o1) {
 		return o1.getMethod().equals(method);
 	}
 
-	private boolean nameMatches(MethodCall o1) {
+	private boolean nameMatches(MethodCall<T> o1) {
 		return o1.getMethod().getName().equals(method.getName());
 	}
 }

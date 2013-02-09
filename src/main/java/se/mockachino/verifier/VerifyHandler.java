@@ -10,15 +10,15 @@ import se.mockachino.util.MockachinoMethod;
 import java.util.Iterator;
 import java.util.List;
 
-public class VerifyHandler extends MatchingHandler {
+public class VerifyHandler<T> extends MatchingHandler<T> {
 	private static final BadUsageHandler BAD_USAGE_HANDLER = InOrderVerifyHandler.BAD_USAGE_HANDLER;
 
-	private final Iterable<Invocation> calls;
+	private final Iterable<Invocation<T>> calls;
 	private final int minCalls;
 	private final int maxCalls;
 	private final long timeout;
 
-	public VerifyHandler(Object mock, Iterable<Invocation> calls,
+	public VerifyHandler(Object mock, Iterable<Invocation<T>> calls,
 						 int minCalls, int maxCalls, long timeout) {
 		super("VerifyHandler", Mockachino.getData(mock).getName(), BAD_USAGE_HANDLER, Mockachino.getData(mock).getTypeLiteral());
 		this.calls = calls;
@@ -28,10 +28,10 @@ public class VerifyHandler extends MatchingHandler {
 	}
 
 	@Override
-	public void match(Object o, MockachinoMethod method, MethodMatcher matcher) {
+	public void match(Object o, MockachinoMethod<T> method, MethodMatcher<T> matcher) {
 		long startTime = System.currentTimeMillis();
 		int counter = 0;
-		Iterator<Invocation> invocationIterator = calls.iterator();
+		Iterator<Invocation<T>> invocationIterator = calls.iterator();
 		counter = consumeIterator(matcher, counter, invocationIterator);
 
 		while (shouldWait(startTime)) {
@@ -66,9 +66,9 @@ public class VerifyHandler extends MatchingHandler {
 		return System.currentTimeMillis() - startTime < timeout;
 	}
 
-	private int consumeIterator(MethodMatcher matcher, int counter, Iterator<Invocation> invocationIterator) {
+	private int consumeIterator(MethodMatcher<T> matcher, int counter, Iterator<Invocation<T>> invocationIterator) {
 		while (invocationIterator.hasNext()) {
-			Invocation invocation = invocationIterator.next();
+			Invocation<T> invocation = invocationIterator.next();
 			if (matcher.matches(invocation.getMethodCall())) {
 				counter++;
 			}
@@ -76,7 +76,7 @@ public class VerifyHandler extends MatchingHandler {
 		return counter;
 	}
 
-	private void error(String msg, MethodMatcher matcher, int maxMisses) {
+	private void error(String msg, MethodMatcher<T> matcher, int maxMisses) {
 		MethodCallGrouper grouper = new MethodCallGrouper(matcher, calls);
 		grouper.getGroupedCalls();
 		String matchingMethods = getBestMatches(matcher, maxMisses, grouper);

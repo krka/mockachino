@@ -11,17 +11,17 @@ import se.mockachino.stub.returnvalue.SequentialAnswers;
 import se.mockachino.util.MockachinoMethod;
 
 public class WhenStubber<T> {
-	static final ThreadLocal<Invocation> lastInvocation = new ThreadLocal<Invocation>();
+	static final ThreadLocal<Invocation<?>> lastInvocation = new ThreadLocal<Invocation<?>>();
 
 	private final MockData<Object> data;
 	private final Object mock;
-	private final MockachinoMethod method;
-	private final MethodMatcher matcher;
+	private final MockachinoMethod<T> method;
+	private final MethodMatcher<T> matcher;
 
-    private Stubber stub;
+    private Stubber<T> stub;
 
     public WhenStubber() {
-		Invocation invocation = lastInvocation.get();
+		Invocation<?> invocation = lastInvocation.get();
 		if (invocation == null) {
 			throw new UsageError("Illegal when(X).thenReturn(..) expression. X needs to be on the form mock.method(...)");
 		}
@@ -32,16 +32,17 @@ public class WhenStubber<T> {
 		// Ensure that the mock is actually a mock
 		data = Mockachino.getData(mock);
 
-		method = invocation.getMethodCall().getMethod();
-		matcher = new MethodMatcherImpl(method, invocation.getMethodCall().getArguments());
+        MethodCall<T> methodCall = (MethodCall<T>) invocation.getMethodCall();
+        method = methodCall.getMethod();
+		matcher = new MethodMatcherImpl(method, methodCall.getArguments());
 
 		// This invocation is a stubbing, not a call
 		data.deleteLastInvocation();
 	}
 
-    private void addStub(VerifyableCallHandler answer) {
+    private void addStub(VerifyableCallHandler<T> answer) {
         if (stub == null) {
-            stub = new Stubber(new SequentialAnswers(answer));
+            stub = new Stubber<T>(new SequentialAnswers<T>(answer));
             stub.onMethod(mock, method, matcher);
         } else {
             stub.extend(answer);
@@ -49,27 +50,27 @@ public class WhenStubber<T> {
     }
 
 	public WhenStubber<T> thenReturn(T value) {
-        addStub(new ReturnAnswer(value));
+        addStub(new ReturnAnswer<T>(value));
         return this;
 	}
 
 	public WhenStubber<T> thenReturn(T value, T... values) {
-        addStub(new ReturnAnswer(value));
+        addStub(new ReturnAnswer<T>(value));
         if (values != null) {
             for (T t : values) {
-                addStub(new ReturnAnswer(t));
+                addStub(new ReturnAnswer<T>(t));
             }
         }
         return this;
 	}
 
-	public WhenStubber<T> thenAnswer(CallHandler answer) {
-        addStub(new VerifyableCallHandlerWrapper(answer));
+	public WhenStubber<T> thenAnswer(CallHandler<T> answer) {
+        addStub(new VerifyableCallHandlerWrapper<T>(answer));
         return this;
 	}
 
 	public WhenStubber<T> thenThrow(Throwable t) {
-        addStub(new ThrowAnswer(t));
+        addStub(new ThrowAnswer<T>(t));
         return this;
 	}
 

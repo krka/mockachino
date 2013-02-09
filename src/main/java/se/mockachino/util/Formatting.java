@@ -19,7 +19,7 @@ public class Formatting {
 		return num + " calls";
 	}
 
-	public static String list(Iterable<Matcher> iterable) {
+	public static String list(Iterable<Matcher<?>> iterable) {
 		return join(", ", iterable);
 	}
 

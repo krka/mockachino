@@ -7,10 +7,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
-public class MockachinoMethod {
-	public static final MockachinoMethod EQUALS = find(Object.class, "equals");
-	public static final MockachinoMethod HASHCODE = find(Object.class, "hashCode");
-	public static final MockachinoMethod NULL = new MockachinoMethod("<null>", new Class[0], void.class);
+public class MockachinoMethod<T> {
+	public static final MockachinoMethod<Boolean> EQUALS = find(Object.class, "equals");
+	public static final MockachinoMethod<Integer> HASHCODE = find(Object.class, "hashCode");
+	public static final MockachinoMethod<?> NULL = new MockachinoMethod("<null>", new Class[0], void.class);
 
 	private final Method method;
 	private final String name;
@@ -27,7 +27,7 @@ public class MockachinoMethod {
 		returnType = method.getReturnType();
 	}
 
-	public MockachinoMethod(String name, Class<Object>[] parameterTypes, Class<?> returnType) {
+	public MockachinoMethod(String name, Class<Object>[] parameterTypes, Class<T> returnType) {
 		this.method = null;
 		this.name = name;
 		this.parameters = parameterTypes;
@@ -43,7 +43,7 @@ public class MockachinoMethod {
 		return parameters;
 	}
 
-	public Class<?> getReturnType() {
+	public Class<T> getReturnType() {
         return getReturnClass(type, method);
 	}
 
@@ -91,19 +91,19 @@ public class MockachinoMethod {
 		return result;
 	}
 
-	public static MockachinoMethod find(Class clazz, String name) {
+	public static <T> MockachinoMethod<T> find(Class clazz, String name) {
 		for (Method method : clazz.getMethods()) {
 			if (method.getName().equals(name)) {
-				return new MockachinoMethod(clazz, method);
+				return new MockachinoMethod<T>(clazz, method);
 			}
 		}
 		return null;
 	}
 
 
-	public Object invoke(Object impl, Object[] objects) throws Throwable {
+	public T invoke(Object impl, Object[] objects) throws Throwable {
         try {
-            return method.invoke(impl, objects);
+            return (T) method.invoke(impl, objects);
         } catch (InvocationTargetException e) {
             throw e.getCause();
         }
@@ -121,7 +121,7 @@ public class MockachinoMethod {
         }
     }
 
-    public static Class<?> getReturnClass(Type type, Method method) {
-        return GenericTypeReflector.erase(getReturnType(type, method));
+    public static <T> Class<T> getReturnClass(Type type, Method method) {
+        return (Class<T>) GenericTypeReflector.erase(getReturnType(type, method));
     }
 }

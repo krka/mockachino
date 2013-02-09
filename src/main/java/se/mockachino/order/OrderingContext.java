@@ -6,7 +6,7 @@ import se.mockachino.matchers.MatcherThreadHandler;
 public class OrderingContext {
 	private final MockPoint start;
 	private final MockPoint end;
-	private Invocation currentInvocation = Invocation.NULL;
+	private Invocation<?> currentInvocation = Invocation.NULL;
 
 	public OrderingContext(MockPoint start, MockPoint end) {
 		this.start = start;

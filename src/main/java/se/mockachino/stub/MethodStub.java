@@ -3,20 +3,20 @@ package se.mockachino.stub;
 import se.mockachino.CallHandler;
 import se.mockachino.matchers.MethodMatcher;
 
-public class MethodStub {
-	private final CallHandler answer;
-	private final MethodMatcher matcher;
+public class MethodStub<T> {
+	private final CallHandler<T> answer;
+	private final MethodMatcher<T> matcher;
 
-	public MethodStub(CallHandler answer, MethodMatcher matcher) {
+	public MethodStub(CallHandler<T> answer, MethodMatcher<T> matcher) {
 		this.answer = answer;
 		this.matcher = matcher;
 	}
 
-	public CallHandler getAnswer() {
+	public CallHandler<T> getAnswer() {
 		return answer;
 	}
 
-	public MethodMatcher getMatcher() {
+	public MethodMatcher<T> getMatcher() {
 		return matcher;
 	}
 }

@@ -10,12 +10,12 @@ import static org.junit.Assert.assertEquals;
 public class MethodListenerTest {
 	@Test
 	public void testSimple() {
-		List mock = Mockachino.mock(List.class);
+		List<String> mock = Mockachino.mock(List.class);
 
 		final List<String> list = new ArrayList<String>();
-		CallHandler listener = new CallHandler() {
+		CallHandler<String> listener = new CallHandler<String>() {
 			@Override
-			public Object invoke(Object obj, MethodCall call) {
+			public String invoke(Object obj, MethodCall call) {
 				list.add(call.toString());
 				return null;
 			}

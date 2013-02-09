@@ -5,7 +5,7 @@ import se.mockachino.Invocation;
 import java.util.List;
 
 public interface Alias {
-	List<Invocation> getMatches();
+	List<Invocation<?>> getMatches();
 
 	int count();
 

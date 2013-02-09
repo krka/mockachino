@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
-public abstract class AbstractInvocationHandler implements InvocationHandler {
+public abstract class AbstractInvocationHandler<T> implements InvocationHandler {
 
 	protected final String name;
     private final Type type;
@@ -18,7 +18,7 @@ public abstract class AbstractInvocationHandler implements InvocationHandler {
     }
 
 	public final Object invoke(Object o, Method reflectMethod, Object[] objects) throws Throwable {
-		MockachinoMethod method = new MockachinoMethod(type, reflectMethod);
+		MockachinoMethod<T> method = new MockachinoMethod<T>(type, reflectMethod);
 		try {
 			return defaultToString(method, doInvoke(o, method, objects));
 		} catch (Throwable throwable) {
@@ -26,13 +26,13 @@ public abstract class AbstractInvocationHandler implements InvocationHandler {
 		}
 	}
 
-	protected Object defaultToString(MockachinoMethod method, Object ret) {
+	protected Object defaultToString(MockachinoMethod<T> method, Object ret) {
 		if (ret == null && method.isToStringCall()) {
 			return name;
 		}
 		return ret;
 	}
 
-	protected abstract Object doInvoke(Object o, MockachinoMethod method, Object[] objects) throws Throwable;
+	protected abstract Object doInvoke(Object o, MockachinoMethod<T> method, Object[] objects) throws Throwable;
 }
 

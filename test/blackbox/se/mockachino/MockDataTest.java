@@ -18,9 +18,9 @@ public class MockDataTest {
 	public void testProtected() {
 		final AtomicInteger count = new AtomicInteger();
 		Prot mock = Mockachino.mock(Prot.class);
-		stubAnswer(new CallHandler() {
+		stubAnswer(new CallHandler<Void>() {
 			@Override
-			public Object invoke(Object obj, MethodCall call) throws Throwable {
+			public Void invoke(Object obj, MethodCall call) throws Throwable {
 				count.incrementAndGet();
 				return null;
 			}

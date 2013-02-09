@@ -15,31 +15,31 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 public class MockData<T> {
-	private static final CallHandler DEFAULT_EQUALS = new CallHandler() {
+	private static final CallHandler<Boolean> DEFAULT_EQUALS = new CallHandler<Boolean>() {
 		@Override
-		public Object invoke(Object obj, MethodCall call) throws Throwable {
+		public Boolean invoke(Object obj, MethodCall call) throws Throwable {
 			return obj == call.getArguments()[0];
 		}
 	};
-	private static final MethodMatcher EQUALS_METHOD_MATCHER = MethodMatcherImpl.matchAll(MockachinoMethod.EQUALS);
-	private static final MethodStub DEFAULT_EQUALS_STUB = new MethodStub(DEFAULT_EQUALS, EQUALS_METHOD_MATCHER);
+	private static final MethodMatcher<Boolean> EQUALS_METHOD_MATCHER = MethodMatcherImpl.matchAll(MockachinoMethod.EQUALS);
+	private static final MethodStub<Boolean> DEFAULT_EQUALS_STUB = new MethodStub<Boolean>(DEFAULT_EQUALS, EQUALS_METHOD_MATCHER);
 
-	private static final CallHandler DEFAULT_HASHCODE = new CallHandler() {
+	private static final CallHandler<Integer> DEFAULT_HASHCODE = new CallHandler<Integer>() {
 		@Override
-		public Object invoke(Object obj, MethodCall call) throws Throwable {
+		public Integer invoke(Object obj, MethodCall call) throws Throwable {
 			return System.identityHashCode(obj);
 		}
 	};
-	private static final MethodMatcher HASHCODE_METHOD_MATCHER = MethodMatcherImpl.matchAll(MockachinoMethod.HASHCODE);
-	private static final MethodStub DEFAULT_HASHCODE_STUB = new MethodStub(DEFAULT_HASHCODE, HASHCODE_METHOD_MATCHER);
+	private static final MethodMatcher<Integer> HASHCODE_METHOD_MATCHER = MethodMatcherImpl.matchAll(MockachinoMethod.HASHCODE);
+	private static final MethodStub<Integer> DEFAULT_HASHCODE_STUB = new MethodStub<Integer>(DEFAULT_HASHCODE, HASHCODE_METHOD_MATCHER);
 
 	private final Class<T> iface;
 	private final List<Invocation> invocations;
 	private final List<Invocation> readOnlyCalls;
-	private final Map<MockachinoMethod, List<MethodObserver>> observers;
-	private final Map<MockachinoMethod, MethodStubs> stubs;
+	private final Map<MockachinoMethod<?>, List<MethodObserver<?>>> observers;
+	private final Map<MockachinoMethod<?>, MethodStubs<?>> stubs;
 	private final Type type;
-	private final Set<MockachinoMethod> methods;
+	private final Set<MockachinoMethod<?>> methods;
 	private final String name;
 
 	public MockData(Class<T> iface, Type type, String name) {
@@ -48,9 +48,9 @@ public class MockData<T> {
 		this.name = name;
 		invocations = new SafeIteratorList<Invocation>(new ArrayList<Invocation>(), Invocation.NULL);
 		readOnlyCalls = Collections.unmodifiableList(invocations);
-		observers = new HashMap<MockachinoMethod, List<MethodObserver>>();
+		observers = new HashMap<MockachinoMethod<?>, List<MethodObserver<?>>>();
 
-		stubs = new HashMap<MockachinoMethod, MethodStubs>();
+		stubs = new HashMap<MockachinoMethod<?>, MethodStubs<?>>();
 		addMethods(iface);
 		addMethods(Object.class);
 		methods = Collections.unmodifiableSet(stubs.keySet());
@@ -75,22 +75,22 @@ public class MockData<T> {
 		}
 	}
 
-	private void addContainer(Method reflectMethod) {
-		MockachinoMethod method = new MockachinoMethod(type, reflectMethod);
+	private <R> void addContainer(Method reflectMethod) {
+		MockachinoMethod<R> method = new MockachinoMethod<R>(type, reflectMethod);
 		if (stubs.containsKey(method)) {
 			return;
 		}
-		stubs.put(method, new MethodStubs());
-		observers.put(method,
-				new SafeIteratorList<MethodObserver>(
-						new ArrayList<MethodObserver>(), null));
+		stubs.put(method, new MethodStubs<R>());
+        SafeIteratorList<MethodObserver<?>> list = new SafeIteratorList<MethodObserver<?>>(
+                new ArrayList<MethodObserver<?>>(), null);
+        observers.put(method, list);
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public Set<MockachinoMethod> getMethods() {
+	public Set<MockachinoMethod<?>> getMethods() {
 		return methods;
 	}
 
@@ -109,7 +109,7 @@ public class MockData<T> {
 	 *
 	 * @return the list of invocations
 	 */
-	public Iterable<Invocation> getCalls(MockPoint start, MockPoint end) {
+	public Iterable<Invocation<?>> getCalls(MockPoint start, MockPoint end) {
 		return new MockPointIterable(readOnlyCalls, start, end);
 	}
 
@@ -129,8 +129,9 @@ public class MockData<T> {
 	 * @param method
 	 * @return all observers
 	 */
-	public List<MethodObserver> getObservers(MockachinoMethod method) {
-		return observers.get(method);
+	public <R> List<MethodObserver<R>> getObservers(MockachinoMethod<R> method) {
+        List methodObservers = observers.get(method);
+        return (List<MethodObserver<R>>) methodObservers;
 	}
 
 	/**
@@ -189,7 +190,7 @@ public class MockData<T> {
 	 * Remove all observers from the mock
 	 */
 	public synchronized void resetObservers() {
-		for (List<MethodObserver> methodObservers : observers.values()) {
+		for (List<MethodObserver<?>> methodObservers : observers.values()) {
 			methodObservers.clear();
 		}
 	}

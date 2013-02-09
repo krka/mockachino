@@ -209,10 +209,10 @@ public class MockachinoTest {
 
 	@Test
 	public void testAnswer() {
-		List mock = Mockachino.mock(List.class);
-		Mockachino.stubAnswer(new CallHandler() {
+		List<String> mock = Mockachino.mock(List.class);
+		Mockachino.stubAnswer(new CallHandler<String>() {
 			@Override
-			public Object invoke(Object self, MethodCall call) {
+			public String invoke(Object self, MethodCall call) {
 				Object obj = call.getArguments()[0];
 				return obj.toString() + obj;
 			}
@@ -245,16 +245,16 @@ public class MockachinoTest {
 
 	@Test
 	public void testBadListener() {
-		List mock = Mockachino.mock(List.class);
+		List<String> mock = Mockachino.mock(List.class);
 
 		final AtomicBoolean wasCalled = new AtomicBoolean();
-		Mockachino.observeWith(new CallHandler() {
+		Mockachino.observeWith(new CallHandler<String>() {
 			@Override
-			public Object invoke(Object obj, MethodCall call) {
+			public String invoke(Object obj, MethodCall call) {
 				wasCalled.set(true);
 				throw new RuntimeException("Never shown");
 			}
-		}).on(mock).add(any(Object.class));
+		}).on(mock).add(any(String.class));
 
 		assertFalse(wasCalled.get());
 		mock.add("Hello world");

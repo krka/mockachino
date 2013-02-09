@@ -16,7 +16,7 @@ public class BetweenVerifyContext {
 		this.end = end;
 	}
 
-	public Iterable<Invocation> getCalls(Object mock) {
+	public Iterable<Invocation<?>> getCalls(Object mock) {
 		MockData<Object> data = Mockachino.getData(mock);
 		return data.getCalls(start, end);
 	}

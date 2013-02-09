@@ -12,18 +12,18 @@ public class IntersectionAlias extends AbstractAlias {
 	}
 
 	@Override
-	public List<Invocation> getMatches() {
+	public List<Invocation<?>> getMatches() {
 		int n = aliases.length;
 		if (n == 0) {
 			return Collections.emptyList();
 		}
-		SortedSet<Invocation> set = new TreeSet<Invocation>(Invocation.COMPARATOR);
+		SortedSet<Invocation<?>> set = new TreeSet<Invocation<?>>(Invocation.COMPARATOR);
 		set.addAll(aliases[0].getMatches());
 		for (int i = 1; i < n; i++) {
 			Alias alias = aliases[i];
-			List<Invocation> list = alias.getMatches();
+			List<Invocation<?>> list = alias.getMatches();
 			set.retainAll(list);
 		}
-		return new ArrayList<Invocation>(set);
+		return new ArrayList<Invocation<?>>(set);
 	}
 }

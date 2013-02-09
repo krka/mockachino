@@ -61,11 +61,11 @@ public class VerifierTest {
 
 	@Test
 	public void testPrettyStack() {
-		final List mock1 = Mockachino.mock(ArrayList.class);
-		final List mock2 = Mockachino.mock(ArrayList.class);
-		Mockachino.stubAnswer(new CallHandler() {
+		final List<String> mock1 = Mockachino.mock(ArrayList.class);
+		final List<String> mock2 = Mockachino.mock(ArrayList.class);
+		Mockachino.stubAnswer(new CallHandler<Boolean>() {
 			@Override
-			public Object invoke(Object obj, MethodCall call) throws Throwable {
+			public Boolean invoke(Object obj, MethodCall call) throws Throwable {
 				return mock1.add("Foo");
 			}
 		}).on(mock2).remove(1);

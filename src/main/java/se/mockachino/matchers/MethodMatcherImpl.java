@@ -9,21 +9,21 @@ import se.mockachino.util.MockachinoMethod;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MethodMatcherImpl implements MethodMatcher {
-	private final MockachinoMethod method;
-	private final List<Matcher> argumentMatchers;
+public class MethodMatcherImpl<T> implements MethodMatcher<T> {
+	private final MockachinoMethod<T> method;
+	private final List<Matcher<?>> argumentMatchers;
 
-	public MethodMatcherImpl(MockachinoMethod method, Object[] arguments) {
+	public MethodMatcherImpl(MockachinoMethod<T> method, Object[] arguments) {
 		this(method, convert(arguments, method.getMethod().isVarArgs()));
 	}
 
-	public MethodMatcherImpl(MockachinoMethod method, List<Matcher> argumentMatchers) {
+	public MethodMatcherImpl(MockachinoMethod<T> method, List<Matcher<?>> argumentMatchers) {
 		this.method = method;
 		this.argumentMatchers = argumentMatchers;
 	}
 
-	private static List<Matcher> convert(Object[] arguments, boolean varArgs) {
-		List<Matcher> argumentMatchers = new ArrayList<Matcher>();
+	private static List<Matcher<?>> convert(Object[] arguments, boolean varArgs) {
+		List<Matcher<?>> argumentMatchers = new ArrayList<Matcher<?>>();
 		if (arguments != null) {
 			if (MatcherThreadHandler.isClean()) {
 				for (Object argument : arguments) {
@@ -38,17 +38,17 @@ public class MethodMatcherImpl implements MethodMatcher {
 		return argumentMatchers;
 	}
 
-	public static MethodMatcherImpl matchAll(MockachinoMethod method) {
+	public static <T> MethodMatcherImpl<T> matchAll(MockachinoMethod<T> method) {
 		MatcherThreadHandler.assertEmpty();
-		List<Matcher> matchers = new ArrayList<Matcher>();
+		List<Matcher<?>> matchers = new ArrayList<Matcher<?>>();
 		for (Class aClass : method.getParameters()) {
 			matchers.add(MatchersBase.mAny(aClass));
 		}
-		return new MethodMatcherImpl(method, matchers);
+		return new MethodMatcherImpl<T>(method, matchers);
 	}
 
 	@Override
-	public boolean matches(MethodCall methodCall) {
+	public boolean matches(MethodCall<?> methodCall) {
 		if (!method.equals(methodCall.getMethod())) {
 			return false;
 		}
@@ -62,7 +62,8 @@ public class MethodMatcherImpl implements MethodMatcher {
 			return false;
 		}
 		for (int i = 0; i < n; i++) {
-			if (!argumentMatchers.get(i).matches(arguments[i])) {
+            Matcher<Object> matcher = (Matcher<Object>) argumentMatchers.get(i);
+            if (!matcher.matches(arguments[i])) {
 				return false;
 			}
 		}
@@ -75,12 +76,12 @@ public class MethodMatcherImpl implements MethodMatcher {
 	}
 
 	@Override
-	public MockachinoMethod getMethod() {
+	public MockachinoMethod<T> getMethod() {
 		return method;
 	}
 
 	@Override
-	public List<Matcher> getArgumentMatchers() {
+	public List<Matcher<?>> getArgumentMatchers() {
 		return argumentMatchers;
 	}
 }

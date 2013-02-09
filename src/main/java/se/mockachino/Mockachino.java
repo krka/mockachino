@@ -53,11 +53,11 @@ import java.lang.reflect.*;
 public class Mockachino {
 	public static final PrimitiveInvocationHandler PRIMITIVE_VALUES = new PrimitiveInvocationHandler();
 	public static final CallHandler DEFAULT_VALUES = new CollectionsHandler(PRIMITIVE_VALUES);
-	public static final CallHandler DEEP_MOCK = new DeepMockHandler(DEFAULT_VALUES);
+    public static final CallHandler DEEP_MOCK = new DeepMockHandler(DEFAULT_VALUES);
 	public static final MockPoint BIG_BANG = new MockPoint(0);
 	public static final MockPoint BIG_CRUNCH = new MockPoint(Integer.MAX_VALUE);
 
-	// Warning for static mutable state!
+    // Warning for static mutable state!
 
 	/**
 	 * Creates a new mock with a default handler and default settings.
@@ -262,10 +262,10 @@ public class Mockachino {
 	 * @param e the exception to throw
 	 * @return a stubber
 	 */
-	public static Stubber stubThrow(Throwable e) {
+	public static <T> Stubber<T> stubThrow(Throwable e) {
 		MockUtil.checkNull("exception", e);
 		MatcherThreadHandler.assertEmpty();
-		return new Stubber(new SequentialAnswers(new ThrowAnswer(e)));
+		return new Stubber<T>(new SequentialAnswers<T>(new ThrowAnswer<T>(e)));
 	}
 
 	/**
@@ -282,17 +282,17 @@ public class Mockachino {
 	 * @param returnValue the returnValue to return when the method is called.
 	 * @return a stubber
 	 */
-	public static <T> Stubber stubReturn(T returnValue) {
+	public static <T> Stubber<T> stubReturn(T returnValue) {
 		MatcherThreadHandler.assertEmpty();
-		return new Stubber(new SequentialAnswers(new ReturnAnswer(returnValue)));
+		return new Stubber<T>(new SequentialAnswers<T>(new ReturnAnswer<T>(returnValue)));
 	}
 
-	public static <T> Stubber stubReturn(T returnValue, T... returnValues) {
+	public static <T> Stubber<T> stubReturn(T returnValue, T... returnValues) {
 		MatcherThreadHandler.assertEmpty();
-        Stubber stubber = new Stubber(new SequentialAnswers(new ReturnAnswer(returnValue)));
+        Stubber<T> stubber = new Stubber<T>(new SequentialAnswers<T>(new ReturnAnswer<T>(returnValue)));
         if (returnValues != null) {
             for (T value : returnValues) {
-                stubber.extend(new ReturnAnswer(value));
+                stubber.extend(new ReturnAnswer<T>(value));
             }
         }
         return stubber;
@@ -311,7 +311,7 @@ public class Mockachino {
 	 * @param answer the answer to use
 	 * @return a stubber
 	 */
-	public static Stubber stubAnswer(CallHandler answer) {
+	public static <T> Stubber<T> stubAnswer(CallHandler<T> answer) {
 		MockUtil.checkNull("answer", answer);
 		MatcherThreadHandler.assertEmpty();
 		return new Stubber(new SequentialAnswers(new VerifyableCallHandlerWrapper(answer)));
@@ -330,10 +330,10 @@ public class Mockachino {
 	 * @param observer the observer to use
 	 * @return
 	 */
-	public static ObserverAdder observeWith(CallHandler observer) {
+	public static <T> ObserverAdder<T> observeWith(CallHandler<T> observer) {
 		MockUtil.checkNull("observer", observer);
 		MatcherThreadHandler.assertEmpty();
-		return new ObserverAdder(observer);
+		return new ObserverAdder<T>(observer);
 	}
 
 	/**

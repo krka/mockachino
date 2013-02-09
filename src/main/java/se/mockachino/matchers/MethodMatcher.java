@@ -6,10 +6,10 @@ import se.mockachino.util.MockachinoMethod;
 
 import java.util.List;
 
-public interface MethodMatcher {
-	boolean matches(MethodCall methodCall);
+public interface MethodMatcher<T> {
+	boolean matches(MethodCall<?> methodCall);
 
-	List<Matcher> getArgumentMatchers();
+	List<Matcher<?>> getArgumentMatchers();
 
-	MockachinoMethod getMethod();
+	MockachinoMethod<T> getMethod();
 }

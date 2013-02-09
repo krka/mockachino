@@ -3,7 +3,7 @@ package se.mockachino.verifier;
 import se.mockachino.CallHandler;
 import se.mockachino.MethodCall;
 
-public class BadUsageHandler implements CallHandler {
+public class BadUsageHandler<T> implements CallHandler<T> {
 	private final BadUsageBuilder builder;
 
 	public BadUsageHandler(BadUsageBuilder builder) {
@@ -11,7 +11,7 @@ public class BadUsageHandler implements CallHandler {
 	}
 
 	@Override
-	public Object invoke(Object obj, MethodCall call) throws Throwable {
+	public T invoke(Object obj, MethodCall<T> call) throws Throwable {
 		return builder.forClass(call.getMethod().getReturnType());
 	}
 }

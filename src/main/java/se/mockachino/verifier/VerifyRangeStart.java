@@ -31,7 +31,7 @@ public class VerifyRangeStart {
 
 	public <T> T on(T mock) {
 		MockData data = Mockachino.getData(mock);
-		Iterable<Invocation> calls = data.getCalls(start, end);
+		Iterable<Invocation<?>> calls = data.getCalls(start, end);
 		VerifyHandler verifyHandler = new VerifyHandler(mock, calls, min, max, timeout);
 		return ProxyUtil.createProxy(mock, verifyHandler);
 	}

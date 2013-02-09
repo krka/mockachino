@@ -1,5 +1,5 @@
 package se.mockachino;
 
-public interface CallHandler {
-	Object invoke(Object obj, MethodCall call) throws Throwable;
+public interface CallHandler<T> {
+	T invoke(Object obj, MethodCall<T> call) throws Throwable;
 }

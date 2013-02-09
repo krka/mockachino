@@ -10,18 +10,18 @@ import se.mockachino.verifier.BadUsageHandler;
 import se.mockachino.verifier.MatchingHandler;
 import se.mockachino.verifier.Reporter;
 
-public class InOrderVerifyHandler extends MatchingHandler {
+public class InOrderVerifyHandler<T> extends MatchingHandler<T> {
 	public static final BadUsageHandler BAD_USAGE_HANDLER = new BadUsageHandler(
 			new BadUsageBuilder(
 					"Incorrect usage. You can not chain calls when verifying a deep mock. " +
 							"You probably used verify().on(mock).method1().method2(). " +
 							"Correct usage is verify().on(mock.method1()).method2()"));
 
-	private final Iterable<Invocation> calls;
+	private final Iterable<Invocation<?>> calls;
 	private final int min;
 	private final OrderingContext orderingContext;
 
-	public InOrderVerifyHandler(OrderingContext orderingContext, Object mock, Iterable<Invocation> calls, int min) {
+	public InOrderVerifyHandler(OrderingContext orderingContext, Object mock, Iterable<Invocation<?>> calls, int min) {
 		super("InOrderVerifyHandler", Mockachino.getData(mock).getName(), BAD_USAGE_HANDLER, Mockachino.getData(mock).getTypeLiteral());
 		this.orderingContext = orderingContext;
 		this.calls = calls;
@@ -29,17 +29,17 @@ public class InOrderVerifyHandler extends MatchingHandler {
 	}
 
 	@Override
-	public void match(Object o, MockachinoMethod method, MethodMatcher matcher) {
+	public void match(Object o, MockachinoMethod<T> method, MethodMatcher<T> matcher) {
 		if (min <= 0) {
 			return;
 		}
 
-		Invocation lastCall = orderingContext.getCurrentInvocation();
+		Invocation<?> lastCall = orderingContext.getCurrentInvocation();
 		int lastCallNumber = lastCall.getCallNumber();
 
 		int count = 0;
 
-		for (Invocation call : calls) {
+		for (Invocation<?> call : calls) {
 			int number = call.getCallNumber();
 
 			// Skip already visited calls

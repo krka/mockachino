@@ -4,22 +4,22 @@ import se.mockachino.util.Formatting;
 
 import java.util.Comparator;
 
-public class Invocation {
-	public static final Invocation NULL = new Invocation(null, null, -1, null);
+public class Invocation<T> {
+	public static final Invocation<?> NULL = new Invocation<Object>(null, null, -1, null);
 
-	public static final Comparator<Invocation> COMPARATOR = new Comparator<Invocation>() {
+	public static final Comparator<Invocation<?>> COMPARATOR = new Comparator<Invocation<?>>() {
 		@Override
-		public int compare(Invocation a, Invocation b) {
+		public int compare(Invocation<?> a, Invocation<?> b) {
 			return a.callNumber - b.callNumber;
 		}
 	};
 
 	private final Object obj;
-	private final MethodCall methodCall;
+	private final MethodCall<T> methodCall;
 	private final int callNumber;
 	private final StackTraceElement[] stacktrace;
 
-	public Invocation(Object obj, MethodCall methodCall, int callNumber, StackTraceElement[] stacktrace) {
+	public Invocation(Object obj, MethodCall<T> methodCall, int callNumber, StackTraceElement[] stacktrace) {
 		this.obj = obj;
 		this.methodCall = methodCall;
 		this.callNumber = callNumber;
@@ -38,7 +38,7 @@ public class Invocation {
 		return Formatting.toString(stacktrace, maxLines);
 	}
 
-	public MethodCall getMethodCall() {
+	public MethodCall<T> getMethodCall() {
 		return methodCall;
 	}
 

@@ -15,13 +15,13 @@ public class BadUsageBuilder {
 		this.message = message;
 	}
 
-	public synchronized Object forClass(Class returnType) {
-		Object proxy = proxys.get(returnType);
+	public synchronized <T> T forClass(Class<T> returnType) {
+		T proxy = (T) proxys.get(returnType);
 		if (proxy == null) {
 			if (!ProxyUtil.canMock(returnType)) {
 				return Primitives.forType(returnType);
 			}
-			proxy = ProxyUtil.newProxy(returnType, new BadUsageThrower(message));
+			proxy = (T) ProxyUtil.newProxy(returnType, new BadUsageThrower(message));
 			proxys.put(returnType, proxy);
 		}
 		return proxy;

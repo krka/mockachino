@@ -7,20 +7,20 @@ import se.mockachino.matchers.MethodMatcher;
 import se.mockachino.util.MockachinoMethod;
 import se.mockachino.verifier.MatchingHandler;
 
-public class AddObserverHandler extends MatchingHandler {
-	private final MockData mockData;
+public class AddObserverHandler<T> extends MatchingHandler<T> {
+	private final MockData<?> mockData;
 	private final Object mock;
-	private final CallHandler observer;
+	private final CallHandler<T> observer;
 
-	public AddObserverHandler(MockData mockData, Object mock, CallHandler observer) {
-		super("Observer", mockData.getName(), Mockachino.DEFAULT_VALUES, mockData.getTypeLiteral());
+	public AddObserverHandler(MockData mockData, Object mock, CallHandler<T> observer) {
+        super("Observer", mockData.getName(), Mockachino.DEFAULT_VALUES, mockData.getTypeLiteral());
 		this.mockData = mockData;
 		this.mock = mock;
 		this.observer = observer;
 	}
 
 	@Override
-	public void match(Object o, MockachinoMethod method, MethodMatcher matcher) {
-		mockData.getObservers(method).add(new MethodObserver(mock, observer, matcher));
+	public void match(Object o, MockachinoMethod<T> method, MethodMatcher<T> matcher) {
+        mockData.getObservers(method).add(new MethodObserver<T>(mock, observer, matcher));
 	}
 }

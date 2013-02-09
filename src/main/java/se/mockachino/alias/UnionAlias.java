@@ -15,14 +15,14 @@ public class UnionAlias extends AbstractAlias {
 	}
 
 	@Override
-	public List<Invocation> getMatches() {
-		SortedSet<Invocation> set = new TreeSet<Invocation>(Invocation.COMPARATOR);
+	public List<Invocation<?>> getMatches() {
+		SortedSet<Invocation<?>> set = new TreeSet<Invocation<?>>(Invocation.COMPARATOR);
 		for (Alias alias : aliases) {
-			List<Invocation> list = alias.getMatches();
+			List<Invocation<?>> list = alias.getMatches();
 			for (Invocation invocation : list) {
 				set.add(invocation);
 			}
 		}
-		return new ArrayList<Invocation>(set);
+		return new ArrayList<Invocation<?>>(set);
 	}
 }

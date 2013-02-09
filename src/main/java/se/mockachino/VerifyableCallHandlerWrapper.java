@@ -2,19 +2,19 @@ package se.mockachino;
 
 import se.mockachino.util.MockachinoMethod;
 
-public class VerifyableCallHandlerWrapper implements VerifyableCallHandler {
-    private final CallHandler callHandler;
+public class VerifyableCallHandlerWrapper<T> implements VerifyableCallHandler<T> {
+    private final CallHandler<T> callHandler;
 
-    public VerifyableCallHandlerWrapper(CallHandler callHandler) {
+    public VerifyableCallHandlerWrapper(CallHandler<T> callHandler) {
         this.callHandler = callHandler;
     }
 
     @Override
-    public void verify(MockachinoMethod method) {
+    public void verify(MockachinoMethod<T> method) {
     }
 
     @Override
-    public Object invoke(Object obj, MethodCall call) throws Throwable {
+    public T invoke(Object obj, MethodCall call) throws Throwable {
         return callHandler.invoke(obj, call);
     }
 }

@@ -4,14 +4,14 @@ import se.mockachino.Invocation;
 
 import java.util.Iterator;
 
-public class MockPointIterator implements Iterator<Invocation> {
-	private final Iterator<Invocation> iterator;
+public class MockPointIterator<T> implements Iterator<Invocation<T>> {
+	private final Iterator<Invocation<T>> iterator;
 	private final MockPoint start;
 	private final MockPoint end;
 
 	private Invocation next;
 
-	public MockPointIterator(Iterator<Invocation> iterator, MockPoint start, MockPoint end) {
+	public MockPointIterator(Iterator<Invocation<T>> iterator, MockPoint start, MockPoint end) {
 		this.iterator = iterator;
 		this.start = start;
 		this.end = end;
@@ -27,8 +27,8 @@ public class MockPointIterator implements Iterator<Invocation> {
 	}
 
 	@Override
-	public Invocation next() {
-		Invocation obj = next;
+	public Invocation<T> next() {
+		Invocation<T> obj = next;
 		next = null;
 		if (obj == null) {
 			obj = fetchNext();
@@ -41,9 +41,9 @@ public class MockPointIterator implements Iterator<Invocation> {
 		throw new UnsupportedOperationException("remove() is unsupported");
 	}
 
-	public Invocation fetchNext() {
+	public Invocation<T> fetchNext() {
 		while (iterator.hasNext()) {
-			Invocation obj = iterator.next();
+			Invocation<T> obj = iterator.next();
 			if (obj.getCallNumber() > end.getCallNumber()) {
 				return null;
 			}

@@ -4,18 +4,18 @@ import se.mockachino.CallHandler;
 import se.mockachino.MethodCall;
 import se.mockachino.matchers.MethodMatcher;
 
-public class MethodObserver {
+public class MethodObserver<T> {
 	private final Object mock;
-	private final CallHandler observer;
-	private final MethodMatcher matcher;
+	private final CallHandler<T> observer;
+	private final MethodMatcher<T> matcher;
 
-	public MethodObserver(Object mock, CallHandler observer, MethodMatcher matcher) {
+	public MethodObserver(Object mock, CallHandler<T> observer, MethodMatcher<T> matcher) {
 		this.mock = mock;
 		this.observer = observer;
 		this.matcher = matcher;
 	}
 
-	public void invoke(MethodCall call) {
+	public void invoke(MethodCall<T> call) {
 		if (matcher.matches(call)) {
 			try {
 				observer.invoke(mock, call);

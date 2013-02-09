@@ -5,16 +5,16 @@ import se.mockachino.util.MockachinoMethod;
 
 import java.util.Arrays;
 
-public class MethodCall {
+public class MethodCall<T> {
 
 
 	private static final Object[] NO_ARGS = new Object[0];
 
 
-	private final MockachinoMethod method;
+	private final MockachinoMethod<T> method;
 	private final Object[] args;
 
-	public MethodCall(MockachinoMethod method, Object[] args) {
+	public MethodCall(MockachinoMethod<T> method, Object[] args) {
 		this.method = method;
 		if (args == null) {
 			args = NO_ARGS;
@@ -31,11 +31,11 @@ public class MethodCall {
 		return args;
 	}
 
-	public MockachinoMethod getMethod() {
+	public MockachinoMethod<T> getMethod() {
 		return method;
 	}
 
-	public boolean equals(MethodCall other) {
+	public boolean equals(MethodCall<T> other) {
 		if (other == null) {
 			return false;
 		}

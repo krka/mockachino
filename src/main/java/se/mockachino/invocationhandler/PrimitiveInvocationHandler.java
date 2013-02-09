@@ -4,9 +4,9 @@ import se.mockachino.CallHandler;
 import se.mockachino.MethodCall;
 import se.mockachino.Primitives;
 
-public class PrimitiveInvocationHandler implements CallHandler {
+public class PrimitiveInvocationHandler<T> implements CallHandler<T> {
 	@Override
-	public Object invoke(Object obj, MethodCall call) throws Throwable {
-		return Primitives.forType(call.getMethod().getReturnType());
+	public T invoke(Object obj, MethodCall call) throws Throwable {
+		return (T) Primitives.forType(call.getMethod().getReturnType());
 	}
 }

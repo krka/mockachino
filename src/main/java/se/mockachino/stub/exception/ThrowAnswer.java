@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ThrowAnswer implements VerifyableCallHandler {
+public class ThrowAnswer<T> implements VerifyableCallHandler<T> {
 
   private final Constructor<Throwable> constructor;
   private final Class<? extends Throwable> clazz;
@@ -125,7 +125,7 @@ public class ThrowAnswer implements VerifyableCallHandler {
   }
 
   @Override
-  public Object invoke(Object obj, MethodCall call) throws Throwable {
+  public T invoke(Object obj, MethodCall call) throws Throwable {
     if (throwable != null) {
       Throwable newThrowable = (Throwable) ObjenesisUtil.newInstance(clazz);
       for (Field field : fields) {
@@ -142,7 +142,7 @@ public class ThrowAnswer implements VerifyableCallHandler {
   }
 
   @Override
-  public void verify(MockachinoMethod method) {
+  public void verify(MockachinoMethod<T> method) {
     if (RuntimeException.class.isAssignableFrom(clazz) ||
             Error.class.isAssignableFrom(clazz)) {
       return;

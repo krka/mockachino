@@ -6,24 +6,24 @@ import se.mockachino.VerifyableCallHandler;
 import se.mockachino.exceptions.UsageError;
 import se.mockachino.util.MockachinoMethod;
 
-public class ReturnAnswer implements VerifyableCallHandler {
-	private final Object returnValue;
+public class ReturnAnswer<T> implements VerifyableCallHandler<T> {
+	private final T returnValue;
 
-	public ReturnAnswer(Object returnValue) {
+	public ReturnAnswer(T returnValue) {
 		this.returnValue = returnValue;
 	}
 
 	@Override
-	public Object invoke(Object obj, MethodCall call) throws Throwable {
+	public T invoke(Object obj, MethodCall call) throws Throwable {
 		return returnValue;
 	}
 
     @Override
-    public void verify(MockachinoMethod method) {
+    public void verify(MockachinoMethod<T> method) {
         verifyReturnType(method.getReturnType(), returnValue);
     }
 
-    protected static void verifyReturnType(Class<?> returnType, Object value) {
+    protected static <T> void verifyReturnType(Class<T> returnType, T value) {
         if (returnType == void.class) {
             if (value != null) {
                 throw new UsageError(("Void methods must return null"));

@@ -9,7 +9,7 @@ import se.mockachino.util.MockachinoMethod;
 
 import java.lang.reflect.Type;
 
-public class DeepMockHandler implements CallHandler {
+public class DeepMockHandler implements CallHandler<Object> {
 	private final CallHandler delegate;
 
 	public DeepMockHandler(CallHandler delegate) {

@@ -9,7 +9,7 @@ import se.mockachino.util.MockachinoMethod;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class CollectionsHandler implements CallHandler {
+public class CollectionsHandler implements CallHandler<Object> {
 
 	private final CallHandler fallback;
 
@@ -30,7 +30,7 @@ public class CollectionsHandler implements CallHandler {
 		} else if (returnType.isAssignableFrom(Map.class)) {
 			returnValue = new ConcurrentHashMap();
 		} else if (returnType.isAssignableFrom(Set.class)) {
-			returnValue = Collections.synchronizedSet(new HashSet());
+			returnValue = Collections.synchronizedSet(new HashSet<Object>());
 		}
 
 		if (returnValue != null) {
