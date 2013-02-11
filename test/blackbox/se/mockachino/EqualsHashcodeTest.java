@@ -74,4 +74,43 @@ public class EqualsHashcodeTest {
 		Mockachino.stubReturn(true).on((Object) mock).equals(same((Object) mock));
 		assertEquals(mockName, mock.toString());
 	}
+
+  @Test
+ 	public void equalsShouldWorkOnSpies() throws Exception {
+ 		Foo foo = new Foo("foo");
+ 		Foo fooSpy1 = spy(foo);
+ 		Foo fooSpy2 = spy(foo);
+
+    assertEquals(fooSpy1, fooSpy2);
+
+ 	}
+
+ 	private static class Foo {
+ 		private String name;
+
+ 		private Foo(String name) {
+ 			this.name = name;
+ 		}
+
+     @Override
+     public boolean equals(Object o) {
+       if (this == o) return true;
+       if (!(o instanceof Foo)) return false;
+
+       Foo foo = (Foo) o;
+
+       if (!name.equals(foo.getName())) return false;
+
+       return true;
+     }
+
+     @Override
+     public int hashCode() {
+       return name.hashCode();
+     }
+
+     public String getName() {
+       return name;
+     }
+   }
 }

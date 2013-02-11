@@ -15,24 +15,6 @@ import java.lang.reflect.Type;
 import java.util.*;
 
 public class MockData<T> {
-	private static final CallHandler DEFAULT_EQUALS = new CallHandler() {
-		@Override
-		public Object invoke(Object obj, MethodCall call) throws Throwable {
-			return obj == call.getArguments()[0];
-		}
-	};
-	private static final MethodMatcher EQUALS_METHOD_MATCHER = MethodMatcherImpl.matchAll(MockachinoMethod.EQUALS);
-	private static final MethodStub DEFAULT_EQUALS_STUB = new MethodStub(DEFAULT_EQUALS, EQUALS_METHOD_MATCHER);
-
-	private static final CallHandler DEFAULT_HASHCODE = new CallHandler() {
-		@Override
-		public Object invoke(Object obj, MethodCall call) throws Throwable {
-			return System.identityHashCode(obj);
-		}
-	};
-	private static final MethodMatcher HASHCODE_METHOD_MATCHER = MethodMatcherImpl.matchAll(MockachinoMethod.HASHCODE);
-	private static final MethodStub DEFAULT_HASHCODE_STUB = new MethodStub(DEFAULT_HASHCODE, HASHCODE_METHOD_MATCHER);
-
 	private final Class<T> iface;
 	private final List<Invocation> invocations;
 	private final List<Invocation> readOnlyCalls;
@@ -54,7 +36,6 @@ public class MockData<T> {
 		addMethods(iface);
 		addMethods(Object.class);
 		methods = Collections.unmodifiableSet(stubs.keySet());
-		setupEqualsAndHashcode();
 	}
 
 	private void addMethods(Class<?> clazz) {
@@ -173,19 +154,10 @@ public class MockData<T> {
 		for (MethodStubs methodStubs : stubs.values()) {
 			methodStubs.clear();
 		}
-		setupEqualsAndHashcode();
-	}
-
-	private void setupEqualsAndHashcode() {
-		MethodStubs equalsStubs = stubs.get(MockachinoMethod.EQUALS);
-		equalsStubs.add(DEFAULT_EQUALS_STUB);
-
-		MethodStubs hashcodeStubs = stubs.get(MockachinoMethod.HASHCODE);
-		hashcodeStubs.add(DEFAULT_HASHCODE_STUB);
 	}
 
 
-	/**
+  /**
 	 * Remove all observers from the mock
 	 */
 	public synchronized void resetObservers() {
