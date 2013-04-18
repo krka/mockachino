@@ -14,6 +14,8 @@ public interface Alias {
 
 	Alias intersection(Alias other);
 
+	Alias difference(Alias other);
+
 	void verifyOnce();
 
 	void verifyNever();

@@ -14,6 +14,11 @@ public abstract class AbstractAlias implements Alias {
 	}
 
 	@Override
+	public Alias difference(Alias other) {
+		return new DifferenceAlias(this, other);
+	}
+
+	@Override
 	public int count() {
 		return getMatches().size();
 	}

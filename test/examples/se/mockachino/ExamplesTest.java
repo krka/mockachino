@@ -1,6 +1,10 @@
 package se.mockachino;
 
 import org.junit.Test;
+import se.mockachino.alias.Alias;
+import se.mockachino.alias.AllAlias;
+import se.mockachino.alias.SimpleAlias;
+import se.mockachino.cleaner.StacktraceCleaner;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.matcher.BasicMatcher;
 import se.mockachino.order.OrderingContext;
@@ -195,4 +199,67 @@ public class ExamplesTest {
 		verifyOnce().on(mock).compare(match(myFooBarMatcher), match(myFooBarMatcher));
 	}
 
+	@Test
+	public void testNoOtherInvocations() {
+		StacktraceCleaner.ENABLED = false;
+
+		// Setup mocks
+		Service1 s1 = mock(Service1.class);
+		Service2 s2 = mock(Service2.class);
+
+		// Stub relevant method
+		stubReturn(42L).on(s1).methodA();
+
+		BlackBox blackBox = new BlackBox(s1, s2);
+
+		// Execute business method
+		long result = blackBox.doSomething();
+
+		// Assert result
+		assertEquals(42, result);
+
+		// Check that method has been invoked
+		// This is somewhat unnecessary as it is already tested by the alias verification below.
+		verifyOnce().on(s1).methodA();
+
+
+		// Any of these calls will make the verification below fail.
+		//s1.methodB();
+		//s2.methodB();
+
+
+		// Verify that no side effects occurred (desired testing)
+		SimpleAlias alias = newAlias();
+		alias.bind(s1).methodA();
+		alias.verifyOnce();
+
+		Alias allMatches = AllAlias.fromMock(s1);
+		Alias difference = allMatches.difference(alias);
+		difference.verifyNever();
+
+		AllAlias.fromMock(s2).verifyNever();
+	}
+
+	private static interface Service1 {
+		long methodA();
+		long methodB();
+	}
+
+	private static interface Service2 {
+		long methodB();
+	}
+
+	private class BlackBox {
+		private final Service1 s1;
+		private final Service2 s2;
+
+		public BlackBox(Service1 s1, Service2 s2) {
+			this.s1 = s1;
+			this.s2 = s2;
+		}
+
+		public long doSomething() {
+			return s1.methodA();
+		}
+	}
 }
