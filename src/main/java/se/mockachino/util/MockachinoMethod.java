@@ -124,4 +124,8 @@ public class MockachinoMethod {
     public static Class<?> getReturnClass(Type type, Method method) {
         return GenericTypeReflector.erase(getReturnType(type, method));
     }
+
+    public Type getType() {
+        return type;
+    }
 }
