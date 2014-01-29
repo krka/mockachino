@@ -94,8 +94,8 @@ public class InvocationComparator implements Comparator<Invocation> {
 		Object[] args1 = o1.getArguments();
 		Object[] args2 = o2.getArguments();
 		for (int i = 0; i < n; i++) {
-			long arg1Hash = args1[i].hashCode();
-			long arg2Hash = args2[i].hashCode();
+			long arg1Hash = getArgumentHashCode(args1[i]);
+			long arg2Hash = getArgumentHashCode(args2[i]);
 			long val = arg1Hash - arg2Hash;
 			if (val != 0) {
 				return Long.signum(val);
@@ -142,6 +142,13 @@ public class InvocationComparator implements Comparator<Invocation> {
 		}
 
 		return element1.getLineNumber() - element2.getLineNumber();
+	}
+
+	private int getArgumentHashCode(Object o) {
+		if (o != null) {
+			return o.hashCode();
+		}
+		return 0;
 	}
 
 	private boolean matchNull(MethodCall methodCall, int index) {
