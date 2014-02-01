@@ -13,7 +13,7 @@
 
   <name>Mockachino</name>
   <description>A lightweight mocking framework</description>
-  <url>http://code.google.com/p/mockachino/</url>
+  <url>http://github.com/krka/mockachino</url>
 
   <licenses>
     <license>
@@ -24,9 +24,9 @@
   </licenses>
 
   <scm>
-    <connection>scm:svn:http://mockachino.googlecode.com/svn/trunk/</connection>
-    <developerConnection>scm:svn:https://mockachino.googlecode.com/svn/trunk/</developerConnection>
-    <url>http://mockachino.googlecode.com/svn/trunk/</url>
+    <connection>scm:git:https://github.com/krka/mockachino.git</connection>
+    <developerConnection>scm:git:https://github.com/krka/mockachino.git</developerConnection>
+    <url>scm:https://github.com/krka/mockachino</url>
   </scm>
   
   <developers>
