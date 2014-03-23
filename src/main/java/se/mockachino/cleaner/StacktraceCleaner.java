@@ -46,6 +46,7 @@ public class StacktraceCleaner {
 		add("net.sf.cglib.");
 		add("junit.framework.");
 		add("org.apache.tools.ant.");
+		add("org.apache.maven.surefire.");
 	}};
 
 	private static boolean isClean(StackTraceElement element) {
