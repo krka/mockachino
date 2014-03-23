@@ -1,4 +1,14 @@
 ----------------------
+- Version 0.6.1
+----------------------
+* Stacktrace cleaning can now be disabled.
+* Fix bug where some exceptions can't be fake-created.
+* Fix equals/hashcode bug for spies.
+* Add Alias.difference() and AllAlias.fromMock()
+* Fix bug in verifyExactly(n).onAnyMethod()
+* Now builds with maven instead of ant
+
+----------------------
 - Version 0.6.0
 ----------------------
 * Removed option to add extra interfaces on mocks.
