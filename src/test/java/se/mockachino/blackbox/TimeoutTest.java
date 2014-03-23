@@ -97,8 +97,10 @@ public class TimeoutTest {
 
 	private void runTimeoutTest(VerifyRangeStart type, int minExecutionTime, int maxExecutionTime, int waitTime, int timeout, boolean wantsOk, List mock, Runnable runnable) {
 
+		long t0 = System.currentTimeMillis();
 		Executors.newSingleThreadScheduledExecutor().schedule(runnable, waitTime, TimeUnit.MILLISECONDS);
 		long t1 = System.currentTimeMillis();
+		long margin = t1 - t0;
 		boolean status;
 		try {
 			type.withTimeout(timeout).on(mock).size();
@@ -108,8 +110,8 @@ public class TimeoutTest {
 		}
 		long t2 = System.currentTimeMillis();
 		long time = t2 - t1;
-		assertTrue("Time: " + time + " expected at most " + maxExecutionTime, time <= maxExecutionTime);
-		assertTrue("Time: " + time + " expected at least " + minExecutionTime, time >= minExecutionTime);
+		assertTrue("Time: " + time + " expected at most " + maxExecutionTime, time <= maxExecutionTime + margin);
+		assertTrue("Time: " + time + " expected at least " + minExecutionTime, time >= minExecutionTime - margin);
 
 		assertEquals(wantsOk, status);
 	}
