@@ -8,6 +8,7 @@ import se.mockachino.matchers.Matchers;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.*;
@@ -19,16 +20,17 @@ public class ThrowsTest {
   @Test
   public void testCorrectStacktrace() {
     List mock = Mockachino.mock(List.class);
-    Mockachino.when(mock.size()).thenThrow(new RuntimeException());
+    Mockachino.when(mock.size()).thenThrow(new IllegalArgumentException());
 
     for (int i = 0; i < 10; i++) {
       // Do some work, to make sure expected will have a different line than the one above.
     }
 
-    RuntimeException expected = new RuntimeException();
+    IllegalArgumentException expected = new IllegalArgumentException();
     try {
       mock.size();
-    } catch (Exception e) {
+      fail();
+    } catch (IllegalArgumentException e) {
       assertEquals(expected.getMessage(), e.getMessage());
       assertEquals(expected.getCause(), e.getCause());
       StackTraceElement[] exp = expected.getStackTrace();
@@ -51,7 +53,8 @@ public class ThrowsTest {
     TestException expected = new TestException(333);
     try {
       mock.doIt();
-    } catch (Exception e) {
+      fail();
+    } catch (TestException e) {
       assertEquals(expected.getMessage(), e.getMessage());
       assertEquals(expected.getCause(), e.getCause());
       StackTraceElement[] exp = expected.getStackTrace();
@@ -66,13 +69,13 @@ public class ThrowsTest {
   public void testNewExceptions() {
     List mock = Mockachino.mock(List.class);
     IOException cause = new IOException();
-    RuntimeException exception = new RuntimeException("Hello world", cause);
+    IllegalArgumentException exception = new IllegalArgumentException("Hello world", cause);
     Exception exception2 = null;
     Mockachino.when(mock.size()).thenThrow(exception);
     try {
       mock.size();
       fail();
-    } catch (Exception e) {
+    } catch (IllegalArgumentException e) {
       assertEquals(cause, e.getCause());
       assertEquals("Hello world", e.getMessage());
       assertFalse(exception == e);
@@ -81,7 +84,7 @@ public class ThrowsTest {
     try {
       mock.size();
       fail();
-    } catch (Exception e) {
+    } catch (IllegalArgumentException e) {
       assertFalse(e == exception2);
     }
   }
