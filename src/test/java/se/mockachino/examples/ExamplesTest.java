@@ -203,8 +203,6 @@ public class ExamplesTest {
 
 	@Test
 	public void testNoOtherInvocations() {
-		StacktraceCleaner.ENABLED = false;
-
 		// Setup mocks
 		Service1 s1 = mock(Service1.class);
 		Service2 s2 = mock(Service2.class);
