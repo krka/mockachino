@@ -1,0 +1,37 @@
+package se.testmockachino.blackbox;
+
+import org.junit.Ignore;
+import org.junit.Test;
+import se.mockachino.CallHandler;
+import se.mockachino.MethodCall;
+import se.mockachino.Mockachino;
+import se.mockachino.observer.ObserverAdder;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static se.mockachino.matchers.Matchers.any;
+
+public class MethodListenerTest {
+	@Test
+	public void testSimple() {
+		List mock = Mockachino.mock(List.class);
+
+		final List<String> list = new ArrayList<String>();
+		CallHandler listener = new CallHandler() {
+			@Override
+			public Object invoke(Object obj, MethodCall call) {
+				list.add(call.toString());
+				return null;
+			}
+		};
+		Mockachino.observeWith(listener).on(mock).get(123);
+
+		mock.get(123);
+		mock.get(124);
+		assertEquals(1, list.size());
+		assertEquals("get(123)", list.get(0));
+	}
+}
