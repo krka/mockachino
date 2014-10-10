@@ -1,15 +1,15 @@
-package se.testmockachino.blackbox;
+package se.mockachino.blackbox;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import se.mockachino.CallHandler;
 import se.mockachino.MethodCall;
 import se.mockachino.Mockachino;
-import se.mockachino.observer.ObserverAdder;
+import se.mockachino.exceptions.UsageError;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertEquals;
 import static se.mockachino.matchers.Matchers.any;
@@ -33,5 +33,37 @@ public class MethodListenerTest {
 		mock.get(124);
 		assertEquals(1, list.size());
 		assertEquals("get(123)", list.get(0));
+	}
+
+	interface Foo {
+		Collection<Integer> bar(String s);
+	}
+
+	@Test
+	public void withNullArguments() throws Exception {
+		Foo mock = Mockachino.mock(Foo.class);
+		final AtomicInteger counter = new AtomicInteger();
+		Mockachino.observeWith(new CallHandler() {
+			@Override
+			public Object invoke(Object obj, MethodCall call) throws Throwable {
+				counter.incrementAndGet();
+				return null;
+			}
+		}).on(mock).bar(any(String.class));
+		assertEquals(0, counter.get());
+		mock.bar("");
+		assertEquals(1, counter.get());
+	}
+
+	@Test(expected = UsageError.class)
+	public void invalidObserverUsage() throws Exception {
+		Foo mock = Mockachino.mock(Foo.class);
+		Mockachino.observeWith(new CallHandler() {
+			@Override
+			public Object invoke(Object obj, MethodCall call) throws Throwable {
+				return null;
+			}
+
+		}).on(mock).bar(any(String.class)).add(123);
 	}
 }
