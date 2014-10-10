@@ -34,7 +34,12 @@
       <id>krka</id>
       <name>Kristofer Karlsson</name>
       <email>kristofer.karlsson@gmail.com</email>
-    </developer>  
+    </developer>
+      <developer>
+          <id>hiflyer</id>
+          <name>Per Malmén</name>
+          <email>per.malmen@gmail.com</email>
+      </developer>
   </developers>
   
   <dependencies>
