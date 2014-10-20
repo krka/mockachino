@@ -91,10 +91,6 @@
               <shadedClassifierName>uberjar</shadedClassifierName>
               <relocations>
                 <relocation>
-                  <pattern>com.googlecode.gentyref</pattern>
-                  <shadedPattern>se.mockachino.dependencies.com.googlecode.gentyref</shadedPattern>
-                </relocation>
-                <relocation>
                   <pattern>net.sf.cglib</pattern>
                   <shadedPattern>se.mockachino.dependencies.net.sf.cglib</shadedPattern>
                 </relocation>
