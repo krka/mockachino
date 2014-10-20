@@ -76,7 +76,42 @@
           <target>1.6</target>
         </configuration>
       </plugin>
-    </plugins>    
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedClassifierName>uberjar</shadedClassifierName>
+              <relocations>
+                <relocation>
+                  <pattern>com.googlecode.gentyref</pattern>
+                  <shadedPattern>se.mockachino.dependencies.com.googlecode.gentyref</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>net.sf.cglib</pattern>
+                  <shadedPattern>se.mockachino.dependencies.net.sf.cglib</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.objectweb</pattern>
+                  <shadedPattern>se.mockachino.dependencies.org.objectweb</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.objenesis</pattern>
+                  <shadedPattern>se.mockachino.dependencies.org.objenesis</shadedPattern>
+                </relocation>
+              </relocations>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 
 	<profiles>
