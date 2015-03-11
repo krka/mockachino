@@ -4,11 +4,15 @@ import org.junit.Test;
 import se.mockachino.CallHandler;
 import se.mockachino.MethodCall;
 import se.mockachino.Mockachino;
+import se.mockachino.exceptions.UsageError;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertEquals;
+import static se.mockachino.matchers.Matchers.any;
 
 public class MethodListenerTest {
 	@Test
