@@ -1,10 +1,7 @@
-package se.testmockachino.blackbox;
-
-// This class is in the testmockachino package to avoid the StacktraceCleaner removing relevant stackframes
+package se.mockachino.blackbox;
 
 import org.junit.Test;
 import se.mockachino.Mockachino;
-import se.mockachino.cleaner.StacktraceCleaner;
 import se.mockachino.exceptions.UsageError;
 import se.mockachino.matchers.Matchers;
 
