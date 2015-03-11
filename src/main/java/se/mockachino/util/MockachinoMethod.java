@@ -116,8 +116,8 @@ public class MockachinoMethod {
     public static Type getReturnType(Type type, Method method) {
         try {
             return GenericTypeReflector.getExactReturnType(method, type);
-        } catch (Exception e) {
-            return method.getReturnType();
+		  } catch (Throwable e) {
+			  return method.getReturnType();
         }
     }
 
