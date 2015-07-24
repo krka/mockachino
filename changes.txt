@@ -1,4 +1,20 @@
 ----------------------
+- Version 0.7.0
+----------------------
+* Updated cglib to 3.1
+* Updated objenesis to 2.1
+* Updated asm to 5.0.4
+
+----------------------
+- Version 0.6.2
+----------------------
+* Updated gentyref to 1.2.0
+* Added an uberjar to the build
+* Fixed a bug where observers on method that return collections would fail
+* Added a ExactOrderingContext
+
+
+----------------------
 - Version 0.6.1
 ----------------------
 * Stacktrace cleaning can now be disabled.
