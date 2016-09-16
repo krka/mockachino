@@ -53,6 +53,23 @@ public void testExampleStub() {
 }
 
 ```
+##Mocking generic classes
+As you might have noticed, the examples here uses a non generified list for simplicity. If you want to mock a generic class and not get warnings about type safety you need to use `TypeToken`.
+```java
+private static TypeToken<List<String>> LIST_TYPE_TOKEN = new TypeToken<List<String>>() {};
+
+@Test
+public void testExampleMockingGenerics() throws Exception {
+
+    // Create a mock
+    List<String> mock = mock(LIST_TYPE_TOKEN);
+
+    mock.add("Hello");
+    mock.add("World");
+}
+
+```
+
 ##Using matchers
 A matcher is something you can use instead of regular arguments when verifying or stubbing. A matcher makes it possible to verify interactions with parameters from a range of values.Here's a simple example
 ```java
