@@ -1,12 +1,12 @@
 package se.mockachino.examples;
 
+import com.googlecode.gentyref.TypeToken;
 import org.junit.Test;
 import se.mockachino.Mockachino;
 import se.mockachino.Settings;
 import se.mockachino.alias.Alias;
 import se.mockachino.alias.AllAlias;
 import se.mockachino.alias.SimpleAlias;
-import se.mockachino.cleaner.StacktraceCleaner;
 import se.mockachino.exceptions.VerificationError;
 import se.mockachino.matchers.matcher.BasicMatcher;
 import se.mockachino.order.OrderingContext;
@@ -55,6 +55,18 @@ public class ExamplesTest {
 		// Verify calls
 		verifyOnce().on(mock).get(123);
 		verifyOnce().on(mock).get(456);
+	}
+
+	private static TypeToken<List<String>> LIST_TYPE_TOKEN = new TypeToken<List<String>>() {};
+
+	@Test
+	public void testExampleMockingGenerics() throws Exception {
+
+		// Create a mock
+		List<String> mock = mock(LIST_TYPE_TOKEN);
+
+		mock.add("Hello");
+		mock.add("World");
 	}
 
 	@Test
