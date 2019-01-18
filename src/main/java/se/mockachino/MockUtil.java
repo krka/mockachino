@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * A mock context is a context for mocking, completely independent from any other context,
  * including the default one.
- * <p/>
+ * <p></p>
  * Create new contexts when you need truly independent tests.
  */
 public class MockUtil {

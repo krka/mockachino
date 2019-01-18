@@ -102,7 +102,7 @@ public class ProxyUtil {
 
 	/**
 	 * Generic method for creating a proxy for a mock object.
-	 * <p/>
+	 * <p></p>
 	 * Probably not interesting for regular users of Mockachino
 	 */
 	public static <T> T createProxy(T mock, InvocationHandler handler) {

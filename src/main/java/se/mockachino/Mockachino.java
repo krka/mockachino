@@ -30,24 +30,24 @@ import java.lang.reflect.*;
 /**
  * This is the main entry point of all your mocking needs.
  * All operations delegates to a singleton {@link MockUtil}.
- * <p/>
- * <p/>
+ * <p></p>
+ * <p></p>
  * For most use cases, using this singleton is the most convenient approach,
  * but are also free to use a {@link MockUtil} object directly.
- * <p/>
+ * <p></p>
  * Consider statically import these classes to reduce verbosity of tests:
  * <pre>
  * import static se.mockachino.Mockachino.*;
  * import static se.mockachino.matchers.Matchers.*;
  * import static se.mockachino.Settings.*;
  * </pre>
- * <p/>
- * <p/>
+ * <p></p>
+ * <p></p>
  * See {@link se.mockachino.matchers.MatchersBase} for available matchers
  * and
  * see {@link se.mockachino.matchers.Matchers} for useful matcher shortcuts.
- * <p/>
- * <p/>
+ * <p></p>
+ * <p></p>
  * See {@link Settings} for how to mock classes with various settings.
  */
 public class Mockachino {
@@ -126,7 +126,7 @@ public class Mockachino {
 	/**
 	 * Creates a new mock with class impl.getClass() with the impl as a default handler,
 	 * and the specified settings.
-	 * <p/>
+	 * <p></p>
 	 * Equivalent to mock(impl.getClass(), settings.spyOn(impl));
 	 *
 	 * @param impl the object to spy on
@@ -142,7 +142,7 @@ public class Mockachino {
 	/**
 	 * Creates a new ordering context which is used to verify method calls in order.
 	 * Ordering contexts are completely independent of each other.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * OrderingContext context = Mockachino.newOrdering();
@@ -158,7 +158,7 @@ public class Mockachino {
 
 	/**
 	 * Verifies that a method call is called between min and max times, inclusive.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyRange(1, 2).on(mock).method();
@@ -175,7 +175,7 @@ public class Mockachino {
 
 	/**
 	 * Verifies that a method call is called an exact number of times.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyExactly(3).on(mock).method();
@@ -191,7 +191,7 @@ public class Mockachino {
 
 	/**
 	 * Verifies that a method call is never called.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyNever().on(mock).method();
@@ -206,7 +206,7 @@ public class Mockachino {
 
 	/**
 	 * Verifies that a method call is only called exactly once.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyOnce().on(mock).method();
@@ -221,7 +221,7 @@ public class Mockachino {
 
 	/**
 	 * Verifies that a method call is called at least a specific number of times.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyAtLeast(3).on(mock).method();
@@ -237,7 +237,7 @@ public class Mockachino {
 
 	/**
 	 * Verifies that a method call is called at most a specific number of times.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyAtMost(3).on(mock).method();
@@ -253,7 +253,7 @@ public class Mockachino {
 
 	/**
 	 * Stubs a method call to throw an exception.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.stubThrow(myException).on(mock).method();
@@ -270,12 +270,12 @@ public class Mockachino {
 
 	/**
 	 * Stubs a method call to return a specific value.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.stubReturn(value).on(mock).method();
 	 * </pre>
-	 * <p/>
+	 * <p></p>
 	 * Note that the type of the value must match the return type of the method call.
 	 * This is checked at runtime and will throw a UsageError if they don't match.
 	 *
@@ -300,12 +300,12 @@ public class Mockachino {
 
 	/**
 	 * Stubs a method call with a specific answer strategy.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.stubAnswer(answer).on(mock).method();
 	 * </pre>
-	 * <p/>
+	 * <p></p>
 	 * All matching method calls will invoke the getValue()-method on the answer-object.
 	 *
 	 * @param answer the answer to use
@@ -321,7 +321,7 @@ public class Mockachino {
 	/**
 	 * Adds an observer to a specific method call.
 	 * The observer will get a callback every time the method is called and the arguments match.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.observeWith(observer).on(mock).method();
@@ -353,7 +353,7 @@ public class Mockachino {
 
 	/**
 	 * Verify that calls happened between (inclusive) two points in time.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.between(start, end).verifyAtLeast(1).on(mock).method();
@@ -372,7 +372,7 @@ public class Mockachino {
 
 	/**
 	 * Verify that calls happened at or after a point in time.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.after(start).verifyAtLeast(1).on(mock).method();
@@ -390,7 +390,7 @@ public class Mockachino {
 
 	/**
 	 * Verify that calls happened at or before a point in time.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.before(end).verifyAtLeast(1).on(mock).method();
@@ -427,7 +427,7 @@ public class Mockachino {
 
 	/**
 	 * Get the metadata for mock.
-	 * <p/>
+	 * <p></p>
 	 * This can be used both for resetting mocks, and inspecting calls on the mock.
 	 *
 	 * @param mock the mock object

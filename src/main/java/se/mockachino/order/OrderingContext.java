@@ -15,7 +15,7 @@ public class OrderingContext {
 
 	/**
 	 * Verifies that a method call is called at least once.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * orderingContext.verify().on(mock).method();
@@ -29,7 +29,7 @@ public class OrderingContext {
 
 	/**
 	 * Verifies that a method call is called at least min number of times.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * orderingContext.verifyAtLeast(3).on(mock).method();
