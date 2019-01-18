@@ -5,37 +5,37 @@ import se.mockachino.matchers.matcher.Matcher;
 
 /**
  * Matchers is a utility class, containing a lot of useful default matchers.
- * <p/>
- * <p/>
+ * <p></p>
+ * <p></p>
  * A matcher is just a plain java object of the {@link se.mockachino.matchers.matcher.Matcher} type,
  * which can be used by verifying and stubbing.
- * <p/>
- * <p/>
+ * <p></p>
+ * <p></p>
  * The only important thing is that when using a matcher for a method call, you need to wrap it in
  * Matchers.match() (or Matchers.m() as a shortcut).
- * <p/>
- * <p/>
+ * <p></p>
+ * <p></p>
  * This wrapping MUST be directly in the actual method call for it to work.
  * Example:
  * <pre>
  * List myMock = mock(List.class);
- * Matcher<Integer> myMatcher = new Matcher<Integer>{...};
- * <p/>
+ * Matcher&lt;Integer&gt; myMatcher = new Matcher&lt;Integer&gt;{...};
+ *
  * // won't work, get expects an integer, not a matcher
  * stubReturn(1).on(myMock).get(myMatcher));
- * <p/>
+ *
  * // Will work:
  * stubReturn(1).on(myMock).get(match(myMatcher)));
  * </pre>
- * <p/>
- * <p/>
+ * <p></p>
+ * <p></p>
  * Apart from using custom matchers, you can use some predefined ones.
  * All methods here that return a Matcher needs to be wrapped in Matchers.match()
  * when using in an argument.
- * The methods that return a primitive or a &lt;T> have already been wrapped in Matchers.match()
+ * The methods that return a primitive or a &lt;T&gt; have already been wrapped in Matchers.match()
  * and can be used directly as is.
- * <p/>
- * <p/>
+ * <p></p>
+ * <p></p>
  * Example:
  * <pre>
  * stubReturn(1).on(myMock).get(match(mAnyInt()));
@@ -100,7 +100,7 @@ public class Matchers extends MatchersBase {
 
 	/**
 	 * Matches the parameter if and only if all the matchers match.
-	 * <p/>
+	 * <p></p>
 	 * If the list of matchers is empty, it defaults to true.
 	 *
 	 * @param matchers
@@ -111,7 +111,7 @@ public class Matchers extends MatchersBase {
 
 	/**
 	 * Matches the parameter if any of the matchers match.
-	 * <p/>
+	 * <p></p>
 	 * If the list of matchers is empty, it defaults to false.
 	 *
 	 * @param matchers

@@ -47,6 +47,7 @@ public class StacktraceCleaner {
 		add("junit.framework.");
 		add("org.apache.tools.ant.");
 		add("org.apache.maven.surefire.");
+		add("jdk.internal.reflect.");
 	}};
 
 	private static boolean isClean(StackTraceElement element) {

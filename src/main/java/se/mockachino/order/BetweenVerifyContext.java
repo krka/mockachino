@@ -24,7 +24,7 @@ public class BetweenVerifyContext {
 
 	/**
 	 * Verifies that a method call is called between min and max times, inclusive.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyRange(1, 2).on(mock).method();
@@ -41,7 +41,7 @@ public class BetweenVerifyContext {
 
 	/**
 	 * Verifies that a method call is called an exact number of times.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyExactly(3).on(mock).method();
@@ -56,7 +56,7 @@ public class BetweenVerifyContext {
 
 	/**
 	 * Verifies that a method call is never called.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyNever().on(mock).method();
@@ -70,7 +70,7 @@ public class BetweenVerifyContext {
 
 	/**
 	 * Verifies that a method call is only called exactly once.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyOnce().on(mock).method();
@@ -84,7 +84,7 @@ public class BetweenVerifyContext {
 
 	/**
 	 * Verifies that a method call is called at least a specific number of times.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyAtLeast(3).on(mock).method();
@@ -99,7 +99,7 @@ public class BetweenVerifyContext {
 
 	/**
 	 * Verifies that a method call is called at most a specific number of times.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * Mockachino.verifyAtMost(3).on(mock).method();
@@ -115,7 +115,7 @@ public class BetweenVerifyContext {
 	/**
 	 * Creates a new ordering context which is used to verify method calls in order.
 	 * Ordering contexts are completely independent of each other.
-	 * <p/>
+	 * <p></p>
 	 * Typical usage:
 	 * <pre>
 	 * OrderingContext context = Mockachino.newOrdering();

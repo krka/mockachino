@@ -2,7 +2,7 @@ package se.mockachino;
 
 /**
  * Shortcut for creating mock settings.
- * <p/>
+ * <p></p>
  * See {@link MockSettings} for details.
  */
 public class Settings {

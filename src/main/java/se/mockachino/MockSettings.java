@@ -55,7 +55,7 @@ public class MockSettings {
 
 	/**
 	 * Sets the mock to be quick.
-	 * <p/>
+	 * <p></p>
 	 * A quick mock simply does not record the stacktrace of calls made.
 	 *
 	 * @return the same mocksettings object
@@ -67,7 +67,7 @@ public class MockSettings {
 
 	/**
 	 * Sets the mock to not be quick.
-	 * <p/>
+	 * <p></p>
 	 * A quick mock simply does not record the stacktrace of calls made.
 	 *
 	 * @return the same mocksettings object
