@@ -30,7 +30,7 @@ public void testExample() {
     verifyNever().on(mock).get(124);
 }
 ```
-##Stubbing
+## Stubbing
 Sometimes you need to setup your mocks to return values for the tested code to work. This is called stubbing.
 ```java
 @Test 
@@ -53,7 +53,7 @@ public void testExampleStub() {
 }
 
 ```
-##Mocking generic classes
+## Mocking generic classes
 As you might have noticed, the examples here uses a non generified list for simplicity. If you want to mock a generic class and not get warnings about type safety you need to use `TypeToken`.
 ```java
 private static TypeToken<List<String>> LIST_TYPE_TOKEN = new TypeToken<List<String>>() {};
@@ -70,7 +70,7 @@ public void testExampleMockingGenerics() throws Exception {
 
 ```
 
-##Using matchers
+## Using matchers
 A matcher is something you can use instead of regular arguments when verifying or stubbing. A matcher makes it possible to verify interactions with parameters from a range of values.Here's a simple example
 ```java
 @Test 
@@ -89,7 +89,7 @@ public void testExampleWithMatchers() {
 `eq()` is the most basic matcher, in fact all plain arguments get converted to an eq-matcher when verifying or stubbing. The `any()` matcher is useful if you want to accept any object. The class parameter is just there to make the compiler happy.
 
 
-##Multiple stubbers
+## Multiple stubbers
 The last defined stub will take precedence if multiple stubbers match, so you can set up default values-
 ```java
 @Test 
@@ -110,7 +110,7 @@ public void testExampleStubOverride() {
     verifyExactly(3).on(mock).get(anyInt());
 }
 ```
-##Mixing matchers and plain arguments
+## Mixing matchers and plain arguments
 It's possible to mix matchers and plain arguments in the same method verification or stubbing in most cases. The only exception is when the plain arguments is `null`, `0`, `false` or `'\0'`. Here is how not to use it
 ```java
 @Test 
@@ -134,7 +134,7 @@ public void testBadMatcherCombo() {
 The output: 
 >se.mockachino.exceptions.VerificationError: Illegal mix of matchers and default values in the same method verification or stubbing. Replace null, 0, '\0' and false with matchers. at se.mockachino.unittests.ExamplesTest.testBadMatcherCombo(ExamplesTest.java:90)
 
-##Useful error messages
+## Useful error messages
 If a verification fails, you'll get an informative output text.
 ```java
 @Test 
@@ -174,7 +174,7 @@ public void testInOrder() {
     order.verify().on(mock).add("Bar");
 }
 ```
-##Using spies
+## Using spies
 Spying is almost the same as mocking, the difference is that all method calls by default go through the spied on object. You can still stub away calls to objects if you want, so the spied object can be thought of as just the default stub for a mock. You spy on an object by providing both the interface (or class) that's relevant and then the actual object to spy on.
 ```java
 @Test 
@@ -207,7 +207,7 @@ public void testSpy() {
 }
 
 ```
-##Combining matchers
+## Combining matchers
 Some matchers combines other matchers. The simplest example is `Matchers.not`, which inverts a matcher. The matcher below matches `compare("Hello", "World")` since `mType(List.class)` does not match `"Hello"` since it's not a list.
 ```java
 @Test 
@@ -220,7 +220,7 @@ public void testNotMatcher() {
     verifyOnce().on(mock).compare(not(mType(List.class)), "World");
 }
 ```
-##Catching values with matchers
+## Catching values with matchers
 Sometimes you want to catch the value that matches a specific matcher. That's really easy.
 ```java
 @Test 
@@ -232,7 +232,7 @@ public void testSimple() {
     assertEquals(Integer.valueOf(123), catcher.getValue()); 
 }
 ```
-##Active observing on method calls
+## Active observing on method calls
 It's easy to add your own callback for mock method calls, for whichever reason. You can use matchers for designing what arguments to listen to, just as with stubbing and verifying. The example below shows how it's done.
 ```java
 @Test 
@@ -255,7 +255,7 @@ public void testSimple() {
     assertEquals("get(123)", list.get(0));
 }
 ```
-##Stubbing with throws
+## Stubbing with throws
 You can of course stub a method to throw an exception instead of returning a value.
 ```java
 @Test 
@@ -270,7 +270,7 @@ public void testException() {
     }
 }
 ```
-##More advanced stubbing with answers
+## More advanced stubbing with answers
 If you need complex behavior, you can implement your own answering strategy and plug into the mock.
 ```java
 @Test 
